@@ -1,0 +1,43 @@
+.add-business {
+  display: block;
+  height: 100%;
+  width: 100%;
+  bottom: min(calc(60vw - 130vh), -15%);
+  text-align: center;
+  .steps {
+    width: 40%;
+    min-width: 300px;
+    margin: 0 auto;
+  }
+  .input-form {
+    width: 50%;
+    height: auto;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto;
+    grid-gap: 1em;
+    min-width: 500px;
+  }
+  .services {
+    width: 1000px;
+    max-width: calc(100% - 3em);
+  }
+  .next-btn {
+    width: 25%;
+    min-width: 250px;
+    margin: 0 auto;
+  }
+}
+@media (max-aspect-ratio: 1/1){
+  .add-business {top: 45%}
+}
+@media (max-width: 550px){
+  .add-business .input-form {
+      grid-template-columns: repeat(1, 1fr);
+      min-width: 250px;
+  }
+}
+@media (max-width: 310px){
+  .add-business .steps {min-width: 250px;}
+}

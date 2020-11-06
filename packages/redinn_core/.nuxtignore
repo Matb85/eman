@@ -1,0 +1,6 @@
+/store/globals/*.js
+
+/lang/**
+
+/assets/**
+!assets/style.scss

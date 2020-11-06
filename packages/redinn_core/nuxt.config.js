@@ -1,7 +1,10 @@
+//import i18n from './lang/i18n.js'
+
 export default {
+  //server: { port: 3000, host: '192.168.1.64' },
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    title: 'redinn_core',
+    title: 'Redinn_Core',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -9,10 +12,11 @@ export default {
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
-
   // Global CSS (https://go.nuxtjs.dev/config-css)
-  css: [],
-
+  css: ['~assets/style.scss',],
+  styleResources: {
+    scss: ['~assets/style.scss']
+  },
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [],
 
@@ -29,6 +33,8 @@ export default {
 
   // Modules (https://go.nuxtjs.dev/config-modules)
   modules: [
+    //['nuxt-i18n', i18n],
+    '@nuxtjs/style-resources',
     // https://go.nuxtjs.dev/buefy
     'nuxt-buefy',
     // https://go.nuxtjs.dev/axios
@@ -39,7 +45,6 @@ export default {
 
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
-
   // Build Configuration (https://go.nuxtjs.dev/config-build)
   build: {},
 }
