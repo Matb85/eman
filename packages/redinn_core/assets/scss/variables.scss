@@ -1,0 +1,79 @@
+@font-face {
+  font-family: "Lato";
+  src: url("~assets/fonts/Lato-Regular.ttf");
+}
+@font-face {
+  font-family: "Lato Light";
+  src: url("~assets/fonts/Lato-thin.ttf");
+}
+
+@import "~bulma/sass/utilities/functions";
+$primary: #ff3030;
+$family-sans-serif: "Lato";
+$family-secondary: "Lato Light";
+$border: hsl(0, 0%, 14%);
+$grey-darker: hsl(0, 0%, 14%);
+$text: hsl(0, 0%, 14%);
+$link-focus-border: #ff3030;
+$link: #ff3030;
+$size-1: 3em;
+$size-2: 2.5em;
+$size-3: 2em;
+$size-4: 1.5em;
+$size-5: 1.25em;
+$size-6: 1em;
+$size-7: 0.75em;
+// HBP - height break point
+// WBP - width break point
+$desktopHBP: 720px;
+$desktopWBP: 1050px;
+$mobileWBP: 450px;
+$sidebarWBP: 905px;
+$twitter: #03a9f4;
+$facebook: #1976d2;
+$instagram: #d800b9;
+$pinterest: #cb1f24;
+$gbusiness: #4175df;
+$gcalendar: #34a853;
+
+$custom-colors: (
+  "twitter": (
+    $twitter,
+    findColorInvert($twitter),
+    findLightColor($twitter),
+    findDarkColor($twitter),
+  ),
+  "facebook": (
+    $facebook,
+    findColorInvert($facebook),
+    findLightColor($facebook),
+    findDarkColor($facebook),
+  ),
+  "instagram": (
+    $instagram,
+    findColorInvert($instagram),
+    findLightColor($instagram),
+    findDarkColor($instagram),
+  ),
+  "pinterest": (
+    $pinterest,
+    findColorInvert($pinterest),
+    findLightColor($pinterest),
+    findDarkColor($pinterest),
+  ),
+  "gbusiness": (
+    $gbusiness,
+    findColorInvert($gbusiness),
+    findLightColor($gbusiness),
+    findDarkColor($gbusiness),
+  ),
+  "gcalendar": (
+    $gcalendar,
+    findColorInvert($gcalendar),
+    findLightColor($gcalendar),
+    findDarkColor($gcalendar),
+  ),
+);
+$column-gap: 1em;
+@import "~bulma";
+@import "~buefy/src/scss/buefy";

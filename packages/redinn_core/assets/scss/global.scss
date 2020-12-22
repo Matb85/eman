@@ -1,0 +1,83 @@
+:root {
+  --navh: 72px;
+  --sidew: 300px;
+}
+@media (max-width: 350px) {
+  :root {
+    --top: 62px;
+  }
+}
+@media (max-width: 1300px) {
+  :root {
+    --sidew: 250px;
+  }
+}
+
+div#__nuxt,
+div#__layout,
+html,
+body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  scrollbar-width: thin;
+  scrollbar-color: $primary white;
+  overflow-x: hidden;
+  overflow-y: auto;
+  font-size: 20px;
+}
+@media (max-height: $desktopHBP), (max-width: $mobileWBP) {
+  div#__nuxt,
+  div#__layout,
+  html,
+  body {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 370px) {
+  div#__nuxt,
+  div#__layout,
+  html,
+  body {
+    font-size: 13px;
+  }
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: white;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: $primary;
+  border-radius: 10px;
+}
+
+.content-con {
+  width: calc(100% - var(--sidew));
+  height: calc(100% - var(--navh));
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 1em;
+  overflow-y: auto;
+}
+
+@media (max-width: $sidebarWBP) {
+  .content-con {
+    left: 0;
+    width: 100%;
+  }
+}
+@media (max-width: 370px) {
+  .content-con {
+    --top: 62px;
+  }
+}
