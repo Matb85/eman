@@ -1,5 +1,5 @@
 <template>
-  <section class="add-business" data-background="wide">
+  <section class="add-business background-wide">
     <h1 class="title is-2">Witaj w Redinn, Maria!</h1>
     <h2 class="title is-2">Oto plan działania:</h2>
     <div class="steps">
@@ -25,7 +25,7 @@
 import roundCard from "@/components/roundCard.vue"
 export default {
     name: "addobject",
-    layout: "backgroundFullW",
+    layout: "background",
     components: {
       roundCard
     }

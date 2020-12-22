@@ -1,6 +1,7 @@
 const dirname = "/media"
 import { defaultlinks } from "~/store/globals/globals"
 export const state = () => ({
+    media: ["google_business", "facebook", "instagram", "pinterest", "twitter",],
     subtreelinks: [
         defaultlinks(dirname),
         {

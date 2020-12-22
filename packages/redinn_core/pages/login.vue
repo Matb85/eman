@@ -1,5 +1,5 @@
 <template>
-  <section class="apl-form">
+  <section class="apl-form background-medium">
     <h1 class="is-size-2 is-unselectable has-text-centered">Witaj z powrotem!</h1>
     <b-input type="text" placeholder="Nazwa Użytkownika" class="mt-5" rounded></b-input>
     <b-input type="password" placeholder="Hasło" class="mt-4" password-reveal rounded></b-input>

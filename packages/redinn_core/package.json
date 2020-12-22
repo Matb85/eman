@@ -13,13 +13,12 @@
     "test:e2e": "wdio wdio.conf.js"
   },
   "dependencies": {
+    "@matb85/photoeditor": "^1.1.5",
     "@nuxt/typescript-runtime": "^2.0.0",
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/pwa": "^3.0.2",
     "core-js": "^3.6.5",
-    "koa": "^2.13.0",
-    "koa-router": "^9.4.0",
-    "nuxt": "^2.14.6",
+    "nuxt": "^2.14.12",
     "nuxt-buefy": "^0.4.3",
     "nuxt-i18n": "^6.15.4"
   },

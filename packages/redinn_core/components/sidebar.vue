@@ -75,7 +75,7 @@ export default {
         height: auto;
     }
     
-    @media (max-width: 880px){
+    @media (max-width: $sidebarWBP){
         .sidebar {transform: translateX(-250px);}
         .sidebar.sidebar-opened {transform: translateX(0);}
         .nav-mobile {display: block;}

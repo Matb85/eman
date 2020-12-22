@@ -1,12 +1,12 @@
-<template>  
-    <div>
-        <hi>fsdkafhsjlk</hi>
-    </div>  
+<template>
+  <div>
+    <h1>fsdkafhsjlk</h1>
+  </div>
 </template>
 
 <script>
 export default {
-    name: "upload",
-    layout: "background"
+  name: 'upload',
+  layout: 'background',
 }
 </script>

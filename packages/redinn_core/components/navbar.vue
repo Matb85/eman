@@ -13,7 +13,7 @@
         </div>
         <div id="end" class="is-unselectable">
             <div id="dialog" class="mx-2">
-                <h2 class="title is-4">Witaj Maria</h2>
+                <h2 class="title is-4">Witaj Bernardyna</h2>
                 <p>Co słychać?</p>
             </div>
             <roundCard @click.native="profileMenu = !profileMenu" dim="2.2em" fontSize="1.4em">M</roundCard>
@@ -149,7 +149,7 @@ export default {
         }
     }
 }
-@media (max-width: 880px) {
+@media (max-width: $sidebarWBP) {
     #navbar {
         #start #links {display: none;}
         #end .menu-burger {display: block;}

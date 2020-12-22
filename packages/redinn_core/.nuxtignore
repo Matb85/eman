@@ -1,6 +1,13 @@
-/store/globals/*.js
-
 /lang/**
-
 /assets/**
-!assets/style.scss
+/test/**
+/plugins/**
+/middleware/**
+/config/**
+
+/node_modules/**
+/.README/**
+/.git/**
+/.github/**
+
+
