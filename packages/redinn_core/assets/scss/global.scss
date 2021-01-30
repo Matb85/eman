@@ -1,3 +1,4 @@
+@charset "utf-8";
 :root {
   --navh: 72px;
   --sidew: 300px;
@@ -51,33 +52,31 @@ body {
 }
 *::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 *::-webkit-scrollbar-track {
   background: white;
 }
 *::-webkit-scrollbar-thumb {
   background-color: $primary;
-  border-radius: 10px;
+  border-radius: 4px;
 }
 
-.content-con {
-  width: calc(100% - var(--sidew));
-  height: calc(100% - var(--navh));
-  position: absolute;
-  bottom: 0;
-  right: 0;
+.grid-tile {
+  box-shadow: 1px 3px 10px 1px rgba(0, 0, 0, 0.25);
+  border-radius: 2em;
   padding: 1em;
-  overflow-y: auto;
 }
 
-@media (max-width: $sidebarWBP) {
-  .content-con {
-    left: 0;
-    width: 100%;
-  }
+.is-paragraph {
+  @extend .has-text-weight-bold, .is-family-secondary;
 }
-@media (max-width: 370px) {
-  .content-con {
-    --top: 62px;
-  }
-}
+// import everything but utilities - they are in the _variables files
+@import "~bulma/sass/base/_all";
+@import "~bulma/sass/elements/_all";
+@import "~bulma/sass/form/_all";
+@import "~bulma/sass/components/_all";
+@import "~bulma/sass/grid/_all";
+@import "~bulma/sass/helpers/_all";
+@import "~bulma/sass/layout/_all";
+@import "~buefy/src/scss/buefy.scss";

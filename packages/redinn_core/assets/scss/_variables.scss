@@ -8,6 +8,7 @@
 }
 
 @import "~bulma/sass/utilities/functions";
+$body-overflow-y: auto;
 $primary: #ff3030;
 $family-sans-serif: "Lato";
 $family-secondary: "Lato Light";
@@ -74,6 +75,10 @@ $custom-colors: (
     findDarkColor($gcalendar),
   ),
 );
-$column-gap: 1em;
-@import "~bulma";
-@import "~buefy/src/scss/buefy";
+$column-gap: 0.75rem;
+
+@import "~bulma/sass/utilities/initial-variables.sass";
+@import "~bulma/sass/utilities/derived-variables.sass";
+@import "~bulma/sass/utilities/animations.sass";
+@import "~bulma/sass/utilities/mixins.sass";
+@import "~bulma/sass/utilities/controls.sass";

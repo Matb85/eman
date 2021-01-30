@@ -15,8 +15,10 @@ module.exports = {
   plugins: ["prettier", "wdio"],
   // add your custom rules here
   rules: {
-    noImplicitThis: true,
-    strict: true,
+    "vue/attribute-hyphenation": 0,
+    "lines-between-class-members": 0,
+    "no-undefined": 2,
+    strict: 2,
     "prettier/prettier": ["warn", { trailingComma: "es5", printWidth: 120 }],
     "max-len": [1, 120],
   },

@@ -6,17 +6,19 @@
     <div class="mt-5 form-con">
       <b-button tag="nuxt-link" to="/core" class="is-primary is-size-4 py-0" rounded expanded>Zaloguj</b-button>
     </div>
-    <nuxt-link to="/register" class="subtitle has-text-centered	new-account is-unselectable is-clickable">Załóż konto</nuxt-link>
+    <nuxt-link to="/register" class="subtitle has-text-centered new-account is-unselectable is-clickable"
+      >Załóż konto</nuxt-link
+    >
   </section>
 </template>
 
 <script lang="ts">
 export default {
-  name: 'HomePage',
-  layout: 'background',
-}
+  name: "Login",
+  layout: "background",
+};
 </script>
 
 <style lang="scss">
-  @import "@/assets/components/_loginregister.scss";
+@import "@/assets/scss/partials/_loginregister.scss";
 </style>

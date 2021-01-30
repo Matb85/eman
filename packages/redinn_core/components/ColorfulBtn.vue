@@ -1,50 +1,21 @@
 <template>
-  <b-button
-    :tag="tag"
-    :to="to"
-    class="b-btn"
-    expanded
-    outlined
-    rounded
-    :class="addedclass"
-    :type="type"
-    :icon-left="icon"
-  >
+  <b-button :tag="tag" :to="to" class="b-btn" expanded outlined :class="addedclass" :type="type" :icon-left="icon">
     <img v-if="customIcon" :src="require('@/assets/imgs/logos/' + customIcon + '.svg')" /><slot />
   </b-button>
 </template>
 
-<script>
-export default {
-  name: "colorfulbtn",
-  props: {
-    icon: {
-      required: false,
-      type: String,
-    },
-    customIcon: {
-      required: false,
-      type: String,
-    },
-    addedclass: {
-      required: false,
-      type: String,
-    },
-    type: {
-      default: "is-primary",
-      required: false,
-      type: String,
-    },
-    tag: {
-      required: false,
-      type: String,
-    },
-    to: {
-      required: false,
-      type: String,
-    },
-  },
-};
+<script lang="ts">
+import { Component, Vue, Prop } from "nuxt-property-decorator";
+
+@Component
+export default class Colorfulbtn extends Vue {
+  @Prop() icon: string;
+  @Prop() customIcon: string;
+  @Prop() addedclass: string;
+  @Prop({ default: "is-primary" }) type: string;
+  @Prop() tag: string;
+  @Prop() to: string;
+}
 </script>
 
 <style lang="scss">

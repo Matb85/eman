@@ -1,8 +1,9 @@
 .add-business {
+  padding: 1rem 0 1.5rem 0;
   display: block;
-  height: 100%;
+  min-height: 100%;
   width: 100%;
-  bottom: min(calc(60vw - 130vh), -15%);
+  top: max(15%, calc(122vh - 60vw));
   text-align: center;
   .steps {
     width: 40%;
@@ -29,15 +30,19 @@
     margin: 0 auto;
   }
 }
-@media (max-aspect-ratio: 1/1){
-  .add-business {top: 45%}
-}
-@media (max-width: 550px){
-  .add-business .input-form {
-      grid-template-columns: repeat(1, 1fr);
-      min-width: 250px;
+@media (max-aspect-ratio: 1/1) {
+  .add-business {
+    top: 45%;
   }
 }
-@media (max-width: 310px){
-  .add-business .steps {min-width: 250px;}
+@media (max-width: 550px) {
+  .add-business .input-form {
+    grid-template-columns: repeat(1, 1fr);
+    min-width: 250px;
+  }
+}
+@media (max-width: 310px) {
+  .add-business .steps {
+    min-width: 250px;
+  }
 }
