@@ -21,7 +21,7 @@
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": ["@types/node", "@nuxt/types", "nuxt-i18n", "buefy/types"]
+    "types": ["@types/node", "@nuxt/types", "nuxt-i18n", "buefy/types", "@types/sortablejs"]
   },
   "exclude": ["node_modules", ".nuxt", "dist"]
 }

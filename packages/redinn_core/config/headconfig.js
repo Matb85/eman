@@ -21,10 +21,7 @@ export default {
     new ContentMetaTag("og:image:secure_url", IMG),
     new ContentMetaTag("og:type", "website"),
     new ContentMetaTag("og:site_name", "Redinn"),
-    new ContentMetaTag(
-      "og:url",
-      process.env.BASE_URL || "http://localhost:3000"
-    ),
+    new ContentMetaTag("og:url", process.env.BASE_URL || "http://localhost:3000"),
   ],
   link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
 };

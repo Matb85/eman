@@ -1,5 +1,5 @@
 <template>
-  <div><b-button @click="$emit('switchView', 'Upload')">wróć</b-button></div>
+  <div></div>
 </template>
 
 <script>

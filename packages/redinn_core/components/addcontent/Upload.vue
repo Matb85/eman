@@ -1,18 +1,5 @@
 <template>
   <section class="upload-con">
-    <section class="p-3 is-flex is-mobile is-justify-content-space-between">
-      <b-button type="is-primary" tag="nuxt-link" to="/media" icon-left="close">Anuluj</b-button>
-      <div class="is-flex is-align-items-center">
-        <RoundCard dim="2.5em"><img src="@/assets/imgs/property.jpg" alt="property image" /></RoundCard>
-        <div class="ml-1">
-          <h3>Zygmuntówka</h3>
-          <p class="is-paragraph">@villazygmuntowka</p>
-        </div>
-      </div>
-      <b-button type="is-primary" icon-right="chevron-double-right" @click="$emit('switchView', 'Share')"
-        >Kolejny krok</b-button
-      >
-    </section>
     <section class="preview px-3">
       <div ref="imgs" class="columns mt-0 is-mobile">
         <div v-for="img in uploadedImgs" :key="img.id" class="column img-act-con" :data-id="img.id">
@@ -56,7 +43,6 @@
 
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
-import RoundCard from "@/components/RoundCard.vue";
 import Sortable from "sortablejs";
 let inputCounter = 0;
 interface imgI {
@@ -64,12 +50,11 @@ interface imgI {
   name: string;
   id: number;
 }
-@Component({
-  components: {
-    RoundCard,
-  },
-})
+@Component
 export default class Upload extends Vue {
+  $refs!: {
+    imgs: HTMLElement;
+  };
   uploadedImgs: Array<imgI> = [
     { id: 0, src: "", name: "0" },
     { id: 1, src: "", name: "1" },
@@ -91,10 +76,9 @@ export default class Upload extends Vue {
   }
 
   mounted() {
-    const sortImgs = (order: Array<number>) => {
+    const sortImgs = (order: number[]) => {
       let j = 0;
       for (let i = 0; i < order.length - 1; i++) {
-        console.log(i);
         this.uploadedImgs[order[i]].id = j;
         j++;
       }
@@ -105,11 +89,11 @@ export default class Upload extends Vue {
       animation: 150,
       dataIdAttr: "data-id",
       store: {
-        get(sortable: typeof Sortable) {
+        get(sortable) {
           console.log(sortable);
         },
-        set(sortable: typeof Sortable) {
-          sortImgs(sortable.toArray());
+        set(sortable) {
+          sortImgs(sortable.toArray().map((x) => parseInt(x)));
         },
       },
     });
