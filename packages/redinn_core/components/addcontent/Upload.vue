@@ -2,7 +2,7 @@
   <section class="upload-con">
     <section class="preview px-3">
       <div ref="imgs" class="columns mt-0 is-mobile">
-        <div v-for="img in uploadedImgs" :key="img.id" class="column img-act-con" :data-id="img.id">
+        <div v-for="img in uploadedImgs" :key="img.undefined" class="column img-act-con" :data-id="img.id">
           <div class="columns is-vcentered is-centered is-multiline is-align-content-center">
             <div class="m-2 is-clickable" @click="$emit('switchView', 'PhotoEditor')">
               <b-icon icon="image-edit-outline" type="is-light" size="is-large" />
@@ -10,17 +10,17 @@
             </div>
             <div class="m-2 is-clickable">
               <b-icon icon="trash-can-outline" type="is-light" size="is-large" />
-              <p class="is-paragraph has-text-centered has-text-white">{{ img.id }}</p>
+              <p class="is-paragraph has-text-centered has-text-white">{{ img.order }}</p>
             </div>
           </div>
-          <img src="@/assets/imgs/property.jpg" :alt="img.name" />
+          <img :src="img.src" :alt="img.name" />
         </div>
         <div v-if="uploadedImgs.length <= 10" class="column py-6 is-flex upload-form">
           <b-upload accept=".jpg,.jpeg,.png" drag-drop multiple class="is-flex-grow-0" @input="addImg($event)">
             <section class="section">
               <div class="content has-text-centered">
                 <b-icon icon="upload" size="is-large"></b-icon>
-                <p>Drop your files here or click to upload</p>
+                <p>Upuść zdjęcia lub kliknij aby je dodać</p>
               </div>
             </section>
           </b-upload>
@@ -47,41 +47,70 @@ import Sortable from "sortablejs";
 let inputCounter = 0;
 interface imgI {
   src: string | ArrayBuffer | null;
-  name: string;
-  id: number;
+  readonly name: string;
+  readonly id: number;
+  order: number;
 }
 @Component
 export default class Upload extends Vue {
-  $refs!: {
-    imgs: HTMLElement;
-  };
-  uploadedImgs: Array<imgI> = [
-    { id: 0, src: "", name: "0" },
-    { id: 1, src: "", name: "1" },
-    { id: 2, src: "", name: "2" },
-  ];
+  $refs!: { imgs: HTMLElement };
+
+  uploadedImgs: Array<imgI> = [];
   addImg(imgs: FileList) {
+    const status: Promise<void>[] = [];
     for (let i = inputCounter; i < imgs.length; i++) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.uploadedImgs.push({
-          src: reader.result,
-          name: imgs[i].name,
-          id: this.uploadedImgs.length,
-        });
-      };
-      reader.readAsDataURL(imgs[i]);
+      status.push(this.readImg(imgs[i]));
     }
     inputCounter = imgs.length;
+    // wait for all the imgs to be read and pushed into this.uploadedImgs
+    Promise.allSettled(status).then(() => {
+      const a = this.uploadedImgs.map((i) => {
+        return { id: i.id, name: i.name };
+      });
+      // save a map of images in case of a page reload
+      sessionStorage.setItem("uploadedimgsmap", JSON.stringify(a));
+    });
   }
-
+  readImg(img: File) {
+    return new Promise<void>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        sessionStorage.setItem("uploadedimg" + this.uploadedImgs.length, reader.result as string);
+        this.uploadedImgs.push({
+          src: reader.result,
+          name: img.name,
+          id: this.uploadedImgs.length,
+          order: this.uploadedImgs.length,
+        });
+        resolve();
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(img);
+    });
+  }
   mounted() {
+    // it has to be a distinct function because of scoping interference
     const sortImgs = (order: number[]) => {
+      console.log(order);
+      console.log(this.uploadedImgs);
       let j = 0;
       for (let i = 0; i < order.length - 1; i++) {
-        this.uploadedImgs[order[i]].id = j;
+        this.uploadedImgs[order[i]].order = j;
         j++;
       }
+      console.log(this.uploadedImgs.map((i) => i.order));
+
+      // update the map of images in case of a page reload -- see addImg()
+      sessionStorage.setItem(
+        "uploadedimgsmap",
+        JSON.stringify(
+          [...this.uploadedImgs].sort(function (a: imgI, b: imgI) {
+            if (a.order > b.order) return 1;
+            if (b.order > a.order) return -1;
+            return 0;
+          })
+        )
+      );
     };
     Sortable.create(this.$refs.imgs, {
       filter: ".upload-form",
@@ -97,8 +126,20 @@ export default class Upload extends Vue {
         },
       },
     });
-    this.uploadedImgs[0].id = 1;
-    this.uploadedImgs[1].id = 0;
+
+    if (!sessionStorage.getItem("uploadedimgsmap")) return;
+    const uploadedimgsmap = JSON.parse(sessionStorage.getItem("uploadedimgsmap") as string);
+    this.uploadedImgs = uploadedimgsmap.map(
+      (x): imgI => {
+        console.log("uploadedimg" + x.id);
+        return {
+          src: sessionStorage.getItem("uploadedimg" + x.id),
+          id: x.id,
+          name: x.name,
+          order: x.order,
+        };
+      }
+    );
   }
 }
 </script>
