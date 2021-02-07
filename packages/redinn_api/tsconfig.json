@@ -6,19 +6,28 @@
     "strict": true,
     "noImplicitAny": false,
     "noImplicitThis": true,
-    "preserveConstEnums": true,
-    "forceConsistentCasingInFileNames": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "preserveConstEnums": true,
+    "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
     "removeComments": true,
     "sourceMap": false,
-    "target": "ES6"
+    "target": "ES2020"
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules"],
-  "types": ["@types/node", "@types/lodash"]
+  "exclude": ["node_modules/**/*"],
+  "types": [
+    "@types/node",
+    "@types/express",
+    "@types/mongoose",
+    "@types/bcrypt",
+    "@types/jsonwebtoken",
+    "@types/passport",
+    "@types/passport-local",
+    "@types/passport-jwt"
+  ]
 }
