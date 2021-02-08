@@ -4,7 +4,7 @@ mongoose.set("useNewUrlParser", true);
 mongoose.set("useFindAndModify", false);
 mongoose.set("useCreateIndex", true);
 mongoose.set("useUnifiedTopology", true);
-mongoose.connect("mongodb://127.0.0.1:27017/?gssapiServiceName=mongodb", {});
+mongoose.connect(process.env.DB || "mongodb://127.0.0.1:27017/", {});
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "connection error:"));

@@ -1,11 +1,10 @@
+require("dotenv").config(); // eslint-disable-line
 import express from "express";
 import bodyParser from "body-parser";
 import passport from "passport";
 import authRoutes from "./routes/auth";
 import graphql from "./routes/graphql";
 import "./auth/strategies";
-
-require("dotenv").config(); // eslint-disable-line
 
 const port = process.env.PORT || 3000;
 const app = express();
