@@ -32,7 +32,11 @@ passport.use(
   new JwtStrategy(
     { secretOrKey: "TOP_SECRET", jwtFromRequest: ExtractJwt.fromBodyField("token") },
     async (token, done) => {
-      return done(null, token.user);
+      try {
+        return done(null, token.id);
+      } catch (error) {
+        done(error);
+      }
     }
   )
 );
