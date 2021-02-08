@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: "addbusiness",
+  name: "Addbusiness",
   layout: "background",
 };
 </script>

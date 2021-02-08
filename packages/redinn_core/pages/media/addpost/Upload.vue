@@ -15,7 +15,7 @@
           </div>
           <img :src="img.src" :alt="img.name" />
         </div>
-        <div v-if="uploadedImgs.length <= 10" class="column py-6 is-flex upload-form">
+        <div v-if="uploadedImgs.length <= 10" class="column py-5 is-flex upload-form">
           <b-upload accept=".jpg,.jpeg,.png" drag-drop multiple class="is-flex-grow-0" @input="addImg($event)">
             <section class="section">
               <div class="content has-text-centered">
@@ -89,6 +89,7 @@ export default class Upload extends Vue {
     });
   }
   mounted() {
+    console.log(this.$route);
     // it has to be a distinct function because of scoping interference
     const sortImgs = (order: number[]) => {
       console.log(order);

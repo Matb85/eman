@@ -9,9 +9,11 @@ export default {
   styleResources: {
     scss: ["~assets/scss/_variables.scss"],
   },
+
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [],
-
+  // Use all the new features in ES2015+ (https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-modern/)
+  modern: true,
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: false,
 
