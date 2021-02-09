@@ -4,7 +4,7 @@
     "rootDir": "./src",
     "module": "commonjs",
     "strict": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noImplicitThis": true,
     "noImplicitReturns": true,
     "noUnusedLocals": true,
@@ -28,6 +28,7 @@
     "@types/jsonwebtoken",
     "@types/passport",
     "@types/passport-local",
-    "@types/passport-jwt"
+    "@types/passport-jwt",
+    "@types/morgan"
   ]
 }

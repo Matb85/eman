@@ -12,10 +12,10 @@ async function CreateUser(email: string, password: string): Promise<UserI> {
 
 async function GetUser(email: string): Promise<UserI> {
   return await User.findOne({ email })
-    .then(data => {
+    .then((data: UserI) => {
       return data;
     })
-    .catch(err => {
+    .catch((err: Error) => {
       throw err;
     });
 }

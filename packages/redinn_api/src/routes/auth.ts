@@ -18,8 +18,7 @@ router.post("/register", async (req, res) => {
 
   return userManagemet
     .CreateUser(email, await GeneratePasswordHash(password))
-    .then(data => {
-      console.log("data:", data);
+    .then(() => {
       return res.status(201).send({ message: "An account has been created. Welcome to Redinn!" });
     })
     .catch(err => {
@@ -28,10 +27,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", async (req, res, next) => {
-  console.log("once");
   passport.authenticate("local", { session: false }, (err, user: UserI, { message } = "") => {
-    console.log(err);
-    console.log(user);
     if (err || !user) return res.status(400).send({ err, message });
 
     const token = jwt.sign({ id: user._id, email: user.email }, "TOP_SECRET", { expiresIn: "15m" });
