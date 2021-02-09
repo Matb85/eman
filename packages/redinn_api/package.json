@@ -1,11 +1,12 @@
 {
   "name": "redinn_api",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "ts-node ./src/app.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "release": "standard-version"
   },
   "author": "",
   "license": "ISC",
