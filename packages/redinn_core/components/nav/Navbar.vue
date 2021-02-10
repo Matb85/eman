@@ -32,7 +32,7 @@
           <b-menu-item icon="cog" label="Ustawienia"></b-menu-item>
           <b-menu-item icon="account" label="Profil"></b-menu-item>
           <b-menu-item icon="information-outline" label="Pomoc"></b-menu-item>
-          <b-menu-item icon="logout" label="Wyloguj"></b-menu-item>
+          <b-menu-item icon="logout" label="Wyloguj" @click="$auth.logout()"></b-menu-item>
         </b-menu-list>
       </div>
     </div>

@@ -15,6 +15,7 @@
   "dependencies": {
     "@matb85/photoeditor": "^1.1.16",
     "@nuxt/typescript-runtime": "^2.0.1",
+    "@nuxtjs/auth-next": "5.0.0-1611574754.9020f2a",
     "@nuxtjs/axios": "^5.13.0",
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.8.3",

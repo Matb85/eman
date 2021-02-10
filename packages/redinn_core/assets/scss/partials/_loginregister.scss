@@ -5,19 +5,27 @@
   width: auto;
   transform: translate(-50%);
   text-align: center;
-  h1 {white-space: nowrap;}
+  h1 {
+    white-space: nowrap;
+  }
   .form-con {
     position: relative;
     width: 86%;
     margin: 0 auto;
-    a.button {height: 1.9em;}
+    input.button {
+      height: 1.9em;
+    }
   }
 }
 .new-account {
   display: inline-block;
   margin-top: 1em;
-  &:hover{text-decoration: underline;}
+  &:hover {
+    text-decoration: underline;
+  }
 }
 @media (max-height: #{$desktopHBP + 20px}) {
-  .new-account {margin-top: 0.6em;}
+  .new-account {
+    margin-top: 0.6em;
+  }
 }
