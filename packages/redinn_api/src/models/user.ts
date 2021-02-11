@@ -12,16 +12,22 @@ db.once("open", function() {
   console.log("connected to the db!");
 });
 
-export interface UserI extends Document<number> {
-  _id: number;
+export interface UserI {
   email: string;
   password: string;
-  _v: number;
+  firstName: string;
+  lastName: string;
+  enterprises: number[];
 }
 
-const UserSchema: Schema = new Schema({
+export interface UserDoc extends UserI, Document<number> {}
+
+const UserSchema = new Schema<UserDoc>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
+  firstName: { type: String, required: true },
+  lastName: { type: String, required: true },
+  enterprises: { type: [Number], default: [] },
 });
 
-export default mongoose.model<UserI>("User", UserSchema);
+export default mongoose.model<UserDoc>("User", UserSchema);

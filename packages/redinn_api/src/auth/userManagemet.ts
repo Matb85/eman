@@ -1,7 +1,7 @@
-import User, { UserI } from "../models/user";
+import User, { UserDoc, UserI } from "../models/user";
 
-async function CreateUser(email: string, password: string): Promise<UserI> {
-  return await User.create({ email, password })
+async function CreateUser(credentials: UserI): Promise<UserDoc> {
+  return await User.create(credentials)
     .then(data => {
       return data;
     })
@@ -10,9 +10,9 @@ async function CreateUser(email: string, password: string): Promise<UserI> {
     });
 }
 
-async function GetUser(email: string): Promise<UserI> {
+async function GetUser(email: string): Promise<UserDoc> {
   return await User.findOne({ email })
-    .then((data: UserI) => {
+    .then((data: UserDoc) => {
       return data;
     })
     .catch((err: Error) => {

@@ -3,8 +3,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import passport from "passport";
-import authRoutes from "./routes/auth";
-import graphql from "./routes/graphql";
+import authRoutes from "./auth/routes";
+import apollo from "./graphql/routes";
 import "./auth/strategies";
 
 const port = process.env.PORT || 3000;
@@ -17,6 +17,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoutes);
-app.use("/graphql", passport.authenticate("jwt", { session: false }), graphql);
+
+app.use("/graphql", /*passport.authenticate("jwt", { session: false }),*/ apollo.getMiddleware({ path: "/" }));
 
 app.listen(port, () => console.log("App listening on port " + port));

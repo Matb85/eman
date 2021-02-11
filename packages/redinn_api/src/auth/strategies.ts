@@ -3,7 +3,8 @@ import auth from "./userManagemet";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import { UserI } from "../models/user";
+import { UserDoc } from "../models/user";
+
 passport.use(
   "local",
   new LocalStrategy(
@@ -11,7 +12,7 @@ passport.use(
     async (email: string, password: string, done) => {
       auth
         .GetUser(email)
-        .then(async (user: UserI) => {
+        .then(async (user: UserDoc) => {
           console.log("granted user", user._id);
           if (!user) return done(null, false, { message: "Authentication failed" });
 
