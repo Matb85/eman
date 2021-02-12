@@ -1,6 +1,6 @@
 import { Router } from "express";
 import passport from "passport";
-import userManagemet from "./userManagemet";
+import * as userManagemet from "./userManagement";
 import { GeneratePasswordHash } from "./encryption";
 import jwt from "jsonwebtoken";
 import { UserDoc, UserI } from "../models/user";
@@ -10,7 +10,7 @@ router.post("/register", async (req, res) => {
   const cred: UserI = req.body; // user credentials
   if (!cred.password || !cred.email || !cred.firstName || !cred.lastName)
     return res.send({ error: "Provide all necessary credentials" });
-  if (await userManagemet.GetUser(cred.email)) return res.send({ error: "this email is already taken." });
+  if (await userManagemet.GetUser({ email: cred.email })) return res.send({ error: "this email is already taken." });
 
   cred.password = await GeneratePasswordHash(cred.password);
   cred.enterprises = [];

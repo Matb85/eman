@@ -13,6 +13,7 @@ db.once("open", function() {
 });
 
 export interface UserI {
+  id: string;
   email: string;
   password: string;
   firstName: string;
@@ -20,7 +21,9 @@ export interface UserI {
   enterprises: number[];
 }
 
-export interface UserDoc extends UserI, Document<number> {}
+export interface UserDoc extends UserI, Document<string> {
+  id: string;
+}
 
 const UserSchema = new Schema<UserDoc>({
   email: { type: String, required: true, unique: true },

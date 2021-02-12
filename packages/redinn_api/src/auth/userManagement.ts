@@ -1,6 +1,6 @@
 import User, { UserDoc, UserI } from "../models/user";
 
-async function CreateUser(credentials: UserI): Promise<UserDoc> {
+export async function CreateUser(credentials: UserI): Promise<UserDoc> {
   return await User.create(credentials)
     .then(data => {
       return data;
@@ -10,8 +10,10 @@ async function CreateUser(credentials: UserI): Promise<UserDoc> {
     });
 }
 
-async function GetUser(email: string): Promise<UserDoc> {
-  return await User.findOne({ email })
+type UserProp<P, T> = Record<Extract<keyof UserI, P>, T>;
+
+export async function GetUser(data: UserProp<"id", string> | UserProp<"email", string>): Promise<UserDoc> {
+  return await User.findOne(data)
     .then((data: UserDoc) => {
       return data;
     })
@@ -19,8 +21,3 @@ async function GetUser(email: string): Promise<UserDoc> {
       throw err;
     });
 }
-
-export default {
-  CreateUser,
-  GetUser,
-};

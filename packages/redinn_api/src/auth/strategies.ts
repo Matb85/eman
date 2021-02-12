@@ -1,5 +1,5 @@
 import { comparePasswords } from "./encryption";
-import auth from "./userManagemet";
+import { GetUser } from "./userManagement";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
@@ -10,10 +10,9 @@ passport.use(
   new LocalStrategy(
     { usernameField: "email", passwordField: "password", session: false },
     async (email: string, password: string, done) => {
-      auth
-        .GetUser(email)
+      GetUser({ email })
         .then(async (user: UserDoc) => {
-          console.log("granted user", user._id);
+          console.log("granted user", user.id);
           if (!user) return done(null, false, { message: "Authentication failed" });
 
           const validation = await comparePasswords(password, user.password);
@@ -21,7 +20,7 @@ passport.use(
 
           return done(null, false, { message: "Authentication failed" });
         })
-        .catch(err => {
+        .catch((err: Error) => {
           return done(err);
         });
     }
