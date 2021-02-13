@@ -1,5 +1,5 @@
 <template>
-  <section id="navbar">
+  <nav id="navbar">
     <div id="start">
       <div id="brand" class="mx-2">
         <LogoIcon />
@@ -15,17 +15,19 @@
     </div>
     <div id="end" class="is-unselectable">
       <div id="dialog" class="mx-2">
-        <h2 class="title is-4">Witaj Bernardyna</h2>
+        <h2 class="title is-4">Witaj {{ $auth.user.firstName }}</h2>
         <p>Co słychać?</p>
       </div>
-      <RoundCard dim="2.2em" fontSize="1.4em" @click.native="profileMenu = !profileMenu">M</RoundCard>
+      <RoundCard dim="2.2em" fontSize="1.4em" @click.native="profileMenu = !profileMenu">{{
+        $auth.user.firstName ? $auth.user.firstName[0] : ""
+      }}</RoundCard>
       <MenuBurger @click.native="toggleSidebar" />
       <div v-show="profileMenu" id="profile-menu">
         <div class="current-profile mb-3">
           <RoundCard dim="2.2em" fontSize="1.4em">M</RoundCard>
           <div class="profile-basic-info ml-2">
-            <p class="title is-5 mb-0">Maria Bis</p>
-            <p class="has-text-weight-bold is-family-secondary">mariab14@gmail.com</p>
+            <p class="title is-5 mb-0">{{ $auth.user.firstName + " " + $auth.user.lastName }}</p>
+            <p class="has-text-weight-bold is-family-secondary">{{ $auth.user.email }}</p>
           </div>
         </div>
         <b-menu-list>
@@ -36,7 +38,7 @@
         </b-menu-list>
       </div>
     </div>
-  </section>
+  </nav>
 </template>
 
 <script lang="ts">

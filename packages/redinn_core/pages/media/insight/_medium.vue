@@ -45,6 +45,7 @@ export default {
   layout: "dashboard",
   components: { GridCon, VerticalCon },
   asyncData({ params, error, store }) {
+    console.log(params);
     if (!store.state.media.media.includes(params.medium))
       error({ statusCode: 404, message: "This page could not be found" });
     const medium = params.medium;

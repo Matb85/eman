@@ -51,16 +51,23 @@ export default {
     strategies: {
       local: {
         property: "token",
+        user: {
+          property: "data.user",
+        },
         endpoints: {
           login: { url: "/auth/login", method: "post" },
-          logout: { url: "/auth/logout", method: "post" },
-          user: false,
+          logout: false,
+          user: {
+            method: "post",
+            url: "/graphql",
+            data: { query: "query { user {email, firstName, lastName, enterprises}}" },
+          },
         },
       },
     },
     redirect: {
       login: "/login",
-      logout: "www.facebook.com",
+      logout: "/register",
       callback: "/login",
       home: "/core",
     },

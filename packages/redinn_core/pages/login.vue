@@ -36,13 +36,18 @@ export default class Login extends Vue {
     password: "",
   };
 
-  async login(): Promise<void> {
-    try {
-      const response = await this.$auth.loginWith("local", { data: this.credentials });
-      console.log(response);
-    } catch (err) {
-      console.log(err);
-    }
+  login(): void {
+    this.$auth
+      .loginWith("local", { data: this.credentials })
+      .then(async () => {
+        const user = await this.$axios.$post("/graphql", {
+          query: "query { user {email, firstName, lastName, enterprises }}",
+        });
+        this.$auth.setUser(user.data.user);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 }
 </script>

@@ -25,7 +25,7 @@ class ArrowInstance {
   }
 }
 export default {
-  name: "backgroundFullW",
+  name: "BackgroundFullW",
   components: {
     Doublearrow,
     LogoIcon,

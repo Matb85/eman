@@ -34,7 +34,7 @@
         >Dodaj Relację</b-button
       >
       <b-button class="act-btn px-5" tag="nuxt-link" to="/media/addpost" type="is-primary" icon-left="plus"
-        >Dodaj <span> Post</span></b-button
+        >Dodaj <span>Post</span></b-button
       >
     </div>
   </section>
@@ -49,56 +49,3 @@ export default {
   components: { GridCon, VerticalCon },
 };
 </script>
-
-<style lang="scss" scoped>
-.br-act-btns {
-  position: fixed;
-  bottom: 1rem;
-  right: 2rem;
-  display: flex;
-  flex-direction: column;
-  width: 6em;
-  transition: width 0.4s;
-  .act-btn {
-    i.mdi.mdi-plus {
-      font-size: 1.3em;
-    }
-    &:nth-of-type(1) {
-      position: relative;
-      top: 0;
-      right: 0;
-      z-index: -1;
-      opacity: 0;
-      transform: translateY(2.5em);
-      transition: opacity 0.4s, transform 0.4s;
-    }
-    &:nth-of-type(2) {
-      overflow: hidden;
-      > ::v-deep span:not(.icon) {
-        margin-right: -2em;
-        transition: margin-right 0.4s;
-        span {
-          display: inline-block;
-          transform: translateY(2.5rem);
-          transition: transform 0.4s;
-        }
-      }
-    }
-  }
-  &:hover {
-    width: 10em;
-    .act-btn {
-      &:nth-of-type(1) {
-        transform: translateY(-0.5rem);
-        opacity: 1;
-      }
-      &:nth-of-type(2) > ::v-deep span:not(.icon) {
-        margin-right: 0;
-        span {
-          transform: translateY(0);
-        }
-      }
-    }
-  }
-}
-</style>

@@ -1,9 +1,8 @@
 <template>
-  <section>
+  <section class="dashbord">
     <Navbar :curPage="curPage" :links="links" />
-
     <Sidebar :links="links">
-      <div v-for="branch in $store.state[$route.name].subtreelinks" :key="branch.name">
+      <div v-for="branch in $store.state[curPage.lowerCaseName].subtreelinks" :key="branch.name">
         <hr class="my-2" />
         <h3>{{ branch.name }}</h3>
         <div class="routes">
@@ -47,8 +46,10 @@ export default class Dashboard extends Vue {
     return this.$store.state.dashboards.filter((link: PrimeRouteI) => link.name !== this.curPage.name);
   }
   get curPage() {
-    const nm = this.$route.name as string;
+    const rm = this.$route.name as string;
+    const nm = rm.substring(0, rm.includes("-") ? rm.indexOf("-") : rm.length);
     return {
+      lowerCaseName: nm,
       name: nm[0].toUpperCase() + nm.substring(1),
       to: this.$route.path,
     };
@@ -56,8 +57,8 @@ export default class Dashboard extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
-section > ::v-deep .content-con {
+<style lang="scss">
+.dashbord > .content-con {
   width: calc(100% - var(--sidew));
   height: calc(100% - var(--navh));
   position: absolute;
@@ -72,14 +73,66 @@ section > ::v-deep .content-con {
 }
 
 @media (max-width: $sidebarWBP) {
-  section > ::v-deep .content-con {
+  .dashbord > .content-con {
     left: 0;
     width: 100%;
   }
 }
 @media (max-width: 370px) {
-  section > ::v-deep .content-con {
+  .dashbord > .content-con {
     --top: 62px;
+  }
+}
+
+//buttons in the tight bottom corner
+.br-act-btns {
+  position: fixed;
+  bottom: 1rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  width: 6rem;
+  transition: width 0.4s;
+  > .act-btn {
+    i.mdi.mdi-plus {
+      font-size: 1.3rem;
+    }
+    &:nth-of-type(1) {
+      position: relative;
+      top: 0;
+      right: 0;
+      z-index: -1;
+      opacity: 0;
+      transform: translateY(2.5rem);
+      transition: opacity 0.4s, transform 0.4s;
+    }
+    &:nth-of-type(2) {
+      overflow: hidden;
+      > span:not(.icon) {
+        margin-right: -2rem;
+        transition: margin-right 0.4s;
+        span {
+          display: inline-block;
+          transform: translateY(2.5rem);
+          transition: transform 0.4s;
+        }
+      }
+    }
+  }
+  &:hover {
+    width: 10em;
+    > .act-btn {
+      &:nth-of-type(1) {
+        transform: translateY(-0.5rem);
+        opacity: 1;
+      }
+      &:nth-of-type(2) > span:not(.icon) {
+        margin-right: 0;
+        span {
+          transform: translateY(0);
+        }
+      }
+    }
   }
 }
 </style>
