@@ -3,7 +3,7 @@ import { gql } from "apollo-server-express";
 export default gql`
   type Query {
     books: [Book]
-    user(id: ID): User
+    user: User
   }
   type Book {
     title: String

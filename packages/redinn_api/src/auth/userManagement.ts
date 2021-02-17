@@ -10,10 +10,8 @@ export async function CreateUser(credentials: UserI): Promise<UserDoc> {
     });
 }
 
-type UserProp<P, T> = Record<Extract<keyof UserI, P>, T>;
-
-export async function GetUser(data: UserProp<"id", string> | UserProp<"email", string>): Promise<UserDoc> {
-  return await User.findOne(data)
+export async function GetUser(email: string): Promise<UserDoc> {
+  return await User.findOne({ email: email })
     .then((data: UserDoc) => {
       return data;
     })

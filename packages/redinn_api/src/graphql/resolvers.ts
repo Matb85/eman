@@ -1,6 +1,6 @@
 import User, { UserI } from "../models/user";
-// import { GetUser } from "../auth/userManagement";
 import { Error } from "mongoose";
+type SafeUser = Omit<UserI, "password" | "id">;
 
 const books = [
   {
@@ -16,17 +16,18 @@ const books = [
 export default {
   Query: {
     books: (): typeof books => books,
-    user(_: string, args: { id: string }): Promise<Omit<UserI, "password" | "id">> {
-      return User.findById(args.id)
-        .then((user: UserI) => {
-          console.log(user, args);
-          return {
-            email: user.email,
-            firstName: user.firstName,
-            lastName: user.lastName,
-            enterprises: user.enterprises,
-          };
-        })
+    user(_: unknown, __: unknown, context: { user: string }): Promise<SafeUser> {
+      return User.findById(context.user)
+        .then(
+          (user: UserI): SafeUser => {
+            return {
+              email: user.email,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              enterprises: user.enterprises,
+            };
+          }
+        )
         .catch((err: Error) => err);
     },
   },

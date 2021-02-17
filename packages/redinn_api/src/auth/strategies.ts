@@ -10,7 +10,7 @@ passport.use(
   new LocalStrategy(
     { usernameField: "email", passwordField: "password", session: false },
     async (email: string, password: string, done) => {
-      GetUser({ email })
+      GetUser(email)
         .then(async (user: UserDoc) => {
           console.log("granted user", user.id);
           if (!user) return done(null, false, { message: "Authentication failed" });
@@ -30,8 +30,9 @@ passport.use(
 passport.use(
   "jwt",
   new JwtStrategy(
-    { secretOrKey: "TOP_SECRET", jwtFromRequest: ExtractJwt.fromBodyField("token") },
+    { secretOrKey: "TOP_SECRET", jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("bearer") },
     async (token, done) => {
+      console.log("token: ", token);
       try {
         return done(null, token.id);
       } catch (error) {

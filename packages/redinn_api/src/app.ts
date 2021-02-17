@@ -18,6 +18,6 @@ app.use(passport.session());
 
 app.use("/auth", authRoutes);
 
-app.use("/graphql", /*passport.authenticate("jwt", { session: false }),*/ apollo.getMiddleware({ path: "/" }));
+app.post("/graphql", passport.authenticate("jwt", { session: false }), apollo.getMiddleware({ path: "/" }));
 
 app.listen(port, () => console.log("App listening on port " + port));

@@ -10,7 +10,7 @@ router.post("/register", async (req, res) => {
   const cred: UserI = req.body; // user credentials
   if (!cred.password || !cred.email || !cred.firstName || !cred.lastName)
     return res.send({ error: "Provide all necessary credentials" });
-  if (await userManagemet.GetUser({ email: cred.email })) return res.send({ error: "this email is already taken." });
+  if (await userManagemet.GetUser(cred.email)) return res.send({ error: "this email is already taken." });
 
   cred.password = await GeneratePasswordHash(cred.password);
   cred.enterprises = [];
@@ -29,7 +29,7 @@ router.post("/login", async (req, res, next) => {
   passport.authenticate("local", { session: false }, (err, user: UserDoc, { message } = "") => {
     if (err || !user) return res.status(400).send({ err, message });
 
-    const token = jwt.sign({ id: user.id, email: user.email }, "TOP_SECRET", { expiresIn: "30m" });
+    const token = jwt.sign({ id: user.id }, "TOP_SECRET", { expiresIn: "30m" });
 
     return res.send({ message: "login successful", token });
   })(req, res, next);
