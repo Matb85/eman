@@ -7,8 +7,3 @@ export async function comparePasswords(plainPassword: string, hashedPassword: st
 export async function GeneratePasswordHash(password: string): Promise<string> {
   return await bcrypt.hash(password, 12);
 }
-
-export default {
-  comparePasswords,
-  GeneratePasswordHash,
-};

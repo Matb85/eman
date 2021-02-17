@@ -1,16 +1,16 @@
 import { comparePasswords } from "./encryption";
-import { GetUser } from "./userManagement";
+import User from "@/db/user";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import { UserDoc } from "../models/user";
+import { UserDoc } from "../db/user";
 
 passport.use(
   "local",
   new LocalStrategy(
     { usernameField: "email", passwordField: "password", session: false },
     async (email: string, password: string, done) => {
-      GetUser(email)
+      User.findOne({ email })
         .then(async (user: UserDoc) => {
           console.log("granted user", user.id);
           if (!user) return done(null, false, { message: "Authentication failed" });
@@ -32,7 +32,6 @@ passport.use(
   new JwtStrategy(
     { secretOrKey: "TOP_SECRET", jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("bearer") },
     async (token, done) => {
-      console.log("token: ", token);
       try {
         return done(null, token.id);
       } catch (error) {

@@ -1,22 +1,21 @@
 import { Router } from "express";
 import passport from "passport";
-import * as userManagemet from "./userManagement";
+import User from "@/db/user";
 import { GeneratePasswordHash } from "./encryption";
 import jwt from "jsonwebtoken";
-import { UserDoc, UserI } from "../models/user";
+import { UserDoc, UserI } from "../db/user";
 const router = Router();
 
 router.post("/register", async (req, res) => {
   const cred: UserI = req.body; // user credentials
   if (!cred.password || !cred.email || !cred.firstName || !cred.lastName)
     return res.send({ error: "Provide all necessary credentials" });
-  if (await userManagemet.GetUser(cred.email)) return res.send({ error: "this email is already taken." });
+  if (await User.findOne({ email: cred.email })) return res.send({ error: "this email is already taken." });
 
   cred.password = await GeneratePasswordHash(cred.password);
   cred.enterprises = [];
 
-  return userManagemet
-    .CreateUser(cred)
+  return User.create(cred)
     .then(() => {
       return res.status(201).send({ message: "An account has been created. Welcome to Redinn!" });
     })

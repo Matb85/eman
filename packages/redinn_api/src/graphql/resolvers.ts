@@ -1,4 +1,4 @@
-import User, { UserI } from "../models/user";
+import User, { UserI } from "../db/user";
 import { Error } from "mongoose";
 type SafeUser = Omit<UserI, "password" | "id">;
 
