@@ -73,7 +73,7 @@ export default {
     },
   },
   router: {
-    middleware: ["auth"],
+    middleware: ["auth", "enterprises"],
     base: process.env.ROUTER_BASE_URL || "/",
   },
 

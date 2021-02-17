@@ -1,5 +1,3 @@
 {
-    "conventionalCommits.scopes": [
-        "media"
-    ]
+  "conventionalCommits.scopes": ["media", "ui", "auth", "core"]
 }

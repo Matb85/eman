@@ -30,10 +30,10 @@
 
 <script lang="ts">
 import { Component, Vue } from "nuxt-property-decorator";
-import { PrimeRouteI } from "@/store";
 import Navbar from "@/components/nav/Navbar.vue";
 import Sidebar from "@/components/nav/Sidebar.vue";
 import ColorfulBtn from "@/components/ColorfulBtn.vue";
+import { PrimeRouteI } from "@/store";
 @Component({
   components: {
     Navbar,

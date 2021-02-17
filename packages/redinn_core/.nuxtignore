@@ -2,7 +2,6 @@
 /assets/**
 /test/**
 /plugins/**
-/middleware/**
 /config/**
 
 /node_modules/**
