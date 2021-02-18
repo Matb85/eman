@@ -1,9 +1,8 @@
 import { comparePasswords } from "./encryption";
-import User from "@/db/user";
+import User, { UserDoc } from "@/db/user";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-import { UserDoc } from "../db/user";
 
 passport.use(
   "local",
@@ -13,7 +12,6 @@ passport.use(
       User.findOne({ email })
         .then(async (user: UserDoc) => {
           if (!user) return done(null, false, { message: "Authentication failed" });
-          console.log("granted user", user.id);
 
           const validation = await comparePasswords(password, user.password);
           if (validation) return done(null, user, { message: "Authentication succeeded" });

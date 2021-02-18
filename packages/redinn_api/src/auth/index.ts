@@ -1,9 +1,8 @@
 import { Router } from "express";
 import passport from "passport";
-import User from "@/db/user";
+import User, { UserDoc, UserI } from "@/db/user";
 import { GeneratePasswordHash } from "./encryption";
 import jwt from "jsonwebtoken";
-import { UserDoc, UserI } from "../db/user";
 const router = Router();
 
 router.post("/register", async (req, res) => {
@@ -20,13 +19,14 @@ router.post("/register", async (req, res) => {
       return res.status(201).send({ message: "An account has been created. Welcome to Redinn!" });
     })
     .catch(err => {
-      throw err;
+      return res.status(500).send({ message: err });
     });
 });
 
 router.post("/login", async (req, res, next) => {
   passport.authenticate("local", { session: false }, (err, user: UserDoc, { message } = "") => {
-    if (err || !user) return res.status(400).send({ err, message });
+    if (err || !user) return res.status(400).send({ message });
+    console.log("granted user", user.id);
 
     const token = jwt.sign({ id: user.id }, "TOP_SECRET", { expiresIn: "30m" });
 
