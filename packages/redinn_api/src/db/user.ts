@@ -1,7 +1,6 @@
 import { model, Document, Schema } from "mongoose";
 
 export interface UserI {
-  id: string;
   email: string;
   password: string;
   firstName: string;
@@ -9,16 +8,14 @@ export interface UserI {
   enterprises: number[];
 }
 
-export interface UserDoc extends UserI, Document<string> {
-  id: string;
-}
+export type UserDoc = UserI & Document<string>;
 
 const UserSchema = new Schema<UserDoc>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  enterprises: { type: [Number], default: [] },
+  enterprises: { type: [Schema.Types.ObjectId], ref: "Enterprise", default: [] },
 });
 
 export default model<UserDoc>("User", UserSchema);

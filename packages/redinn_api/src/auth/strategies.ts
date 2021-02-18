@@ -12,8 +12,8 @@ passport.use(
     async (email: string, password: string, done) => {
       User.findOne({ email })
         .then(async (user: UserDoc) => {
-          console.log("granted user", user.id);
           if (!user) return done(null, false, { message: "Authentication failed" });
+          console.log("granted user", user.id);
 
           const validation = await comparePasswords(password, user.password);
           if (validation) return done(null, user, { message: "Authentication succeeded" });
