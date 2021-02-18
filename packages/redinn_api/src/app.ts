@@ -4,8 +4,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import morgan from "morgan";
 import passport from "passport";
-import authRoutes from "./auth/routes";
-import apollo from "./graphql/routes";
+import authRoutes from "./auth";
+import apollo from "./graphql";
 import "./auth/strategies";
 
 const port = process.env.PORT || 3000;
