@@ -8,7 +8,7 @@ export interface UserI {
   enterprises: number[];
 }
 
-export type UserDoc = UserI & Document<string>;
+export type UserDoc = UserI & Document;
 
 const UserSchema = new Schema<UserDoc>({
   email: { type: String, required: true, unique: true },

@@ -2,14 +2,21 @@ import { model, Document, Schema } from "mongoose";
 
 type SocialMedia = "facebook" | "twitter" | "instagram" | "googleBusiness" | "pinterest";
 
+interface employee {
+  ref: string;
+  role: string;
+}
+
 export interface EnterpriseI {
+  name: string;
+  logo: string;
   address: {
     country: string;
     zipcode: string;
     city: string;
     street: string;
   };
-  employees: number[];
+  employees: employee[];
   media: {
     config: Record<SocialMedia, unknown>;
     posts: unknown[];
@@ -17,9 +24,10 @@ export interface EnterpriseI {
   };
 }
 
-export type EnterpriseDoc = EnterpriseI & Document<string>;
+export type EnterpriseDoc = EnterpriseI & Document;
 
 const schema = new Schema<EnterpriseDoc>({
+  name: String,
   adress: {
     country: { type: String, required: true },
     zipcode: { type: String, required: true },
@@ -27,7 +35,7 @@ const schema = new Schema<EnterpriseDoc>({
     street: { type: String, required: true },
   },
   employees: {
-    type: [{ id: { type: Schema.Types.ObjectId, ref: "User" }, role: String }],
+    type: [{ ref: { type: Schema.Types.ObjectId, ref: "User" }, role: String }],
     default: [],
   },
   media: {
@@ -37,4 +45,4 @@ const schema = new Schema<EnterpriseDoc>({
   },
 });
 
-export default model<EnterpriseDoc>("enterprise", schema);
+export default model<EnterpriseDoc>("Enterprise", schema);

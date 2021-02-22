@@ -1,10 +1,11 @@
 import User, { UserI } from "@/db/user";
-import { Error } from "mongoose";
-type SafeUser = Omit<UserI, "password" | "id">;
+import { Context } from "../index";
+
+type SafeUser = Omit<UserI, "password">;
 
 export default {
   Query: {
-    user(_: unknown, __: unknown, context: { user: string }): Promise<SafeUser> {
+    user(_: unknown, __: unknown, context: Context): Promise<SafeUser> {
       return User.findById(context.user)
         .then(
           (user: UserI): SafeUser => {

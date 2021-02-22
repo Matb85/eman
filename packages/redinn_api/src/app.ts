@@ -10,15 +10,16 @@ import "./auth/strategies";
 
 const port = process.env.PORT || 3000;
 const app = express();
+
 app.use(morgan(":date[iso] :method :url status :status :res[content-length] bytes - :response-time ms"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.session());
 
 app.use("/auth", authRoutes);
 
-app.post("/graphql", passport.authenticate("jwt", { session: false }), apollo.getMiddleware({ path: "/" }));
+app.post("/graphql", /*passport.authenticate("jwt", { session: false }),*/ apollo.getMiddleware({ path: "/" }));
 
 app.listen(port, () => console.log("App listening on port " + port));
