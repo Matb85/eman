@@ -4,8 +4,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "outDir": "./dist",
-    "rootDir": "./src",
+    "outDir": "./dist/",
     "module": "commonjs",
     "strict": true,
     "noImplicitAny": true,
@@ -20,9 +19,10 @@
     "esModuleInterop": true,
     "removeComments": true,
     "sourceMap": false,
-    "target": "ES2020"
+    "target": "ES2020",
+    "skipLibCheck": true
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "__tests__/**/*"],
   "exclude": ["node_modules/**/*"],
   "types": [
     "@types/node",
@@ -35,6 +35,8 @@
     "@types/passport-local",
     "@types/passport-jwt",
     "@types/morgan",
+    "@types/jest",
+    "@types/supertest",
     "apollo-server-types"
   ]
 }

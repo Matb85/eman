@@ -1,4 +1,3 @@
-require("dotenv").config(); // eslint-disable-line
 import "./db";
 import express from "express";
 import bodyParser from "body-parser";
@@ -8,7 +7,6 @@ import authRoutes from "./auth";
 import apollo from "./graphql";
 import "./auth/strategies";
 
-const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(morgan(":date[iso] :method :url status :status :res[content-length] bytes - :response-time ms"));
@@ -22,4 +20,4 @@ app.use("/auth", authRoutes);
 
 app.post("/graphql", /*passport.authenticate("jwt", { session: false }),*/ apollo.getMiddleware({ path: "/" }));
 
-app.listen(port, () => console.log("App listening on port " + port));
+export default app;
