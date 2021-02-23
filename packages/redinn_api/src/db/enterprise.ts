@@ -27,8 +27,8 @@ export interface EnterpriseI {
 export type EnterpriseDoc = EnterpriseI & Document;
 
 const schema = new Schema<EnterpriseDoc>({
-  name: String,
-  adress: {
+  name: { type: String, required: true },
+  address: {
     country: { type: String, required: true },
     zipcode: { type: String, required: true },
     city: { type: String, required: true },

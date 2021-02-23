@@ -7,7 +7,7 @@
     "dev": "ts-node -r tsconfig-paths/register ./src/index.ts",
     "build": "tsc",
     "release": "standard-version",
-    "test": "jest"
+    "test": "jest --detectOpenHandles --runInBand --forceExit"
   },
   "author": "",
   "license": "ISC",

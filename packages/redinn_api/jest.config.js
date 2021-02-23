@@ -5,7 +5,8 @@ module.exports = {
   },
   testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
   testPathIgnorePatterns: ["/node_modules/"],
-  moduleFileExtensions: ["ts", "tsx", "json"],
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   preset: "ts-jest",
   moduleNameMapper: { "^@/(.*)$": "<rootDir>/src/$1" },
+  verbose: false,
 };

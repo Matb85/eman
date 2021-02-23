@@ -14,10 +14,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(passport.initialize());
-// app.use(passport.session());
 
 app.use("/auth", authRoutes);
 
-app.post("/graphql", /*passport.authenticate("jwt", { session: false }),*/ apollo.getMiddleware({ path: "/" }));
+app.post("/graphql", passport.authenticate("jwt", { session: false }), apollo.getMiddleware({ path: "/" }));
 
 export default app;

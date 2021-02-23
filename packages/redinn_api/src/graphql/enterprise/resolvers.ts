@@ -4,6 +4,7 @@ import User from "@/db/user";
 
 export default {
   Query: {
+    // enterprise(id: $id) {...}
     enterprise(_: unknown, id: number): Promise<EnterpriseI> {
       return Enterprise.findById(id)
         .then((enterprise: EnterpriseI) => {
@@ -13,10 +14,12 @@ export default {
     },
   },
   Mutation: {
-    addEnterprise(_: unknown, data: EnterpriseI, context: Context): Promise<EnterpriseI> {
+    // addEnterprise(data: $enterprise) { ... }
+    addEnterprise(_: unknown, { data }: { data: EnterpriseI }, context: Context): Promise<EnterpriseI> {
+      console.log(data);
       return Enterprise.create({
         name: data.name,
-        adress: data.address,
+        address: data.address,
         employees: [{ ref: context.user, role: "admin" }],
       })
         .then(enterprise => {

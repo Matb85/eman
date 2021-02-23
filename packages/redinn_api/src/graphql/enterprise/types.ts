@@ -4,22 +4,25 @@ export default gql`
   type Enterprise {
     name: String!
     logo: String!
-    address: Adress
-    employees: [Int]
+    address: Address!
+    employees: [Employee!]
   }
-  type Adress {
+  type Address {
     country: String!
     zipcode: String!
     city: String!
     street: String!
   }
+  type Employee {
+    ref: String
+    role: String!
+  }
 
   input EnterpriseI {
     name: String!
-    logo: String!
-    address: AdressI
+    address: AddressI!
   }
-  input AdressI {
+  input AddressI {
     country: String!
     zipcode: String!
     city: String!
