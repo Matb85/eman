@@ -34,10 +34,7 @@ const schema = new Schema<EnterpriseDoc>({
     city: { type: String, required: true },
     street: { type: String, required: true },
   },
-  employees: {
-    type: [{ ref: { type: Schema.Types.ObjectId, ref: "User" }, role: String }],
-    default: [],
-  },
+  employees: [{ ref: { type: Schema.Types.ObjectId, ref: "User" }, role: String }],
   media: {
     config: Schema.Types.Mixed,
     posts: { type: [Schema.Types.Mixed], default: [] },

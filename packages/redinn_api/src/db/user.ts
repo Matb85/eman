@@ -15,7 +15,7 @@ const UserSchema = new Schema<UserDoc>({
   password: { type: String, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
-  enterprises: { type: [Schema.Types.ObjectId], ref: "Enterprise", default: [] },
+  enterprises: [{ type: Schema.Types.ObjectId, ref: "Enterprise" }],
 });
 
 export default model<UserDoc>("User", UserSchema);

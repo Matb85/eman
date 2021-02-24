@@ -1,22 +1,19 @@
 import { Context } from "../index";
 import Enterprise, { EnterpriseI } from "@/db/enterprise";
-import User from "@/db/user";
+import User, { UserDoc } from "@/db/user";
 
 export default {
   Query: {
     // enterprise(id: $id) {...}
-    enterprise(_: unknown, id: number): Promise<EnterpriseI> {
-      return Enterprise.findById(id)
-        .then((enterprise: EnterpriseI) => {
-          return enterprise;
-        })
-        .catch((err: Error) => err);
+    enterprise(_: unknown, { id }: { id: number }, context: Context): Promise<EnterpriseI> {
+      return User.findById(context.user)
+        .populate("enterprises")
+        .then((user: UserDoc) => user.enterprises[id]);
     },
   },
   Mutation: {
     // addEnterprise(data: $enterprise) { ... }
     addEnterprise(_: unknown, { data }: { data: EnterpriseI }, context: Context): Promise<EnterpriseI> {
-      console.log(data);
       return Enterprise.create({
         name: data.name,
         address: data.address,

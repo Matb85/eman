@@ -42,8 +42,10 @@ describe("graphql", () => {
       .post("/graphql")
       .set(graphqlHeaders(token))
       .send({
-        query:
-          "mutation add($enterprise: EnterpriseI){addEnterprise(data: $enterprise) { name address {country zipcode} employees {ref role}}}",
+        query: `mutation add($enterprise: EnterpriseI){
+          addEnterprise(data: $enterprise) { 
+            name address { country zipcode} employees {ref role}
+          }}`,
         variables: {
           enterprise: {
             name: "Redinn",
@@ -52,6 +54,21 @@ describe("graphql", () => {
         },
       });
     console.log("response ", response.body);
+    expect(response.status).toBe(200);
+
+    done();
+  });
+
+  it("get enterprise", async done => {
+    const response = await request
+      .post("/graphql")
+      .set(graphqlHeaders(token))
+      .send({
+        query: "query get{enterprise(index: 0){ name}}",
+      });
+
+    expect(response.status).toBe(200);
+    console.log(response.body);
     done();
   });
 });

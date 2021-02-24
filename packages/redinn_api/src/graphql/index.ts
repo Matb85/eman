@@ -8,7 +8,7 @@ import EnterpriseResolvers from "./enterprise/resolvers";
 const Query = gql`
   type Query {
     user: User
-    enterprise: Enterprise
+    enterprise(index: Int): Enterprise
   }
   type Mutation {
     addEnterprise(data: EnterpriseI): Enterprise
