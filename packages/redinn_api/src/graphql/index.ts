@@ -6,11 +6,15 @@ import EnterpriseTypeDefs from "./enterprise/types";
 import EnterpriseResolvers from "./enterprise/resolvers";
 
 const Query = gql`
+  type Message {
+    message: String
+  }
   type Query {
     user: User
     enterprise(index: Int): Enterprise
   }
   type Mutation {
+    deleteEnterprise(password: String, enterpriseID: ID): Message
     addEnterprise(data: EnterpriseI): Enterprise
   }
 `;

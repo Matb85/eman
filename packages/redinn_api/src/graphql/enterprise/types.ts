@@ -2,6 +2,7 @@ import { gql } from "apollo-server-express";
 
 export default gql`
   type Enterprise {
+    id: ID
     name: String!
     logo: String!
     address: Address!
@@ -15,7 +16,7 @@ export default gql`
   }
   type Employee {
     ref: String
-    role: String!
+    permissions: String!
   }
 
   input EnterpriseI {

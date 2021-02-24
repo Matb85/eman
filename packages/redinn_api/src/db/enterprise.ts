@@ -2,21 +2,22 @@ import { model, Document, Schema } from "mongoose";
 
 type SocialMedia = "facebook" | "twitter" | "instagram" | "googleBusiness" | "pinterest";
 
-interface employee {
+export interface Employee {
   ref: string;
-  role: string;
+  permissions: string;
+}
+interface Address {
+  country: string;
+  zipcode: string;
+  city: string;
+  street: string;
 }
 
 export interface EnterpriseI {
   name: string;
   logo: string;
-  address: {
-    country: string;
-    zipcode: string;
-    city: string;
-    street: string;
-  };
-  employees: employee[];
+  address: Address;
+  employees: Employee[];
   media: {
     config: Record<SocialMedia, unknown>;
     posts: unknown[];
@@ -34,7 +35,16 @@ const schema = new Schema<EnterpriseDoc>({
     city: { type: String, required: true },
     street: { type: String, required: true },
   },
-  employees: [{ ref: { type: Schema.Types.ObjectId, ref: "User" }, role: String }],
+  employees: [
+    {
+      ref: { type: Schema.Types.ObjectId, ref: "User" },
+      permissions: {
+        type: String,
+        validate: { validator: (v: string) => /^[0-1]{6,}$/.test(v), message: () => `follow regexp /^[0-1]{6,}$/` },
+        required: true,
+      },
+    },
+  ],
   media: {
     config: Schema.Types.Mixed,
     posts: { type: [Schema.Types.Mixed], default: [] },

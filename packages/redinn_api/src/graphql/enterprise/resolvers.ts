@@ -1,14 +1,19 @@
 import { Context } from "../index";
-import Enterprise, { EnterpriseI } from "@/db/enterprise";
+import Enterprise, { EnterpriseI, EnterpriseDoc, Employee } from "@/db/enterprise";
 import User, { UserDoc } from "@/db/user";
+import { comparePasswords } from "@/auth/encryption";
+import { UserInputError, ApolloError } from "apollo-server-express";
 
+interface Message {
+  message: string;
+}
 export default {
   Query: {
-    // enterprise(id: $id) {...}
-    enterprise(_: unknown, { id }: { id: number }, context: Context): Promise<EnterpriseI> {
+    // enterprise(index: Int) {...}
+    enterprise(_: unknown, { index }: { index: number }, context: Context): Promise<EnterpriseI> {
       return User.findById(context.user)
         .populate("enterprises")
-        .then((user: UserDoc) => user.enterprises[id]);
+        .then((user: UserDoc) => user.enterprises[index]);
     },
   },
   Mutation: {
@@ -17,16 +22,38 @@ export default {
       return Enterprise.create({
         name: data.name,
         address: data.address,
-        employees: [{ ref: context.user, role: "admin" }],
+        employees: [{ ref: context.user, permissions: "111111" }],
       })
         .then(enterprise => {
           User.findByIdAndUpdate(context.user, { $addToSet: { enterprises: enterprise._id } }).catch(
             (err: Error) => err
           );
-          console.log("data:", enterprise);
           return enterprise;
         })
         .catch(err => err);
+    },
+
+    async deleteEnterprise(_: unknown, args: Record<string, string>, context: Context): Promise<Message> {
+      const enterprise: EnterpriseDoc = await Enterprise.findById(args.enterpriseID);
+      if (!enterprise) throw new UserInputError("incorrect enterprise ID");
+      console.log("employees: " + enterprise.employees[0]);
+
+      const requesterEntry = enterprise.employees.find(u => u.ref == context.user) as Employee;
+      console.log("requesterEntry: " + requesterEntry);
+      const requester: UserDoc = await User.findById(requesterEntry.ref);
+
+      if (!(await comparePasswords(args.password, requester.password))) throw new UserInputError("incorrect password");
+      if (!parseInt(requesterEntry.permissions[0]))
+        throw new ApolloError("you don't have permissions to delete this enterprise");
+
+      await User.updateMany(
+        { _id: { $in: enterprise.employees.map(e => e.ref) } },
+        { $pull: { enterprises: enterprise._id } }
+      ).catch((err: Error) => err);
+
+      await enterprise.remove().catch(err => err);
+
+      return { message: "enterprise deleted" };
     },
   },
 };

@@ -5,6 +5,7 @@ const request = supertest(app);
 let token: string;
 const email = "doe@gmail.com";
 const password = "1qsxvfe3";
+let enterpriseID: string;
 
 describe("auth", () => {
   it("login to the John Doe's account", async done => {
@@ -44,7 +45,7 @@ describe("graphql", () => {
       .send({
         query: `mutation add($enterprise: EnterpriseI){
           addEnterprise(data: $enterprise) { 
-            name address { country zipcode} employees {ref role}
+            name address { country zipcode} employees {ref permissions}
           }}`,
         variables: {
           enterprise: {
@@ -64,11 +65,33 @@ describe("graphql", () => {
       .post("/graphql")
       .set(graphqlHeaders(token))
       .send({
-        query: "query get{enterprise(index: 0){ name}}",
+        query: "query get{enterprise(index: 0){ id name}}",
+      });
+    enterpriseID = response.body.data.enterprise.id;
+    console.log(enterpriseID);
+    expect(response.status).toBe(200);
+    console.log("enterprise: ", response.body);
+    done();
+  });
+
+  it("delete enterprise", async done => {
+    const response = await request
+      .post("/graphql")
+      .set(graphqlHeaders(token))
+      .send({
+        query: `mutation delete($password: String, $id: ID){
+          deleteEnterprise(password: $password, enterpriseID: $id){
+            message
+          }
+        }`,
+        variables: {
+          password: password,
+          id: enterpriseID,
+        },
       });
 
+    console.log("response:: ", response.body);
     expect(response.status).toBe(200);
-    console.log(response.body);
     done();
   });
 });
