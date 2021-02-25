@@ -1,24 +1,22 @@
 <template>
-  <section class="apl-form background-medium">
-    <h1 class="is-size-2 is-unselectable has-text-centered">Witaj z powrotem!</h1>
+  <main class="apl-form">
+    <h1 class="is-size-2 is-unselectable has-text-centered">Dobrze Cię widzieć!</h1>
     <form class="mt-5" @submit.prevent="login">
       <b-input v-model="credentials.email" type="text" placeholder="Email" rounded></b-input>
       <b-input
         v-model="credentials.password"
         type="password"
         placeholder="Hasło"
-        class="mt-4"
+        class="mt-3"
         rounded
         password-reveal
       ></b-input>
-      <div class="mt-5 form-con">
-        <b-button tag="input" native-type="submit" value="Zaloguj" class="is-primary is-size-4 py-0" expanded />
+      <div class="mt-3 submit-con">
+        <b-button tag="input" type="is-primary" native-type="submit" value="Zaloguj" class="is-size-4 py-0" expanded />
       </div>
     </form>
-    <nuxt-link to="/register" class="subtitle has-text-centered new-account is-unselectable is-clickable"
-      >Załóż konto</nuxt-link
-    >
-  </section>
+    <nuxt-link to="/register" class="new-account">Załóż konto</nuxt-link>
+  </main>
 </template>
 
 <script lang="ts">

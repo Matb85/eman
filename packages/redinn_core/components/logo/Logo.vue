@@ -1,6 +1,6 @@
 <template>
   <section class="logo-con">
-    <LogoIcon fill="#fff" />
+    <LogoIcon :fill="$attrs.fill" />
     <a href="#" class="title is-1 redinn-name ml-1 is-unselectable is-clickable">Redinn</a>
   </section>
 </template>

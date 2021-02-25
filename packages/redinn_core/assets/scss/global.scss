@@ -71,6 +71,7 @@ body {
 .is-paragraph {
   @extend .has-text-weight-bold, .is-family-secondary;
 }
+
 // import everything but utilities - they are in the _variables files
 @import "~bulma/sass/base/_all";
 @import "~bulma/sass/elements/_all";
@@ -80,3 +81,7 @@ body {
 @import "~bulma/sass/helpers/_all";
 @import "~bulma/sass/layout/_all";
 @import "~buefy/src/scss/buefy.scss";
+
+a {
+  color: $text;
+}

@@ -1,5 +1,5 @@
 <template>
-  <section id="btm" class="apl-form">
+  <main class="apl-form">
     <h1 class="is-size-2 has-text-centered">Witaj na pokładzie!</h1>
     <form class="mt-5" @submit.prevent="register">
       <b-field
@@ -16,12 +16,19 @@
           @input="feedback[name].validate(credentials[name])"
         />
       </b-field>
-      <div class="mt-5 form-con">
-        <b-button tag="input" native-type="submit" value="utwórz konta" class="is-primary is-size-4 py-0" expanded />
+      <div class="mt-3 submit-con">
+        <b-button
+          tag="input"
+          native-type="submit"
+          value="utwórz konto"
+          class="is-size-4 py-0"
+          type="is-primary"
+          expanded
+        />
       </div>
     </form>
-    <nuxt-link to="/login" class="new-account subtitle is-size-6 is-clickable">Masz konto? Zaloguj się</nuxt-link>
-  </section>
+    <nuxt-link to="/login" class="new-account">Masz konto? Zaloguj się</nuxt-link>
+  </main>
 </template>
 
 <script lang="ts">
@@ -75,10 +82,11 @@ export default class Register extends Vue {
   async register(): Promise<void> {
     try {
       const result = await this.$axios.$post("/auth/register", this.credentials);
+      console.log(result);
+      if (result.error) return;
       this.$auth.loginWith("local", {
         data: this.credentials,
       });
-      console.log(result);
     } catch (err) {
       console.log(err);
     }
@@ -87,13 +95,4 @@ export default class Register extends Vue {
 </script>
 <style scoped lang="scss">
 @import "@/assets/scss/partials/_loginregister.scss";
-#btm {
-  top: initial;
-  bottom: 1em;
-}
-@media (max-width: $mobileWBP) {
-  #btm {
-    bottom: 8%;
-  }
-}
 </style>

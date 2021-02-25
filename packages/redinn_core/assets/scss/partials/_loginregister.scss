@@ -1,14 +1,5 @@
 .apl-form {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: auto;
-  transform: translate(-50%);
-  // text-align: center;
-  h1 {
-    white-space: nowrap;
-  }
-  .form-con {
+  form {
     position: relative;
     width: 86%;
     margin: 0 auto;
@@ -16,16 +7,16 @@
       height: 1.9em;
     }
   }
-}
-.new-account {
-  display: inline-block;
-  margin-top: 1em;
-  &:hover {
-    text-decoration: underline;
+  .submit-con {
+    width: 75%;
+    margin: 0 auto;
   }
 }
-@media (max-height: #{$desktopHBP + 20px}) {
-  .new-account {
-    margin-top: 0.6em;
+.new-account {
+  margin-top: 1rem;
+  display: block;
+  text-align: center;
+  &:hover {
+    text-decoration: underline;
   }
 }
