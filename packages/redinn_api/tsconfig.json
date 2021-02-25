@@ -22,7 +22,6 @@
     "target": "ES2020",
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "__tests__/**/*"],
   "exclude": ["node_modules/**/*"],
   "types": [
     "@types/node",

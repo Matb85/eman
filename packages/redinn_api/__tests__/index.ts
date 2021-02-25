@@ -3,9 +3,9 @@ import supertest from "supertest";
 const request = supertest(app);
 
 let token: string;
+let enterpriseID: string;
 const email = "doe@gmail.com";
 const password = "1qsxvfe3";
-let enterpriseID: string;
 
 describe("auth", () => {
   it("login to the John Doe's account", async done => {
@@ -68,9 +68,29 @@ describe("graphql", () => {
         query: "query get{enterprise(index: 0){ id name}}",
       });
     enterpriseID = response.body.data.enterprise.id;
-    console.log(enterpriseID);
+
     expect(response.status).toBe(200);
     console.log("enterprise: ", response.body);
+    done();
+  });
+
+  it("update enterprise", async done => {
+    const response = await request
+      .post("/graphql")
+      .set(graphqlHeaders(token))
+      .send({
+        query: `mutation update($id: ID){
+          updateEnterprise(enterpriseID: $id){
+            message
+          }
+        }`,
+        variables: {
+          id: enterpriseID,
+        },
+      });
+
+    console.log("response:: ", response.body);
+    expect(response.status).toBe(200);
     done();
   });
 
@@ -85,7 +105,7 @@ describe("graphql", () => {
           }
         }`,
         variables: {
-          password: password,
+          password,
           id: enterpriseID,
         },
       });
