@@ -13,8 +13,10 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [],
+
   // Use all the new features from ES2015+ (https://nuxtjs.org/docs/2.x/configuration-glossary/configuration-modern/)
   modern: process.env.NODE_ENV === "production",
+
   // Auto import components (https://go.nuxtjs.dev/config-components)
   components: false,
 
