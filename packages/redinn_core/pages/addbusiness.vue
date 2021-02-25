@@ -1,7 +1,6 @@
 <template>
-  <section class="add-business background-wide">
+  <form class="add-business background-wide">
     <h1 class="title is-2">Dodaj działalność</h1>
-
     <h3 class="subtitle is-4 mt-5">Ogólne informacje</h3>
     <div class="input-form">
       <b-field label="Nazwa firmy" label-position="on-border">
@@ -17,6 +16,7 @@
     </div>
 
     <h3 class="subtitle is-4 mt-5">Adress</h3>
+
     <div class="input-form">
       <b-field label="Państwo" label-position="on-border">
         <b-input rounded placeholder="np. Polska" />
@@ -35,16 +35,16 @@
     <h3 class="subtitle is-4 mt-5">Logo działalności</h3>
 
     <b-upload drag-drop accept="image/*" required type="is-dark">
-      <section class="section content has-text-centered px-6">
+      <section class="section content has-text-centered">
         <b-icon icon="upload" size="is-large" />
         <p>Upuść lub wybierz plik</p>
       </section>
     </b-upload>
 
     <div class="next-btn">
-      <b-button class="mt-6" tag="nuxt-link" to="/addbusiness/choose" type="is-primary">Dodaj</b-button>
+      <b-button class="mt-6" tag="input" native-type="submit" value="Dodaj" type="is-primary" />
     </div>
-  </section>
+  </form>
 </template>
 
 <script lang="ts">

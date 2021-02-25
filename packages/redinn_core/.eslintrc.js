@@ -17,9 +17,10 @@ module.exports = {
   rules: {
     "vue/attribute-hyphenation": 0,
     "lines-between-class-members": 0,
-    "no-undefined": 2,
-    strict: 2,
     "prettier/prettier": ["warn", { trailingComma: "es5", printWidth: 120 }],
     "max-len": [1, 120],
+    "no-console": 0,
+    "no-undefined": 2,
+    strict: 2,
   },
 };
