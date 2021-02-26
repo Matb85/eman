@@ -22,14 +22,9 @@
 <script lang="ts">
 import { Vue, Component } from "nuxt-property-decorator";
 
-interface CredentialsI {
-  email: string;
-  password: string;
-}
-
 @Component({ layout: "background" })
 export default class Login extends Vue {
-  credentials: CredentialsI = {
+  credentials = {
     email: "",
     password: "",
   };
@@ -49,7 +44,3 @@ export default class Login extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-@import "@/assets/scss/partials/_loginregister.scss";
-</style>

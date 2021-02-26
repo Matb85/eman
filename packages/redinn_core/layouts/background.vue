@@ -1,7 +1,7 @@
 <template>
   <section class="background-layout">
-    <Nuxt class="main" />
     <Logo />
+    <Nuxt class="main" />
     <section class="fins">
       <LogoIcon />
       <LogoIcon />
@@ -28,14 +28,13 @@ export default {
   height: 100%;
   > .main {
     position: relative;
-    top: 8rem;
+    top: 5rem;
     left: 5rem;
     width: 100%;
-    padding: 0 0.75rem;
     max-width: 24rem;
   }
   > .logo-con {
-    position: absolute;
+    position: relative;
     top: 1.5rem;
     left: 1.5rem;
   }

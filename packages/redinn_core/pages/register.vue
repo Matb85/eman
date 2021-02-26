@@ -16,11 +16,12 @@
           @input="feedback[name].validate(credentials[name])"
         />
       </b-field>
+
       <div class="mt-3 submit-con">
         <b-button
           tag="input"
           native-type="submit"
-          value="utwórz konto"
+          value="Utwórz konto"
           class="is-size-4 py-0"
           type="is-primary"
           expanded
@@ -93,6 +94,3 @@ export default class Register extends Vue {
   }
 }
 </script>
-<style scoped lang="scss">
-@import "@/assets/scss/partials/_loginregister.scss";
-</style>
