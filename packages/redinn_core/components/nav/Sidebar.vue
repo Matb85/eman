@@ -1,10 +1,12 @@
 <template>
   <section ref="sidebar" class="sidebar">
-    <div id="property" class="mt-4">
+    <div id="property" class="mt-4 is-clickable" @click="launchEnterpriseGrid">
       <b-button type="is-text" size="is-small" class="has-background-white px-0 py-0" active>Zmień obiekt</b-button>
       <RoundCard dim="120px"><img src="@/assets/imgs/property.jpg" alt="property image" /></RoundCard>
-      <h3 class="is-title is-4">Zygmuntówka</h3>
-      <p class="has-text-weight-bold is-family-secondary">Ul. Franciszka Koterby Kuriera AK 37</p>
+      <h3 class="is-title is-4">{{ $auth.enterprise ? $auth.enterprise.name : "" }}</h3>
+      <p class="has-text-weight-bold is-family-secondary">
+        Ul. {{ $auth.enterprise ? $auth.enterprise.address.street : "" }}
+      </p>
     </div>
     <div id="routes-con" class="px-3">
       <span class="nav-mobile">
@@ -28,22 +30,29 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "nuxt-property-decorator";
-
 import RoundCard from "@/components/RoundCard.vue";
-@Component({
-  components: {
-    RoundCard,
-  },
-})
+import EnterprisesView from "@/components/nav/EnterprisesView.vue";
+
+@Component({ components: { RoundCard } })
 export default class Sidebar extends Vue {
-  $refs!: {
-    sidebar: HTMLElement;
-  };
+  $refs!: { sidebar: HTMLElement };
   @Prop() links: Array<object>;
+
+  launchEnterpriseGrid() {
+    this.$buefy.modal.open({
+      parent: this,
+      component: EnterprisesView,
+      trapFocus: true,
+    });
+  }
+
   created() {
     this.$root.$on("toggle sidebar", () => {
       this.$refs.sidebar.classList.toggle("sidebar-opened");
     });
+  }
+  mounted() {
+    this.launchEnterpriseGrid();
   }
 }
 </script>

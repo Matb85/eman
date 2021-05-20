@@ -34,20 +34,15 @@ import Navbar from "@/components/nav/Navbar.vue";
 import Sidebar from "@/components/nav/Sidebar.vue";
 import ColorfulBtn from "@/components/ColorfulBtn.vue";
 import { PrimeRouteI } from "@/store";
-@Component({
-  components: {
-    Navbar,
-    Sidebar,
-    ColorfulBtn,
-  },
-})
+
+@Component({ components: { Navbar, Sidebar, ColorfulBtn } })
 export default class Dashboard extends Vue {
   get links() {
     return this.$store.state.dashboards.filter((link: PrimeRouteI) => link.name !== this.curPage.name);
   }
   get curPage() {
     const rm = this.$route.name as string;
-    const nm = rm.substring(0, rm.includes("-") ? rm.indexOf("-") : rm.length);
+    const nm = rm.slice(rm.indexOf("enterprise") + 11).substring(0, rm.includes("-") ? rm.indexOf("-") : rm.length);
     return {
       lowerCaseName: nm,
       name: nm[0].toUpperCase() + nm.substring(1),

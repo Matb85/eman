@@ -49,6 +49,7 @@ export default {
   },
 
   auth: {
+    plugins: ["~/plugins/authFetchEnterprise.ts"],
     localStorage: false,
     strategies: {
       local: {

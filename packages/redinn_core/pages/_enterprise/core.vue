@@ -38,5 +38,15 @@ export default {
   name: "Core",
   layout: "dashboard",
   components: { GridCon, VerticalCon },
+  // async asyncData({ route, $axios }) {
+  //   const response = await $axios.$post("/graphql", {
+  //     query: `query get{enterprise(index: ${route.params.enterprise}){ id name address {street}}}`,
+  //   });
+  //
+  //   console.log(response);
+  // },
+  mounted() {
+    console.log(this.$auth.enterprise);
+  },
 };
 </script>
