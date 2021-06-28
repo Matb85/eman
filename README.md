@@ -1,6 +1,6 @@
-# Redinn assets
+# Redinn Core
 
-## Cloud file storage for Redinn apps & websites
+## The ulitmate service for managing enterprises
 
 ### packages
 
