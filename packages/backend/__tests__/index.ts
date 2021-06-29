@@ -15,7 +15,7 @@ describe("auth", () => {
       email,
       password,
     });
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
   });
 
   it("login to the John Doe's account", async () => {

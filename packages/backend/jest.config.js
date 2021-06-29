@@ -9,5 +9,8 @@ module.exports = {
   preset: "ts-jest",
   moduleNameMapper: { "^@/(.*)$": "<rootDir>/src/$1" },
   verbose: false,
+
+  globalSetup: "<rootDir>/__tests__/setup/globalSetup.ts",
+  globalTeardown: "<rootDir>/__tests__/setup/globalTeardown.ts",
   setupFilesAfterEnv: ["<rootDir>/__tests__/setup/setupFilesAfterEnv.ts"],
 };

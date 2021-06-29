@@ -1,7 +1,13 @@
 declare namespace NodeJS {
-  export interface ProcessEnv {
+  interface ProcessEnv {
+    DATABASE_HOST: string;
+    DATABASE_PORT: string;
+    DATABASE_NAME: string;
+    BROWSER_BASE_URL: string;
     PORT: string;
-    DB: string;
     NODE_ENV: string;
+  }
+  interface Global {
+    mongod: MongoMemoryServer;
   }
 }
