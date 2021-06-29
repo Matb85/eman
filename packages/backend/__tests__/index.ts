@@ -8,7 +8,7 @@ const email = "doe@gmail.com";
 const password = "1qsxvfe3";
 
 describe("auth", () => {
-  it("login to the John Doe's account", async done => {
+  it("login to the John Doe's account", async () => {
     const response = await request.post("/auth/login").send({
       email,
       password,
@@ -18,27 +18,22 @@ describe("auth", () => {
     expect(response.body.message).toBe("login successful");
 
     token = response.body.token;
-    done();
   });
 });
 
 const graphqlHeaders = (token: string) => ({ Accept: "application/json", Authorization: "bearer " + token });
 
 describe("graphql", () => {
-  it("get user data", async done => {
-    const response = await request
-      .post("/graphql")
-      .set(graphqlHeaders(token))
-      .send({
-        query: "query {user {firstName}}",
-      });
+  it("get user data", async () => {
+    const response = await request.post("/graphql").set(graphqlHeaders(token)).send({
+      query: "query {user {firstName}}",
+    });
 
     expect(response.status).toBe(200);
     expect(typeof response.body.data.user.firstName).toBe("string");
-    done();
   });
 
-  it("create an enterprise", async done => {
+  it("create an enterprise", async () => {
     const response = await request
       .post("/graphql")
       .set(graphqlHeaders(token))
@@ -56,25 +51,19 @@ describe("graphql", () => {
       });
     console.log("response ", response.body);
     expect(response.status).toBe(200);
-
-    done();
   });
 
-  it("get enterprise", async done => {
-    const response = await request
-      .post("/graphql")
-      .set(graphqlHeaders(token))
-      .send({
-        query: "query get{enterprise(index: 0){ id name}}",
-      });
+  it("get enterprise", async () => {
+    const response = await request.post("/graphql").set(graphqlHeaders(token)).send({
+      query: "query get{enterprise(index: 0){ id name}}",
+    });
     enterpriseID = response.body.data.enterprise.id;
 
     expect(response.status).toBe(200);
     console.log("enterprise: ", response.body);
-    done();
   });
 
-  it("update enterprise", async done => {
+  it("update enterprise", async () => {
     const response = await request
       .post("/graphql")
       .set(graphqlHeaders(token))
@@ -91,10 +80,9 @@ describe("graphql", () => {
 
     console.log("response:: ", response.body);
     expect(response.status).toBe(200);
-    done();
   });
 
-  it("delete enterprise", async done => {
+  it("delete enterprise", async () => {
     const response = await request
       .post("/graphql")
       .set(graphqlHeaders(token))
@@ -112,6 +100,5 @@ describe("graphql", () => {
 
     console.log("response:: ", response.body);
     expect(response.status).toBe(200);
-    done();
   });
 });
