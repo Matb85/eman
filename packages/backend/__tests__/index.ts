@@ -8,6 +8,16 @@ const email = "doe@gmail.com";
 const password = "1qsxvfe3";
 
 describe("auth", () => {
+  it("create John Doe's account", async () => {
+    const response = await request.post("/auth/register").send({
+      firstName: "John",
+      lastName: "Doe",
+      email,
+      password,
+    });
+    expect(response.status).toBe(200);
+  });
+
   it("login to the John Doe's account", async () => {
     const response = await request.post("/auth/login").send({
       email,
@@ -63,6 +73,7 @@ describe("graphql", () => {
     console.log("enterprise: ", response.body);
   });
 
+  /*
   it("update enterprise", async () => {
     const response = await request
       .post("/graphql")
@@ -81,7 +92,7 @@ describe("graphql", () => {
     console.log("response:: ", response.body);
     expect(response.status).toBe(200);
   });
-
+*/
   it("delete enterprise", async () => {
     const response = await request
       .post("/graphql")
