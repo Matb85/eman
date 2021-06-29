@@ -1,5 +1,5 @@
 import { comparePasswords } from "./encryption";
-import User, { UserDoc } from "@/db/user";
+import User from "@/db/user";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
@@ -10,8 +10,8 @@ passport.use(
     { usernameField: "email", passwordField: "password", session: false },
     async (email: string, password: string, done) => {
       User.findOne({ email })
-        .then(async (user: UserDoc) => {
-          if (!user) return done(null, false, { message: "Authentication failed" });
+        .then(async user => {
+          if (user == null || !user) return done(null, false, { message: "Authentication failed" });
 
           const validation = await comparePasswords(password, user.password);
           if (validation) return done(null, user, { message: "Authentication succeeded" });

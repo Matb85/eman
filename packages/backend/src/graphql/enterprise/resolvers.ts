@@ -10,10 +10,9 @@ interface Message {
 export default {
   Query: {
     // enterprise(index: Int) {...}
-    enterprise(_: unknown, { index }: { index: number }, context: Context): Promise<EnterpriseI> {
-      return User.findById(context.user)
-        .populate("enterprises")
-        .then((user: UserDoc) => user.enterprises[index]);
+    async enterprise(_: unknown, { index }: { index: number }, context: Context): Promise<EnterpriseI> {
+      const user = (await User.findById(context.user).populate("enterprises")) as UserDoc;
+      return user.enterprises[index] as unknown as EnterpriseI;
     },
   },
   Mutation: {
@@ -34,13 +33,13 @@ export default {
     },
 
     async deleteEnterprise(_: unknown, args: Record<string, string>, context: Context): Promise<Message> {
-      const enterprise: EnterpriseDoc = await Enterprise.findById(args.enterpriseID);
+      const enterprise = (await Enterprise.findById(args.enterpriseID)) as EnterpriseDoc;
       if (!enterprise) throw new UserInputError("incorrect enterprise ID");
       console.log("employees: " + enterprise.employees[0]);
 
       const requesterEntry = enterprise.employees.find(u => u.ref == context.user) as Employee;
       console.log("requesterEntry: " + requesterEntry);
-      const requester: UserDoc = await User.findById(requesterEntry.ref);
+      const requester = (await User.findById(requesterEntry.ref)) as UserDoc;
 
       if (!(await comparePasswords(args.password, requester.password))) throw new UserInputError("incorrect password");
       if (!parseInt(requesterEntry.permissions[0]))
