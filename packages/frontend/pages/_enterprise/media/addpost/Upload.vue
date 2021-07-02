@@ -121,6 +121,7 @@ export default class Upload extends Vue {
       store: {
         get(sortable) {
           console.log(sortable);
+          return [""];
         },
         set(sortable) {
           sortImgs(sortable.toArray().map((x) => parseInt(x)));
@@ -130,17 +131,15 @@ export default class Upload extends Vue {
 
     if (!sessionStorage.getItem("uploadedimgsmap")) return;
     const uploadedimgsmap = JSON.parse(sessionStorage.getItem("uploadedimgsmap") as string);
-    this.uploadedImgs = uploadedimgsmap.map(
-      (x): imgI => {
-        console.log("uploadedimg" + x.id);
-        return {
-          src: sessionStorage.getItem("uploadedimg" + x.id),
-          id: x.id,
-          name: x.name,
-          order: x.order,
-        };
-      }
-    );
+    this.uploadedImgs = uploadedimgsmap.map((x: imgI): imgI => {
+      console.log("uploadedimg" + x.id);
+      return {
+        src: sessionStorage.getItem("uploadedimg" + x.id),
+        id: x.id,
+        name: x.name,
+        order: x.order,
+      };
+    });
   }
 }
 </script>

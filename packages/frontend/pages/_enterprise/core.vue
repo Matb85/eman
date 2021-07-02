@@ -45,8 +45,5 @@ export default {
   //
   //   console.log(response);
   // },
-  mounted() {
-    console.log(this.$auth.enterprise);
-  },
 };
 </script>

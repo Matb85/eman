@@ -13,7 +13,7 @@ export default async function ({ $auth, $axios, route }: Context) {
 
 // types for nuxt-auth
 
-interface ExtendedAuth extends Auth {
+interface ExtendedAuth extends Omit<Auth, "user"> {
   enterprise: EnterpriseI;
   user: UserI;
 }

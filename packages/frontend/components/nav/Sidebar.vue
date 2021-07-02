@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from "nuxt-property-decorator";
-import RoundCard from "@/components/RoundCard.vue";
+import RoundCard from "@/components/roundCard.vue";
 import EnterprisesView from "@/components/nav/EnterprisesView.vue";
 
 @Component({ components: { RoundCard } })
@@ -41,7 +41,7 @@ export default class Sidebar extends Vue {
   launchEnterpriseGrid() {
     this.$buefy.modal.open({
       parent: this,
-      component: EnterprisesView,
+      component: EnterprisesView as any,
       trapFocus: true,
     });
   }

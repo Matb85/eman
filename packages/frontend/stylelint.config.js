@@ -9,19 +9,9 @@ module.exports = {
         ignoreAtRules: ["function", "if", "each", "include", "mixin", "for", "extend"],
       },
     ],
-    // "font-family-no-missing-generic-family-keyword": [
-    //   true,
-    //   {
-    //     ignoreFontFamilies: ["Lato Light"],
-    //   },
-    // ],
-    "selector-pseudo-element-no-unknown": [
-      true,
-      {
-        ignorePseudoElements: ["v-deep"],
-      },
-    ],
+    "selector-pseudo-element-no-unknown": [true, { ignorePseudoElements: ["v-deep"] }],
     "function-name-case": null,
     "declaration-block-single-line-max-declarations": 1,
+    "no-invalid-position-at-import-rule": null,
   },
 };

@@ -27,7 +27,7 @@
 import { Component, Vue } from "nuxt-property-decorator";
 import Navbar from "@/components/nav/Navbar.vue";
 
-import RoundCard from "@/components/RoundCard.vue";
+import RoundCard from "@/components/roundCard.vue";
 
 class Navbtn {
   text: string;

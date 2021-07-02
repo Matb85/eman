@@ -45,9 +45,9 @@
 import { Component, Vue, Prop } from "nuxt-property-decorator";
 import { PrimeRouteI } from "@/store";
 
+import MenuBurger from "@/components/svgs/menuBurger.vue";
 import LogoIcon from "@/components/logo/LogoIcon.vue";
-import RoundCard from "@/components/RoundCard.vue";
-import MenuBurger from "@/components/svgs/MenuBurger.vue";
+import RoundCard from "@/components/roundCard.vue";
 
 @Component({
   components: {
