@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 	"time"
 
@@ -9,6 +10,11 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
+
+func SendResponse(w http.ResponseWriter, status int, message *map[string]string) {
+	w.WriteHeader(status)
+	json.NewEncoder(w).Encode(message)
+}
 
 func Setup(router *mux.Router) {
 

@@ -3,12 +3,12 @@ package auth
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -17,11 +17,6 @@ type User struct {
 	FirstName   string `json:"firstname"`
 	LastName    string `json:"lastname"`
 	Enterprises []int  `json:"enterprises"`
-}
-
-func SendResponse(w http.ResponseWriter, status int, message *map[string]string) {
-	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(message)
 }
 
 func Register(DB *mongo.Database) func(http.ResponseWriter, *http.Request) {
@@ -41,17 +36,21 @@ func Register(DB *mongo.Database) func(http.ResponseWriter, *http.Request) {
 		// get the users collection
 		COL := DB.Collection("users")
 		// check if email is already used
-
-		fmt.Println(COL.CountDocuments(ctx, bson.M{"email": user.Email}))
 		if count, _ := COL.CountDocuments(ctx, bson.M{"email": user.Email}); count > 0 {
 			SendResponse(w, http.StatusBadRequest, &map[string]string{
 				"message": "email already in use",
 			})
 			return
 		}
-
+		hashedPassword, hashErr := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
+		if hashErr != nil {
+			SendResponse(w, http.StatusInternalServerError, &map[string]string{
+				"message": "internal error",
+			})
+		}
+		user.Password = string(hashedPassword)
+		// finally, insert the user
 		_, insertErr := COL.InsertOne(ctx, user)
-		fmt.Println(insertErr)
 		if insertErr != nil {
 			SendResponse(w, http.StatusInternalServerError, &map[string]string{
 				"message": "internal error",
