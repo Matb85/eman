@@ -36,11 +36,7 @@ func Setup(router *mux.Router) {
 	schema := graphql.MustParseSchema(s, &rootquery{}, opts...)
 	g := relay.Handler{Schema: schema}
 
-	const (
-		GQLPATH     = "/graphql"
-		FULLGQLPATH = GQLPATH + "/"
-	)
-	router.HandleFunc(GQLPATH, func(w http.ResponseWriter, r *http.Request) {
+	router.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {
 		// pass auth validate the token
 		claims, err := auth.VerifyToken(r.Header.Get("Authorization"))
 		if err != nil {
@@ -53,7 +49,4 @@ func Setup(router *mux.Router) {
 		ctx := context.WithValue(context.Background(), "user_id", claims.ID)
 		g.ServeHTTP(w, r.WithContext(ctx))
 	}).Methods("POST")
-
-	router.Methods("GET").PathPrefix(FULLGQLPATH).Handler(http.StripPrefix(FULLGQLPATH, http.FileServer(http.Dir("./static"))))
-
 }
