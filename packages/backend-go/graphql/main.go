@@ -5,7 +5,6 @@ import (
 
 	graphql "github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
-	"redinnlabs.com/redinn-core/database"
 )
 
 type rootquery struct {
@@ -27,7 +26,6 @@ func Setup() *relay.Handler {
 		}
 		s += string(content)
 	}
-	database.Connect()
 
 	// setup the graphql package
 	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers()}

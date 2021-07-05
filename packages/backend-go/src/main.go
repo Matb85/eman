@@ -8,6 +8,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"redinnlabs.com/redinn-core/auth"
+	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/graphql"
 )
 
@@ -17,6 +18,7 @@ func main() {
 		PORT = "8080"
 	}
 	fmt.Println("listening on port " + PORT)
+	database.Connect()
 
 	router := mux.NewRouter()
 
