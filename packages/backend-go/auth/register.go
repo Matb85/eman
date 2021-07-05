@@ -6,12 +6,14 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
+	Uuid        string `json:"uuid"`
 	Email       string `json:"email"`
 	Password    string `json:"password"`
 	FirstName   string `json:"firstname"`
@@ -49,6 +51,8 @@ func Register(DB *mongo.Database) func(http.ResponseWriter, *http.Request) {
 			})
 		}
 		user.Password = string(hashedPassword)
+
+		user.Uuid = uuid.New().String()
 		// finally, insert the user
 		_, insertErr := COL.InsertOne(ctx, user)
 		if insertErr != nil {

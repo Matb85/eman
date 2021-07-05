@@ -26,8 +26,16 @@ func main() {
 		FULLGQLPATH = GQLPATH + "/"
 	)
 	router.HandleFunc(GQLPATH, func(w http.ResponseWriter, r *http.Request) {
-		// pass auth token to resolvers
-		ctx := context.WithValue(context.Background(), "token", "to jest klucz")
+		// pass auth validate the token
+		claims, err := auth.VerifyToken(r.Header.Get("Authorization"))
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json")
+			auth.SendResponse(w, http.StatusInternalServerError, &map[string]string{
+				"message": err.Error(),
+			})
+			return
+		}
+		ctx := context.WithValue(context.Background(), "token", claims.ID)
 		g.ServeHTTP(w, r.WithContext(ctx))
 	}).Methods("POST")
 

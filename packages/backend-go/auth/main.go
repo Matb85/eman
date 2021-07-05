@@ -28,6 +28,7 @@ func Setup(router *mux.Router) {
 
 	router.Use(jsonHeader)
 	router.HandleFunc("/register", Register(db)).Methods("POST")
+	router.HandleFunc("/login", Login(db)).Methods("POST")
 
 }
 
