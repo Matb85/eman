@@ -14,7 +14,6 @@ func SendResponse(w http.ResponseWriter, status int, message *map[string]string)
 }
 
 func Setup(router *mux.Router) {
-
 	db := database.Connect()
 
 	router.Use(jsonHeader)

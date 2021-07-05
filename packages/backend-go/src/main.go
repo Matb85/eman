@@ -35,7 +35,7 @@ func main() {
 			})
 			return
 		}
-		ctx := context.WithValue(context.Background(), "token", claims.ID)
+		ctx := context.WithValue(context.Background(), "user_id", claims.ID)
 		g.ServeHTTP(w, r.WithContext(ctx))
 	}).Methods("POST")
 
