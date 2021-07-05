@@ -45,8 +45,8 @@ func Login(DB *mongo.Database) func(http.ResponseWriter, *http.Request) {
 			})
 			return
 		}
-		access_token, e1 := createToken(fetchuser.Uuid, time.Minute*15)
-		refresh_token, e2 := createToken(fetchuser.Uuid, time.Hour*24*30)
+		access_token, e1 := createToken(fetchuser.Id.Hex(), time.Minute*15)
+		refresh_token, e2 := createToken(fetchuser.Id.Hex(), time.Hour*24*30)
 		if e1 == nil && e2 == nil {
 			SendResponse(w, http.StatusOK, &map[string]string{
 				"message":       "Welcome to Redinn!",

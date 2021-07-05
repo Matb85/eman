@@ -7,6 +7,7 @@ import (
 
 	"github.com/graph-gophers/graphql-go"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"redinnlabs.com/redinn-core/database"
 )
 
@@ -21,7 +22,9 @@ func (r *UserQuery) User(ctx context.Context) (*User, error) {
 
 	user := &User{}
 
-	fetchErr := db.Collection("users").FindOne(dbctx, bson.M{"uuid": ctx.Value("user_id")}).Decode(&user)
+	id, _ := primitive.ObjectIDFromHex(ctx.Value("user_id").(string))
+
+	fetchErr := db.Collection("users").FindOne(dbctx, bson.M{"_id": id}).Decode(&user)
 	fmt.Println(user)
 	if fetchErr != nil {
 		return &User{}, fetchErr
@@ -31,9 +34,9 @@ func (r *UserQuery) User(ctx context.Context) (*User, error) {
 }
 
 type User struct {
-	ID          graphql.ID
-	EMAIL       string
-	FIRSTNAME   string
-	LASTNAME    string
-	ENTERPRISES *[]graphql.ID
+	ID          graphql.ID    `json:"id" bson:"_id,omitempty"`
+	EMAIL       string        `json:"email"`
+	FIRSTNAME   string        `json:"firstname"`
+	LASTNAME    string        `json:"lastname"`
+	ENTERPRISES *[]graphql.ID `json:"enterprises"`
 }
