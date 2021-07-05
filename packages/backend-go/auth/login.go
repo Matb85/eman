@@ -44,6 +44,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+	// create tokens
 	access_token, e1 := createToken(fetchuser.Id.Hex(), time.Minute*15)
 	refresh_token, e2 := createToken(fetchuser.Id.Hex(), time.Hour*24*30)
 	if e1 == nil && e2 == nil {

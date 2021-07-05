@@ -18,6 +18,8 @@ func main() {
 		PORT = "8080"
 	}
 	fmt.Println("listening on port " + PORT)
+
+	// connect to the database
 	database.Connect()
 
 	router := mux.NewRouter()
