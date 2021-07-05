@@ -2,7 +2,6 @@ package graphql
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/graph-gophers/graphql-go"
@@ -14,22 +13,17 @@ import (
 type UserQuery struct{}
 
 func (r *UserQuery) User(ctx context.Context) (*User, error) {
-	fmt.Println(ctx.Value("user_id"))
-
 	dbctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	db := database.Connect()
 
 	user := &User{}
 
 	id, _ := primitive.ObjectIDFromHex(ctx.Value("user_id").(string))
 
-	fetchErr := db.Collection("users").FindOne(dbctx, bson.M{"_id": id}).Decode(&user)
-	fmt.Println(user)
+	fetchErr := database.UserCol.FindOne(dbctx, bson.M{"_id": id}).Decode(&user)
 	if fetchErr != nil {
 		return &User{}, fetchErr
 	}
-	fmt.Println(ctx.Value("user_id"))
 	return user, nil
 }
 

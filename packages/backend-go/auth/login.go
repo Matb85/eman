@@ -8,56 +8,54 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
+	"redinnlabs.com/redinn-core/database"
 )
 
-func Login(DB *mongo.Database) func(http.ResponseWriter, *http.Request) {
-	return func(w http.ResponseWriter, r *http.Request) {
+func Login(w http.ResponseWriter, r *http.Request) {
 
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		user := User{Enterprises: []int{}}
-		// convert json to struct
-		err := json.NewDecoder(r.Body).Decode(&user)
-		// some validation
-		if err != nil || len(user.Password) < 8 || len(user.Email) < 3 {
-			SendResponse(w, http.StatusBadRequest, &map[string]string{
-				"message": "provided wrong data",
-			})
-			return
-		}
-		// get the users collection
-		COL := DB.Collection("users")
-		// fetch the user
-		fetchuser := User{Enterprises: []int{}}
-		fetchErr := COL.FindOne(ctx, bson.M{"email": user.Email}).Decode(&fetchuser)
-		if fetchErr != nil {
-			SendResponse(w, http.StatusBadRequest, &map[string]string{
-				"message": "provided wrong data1",
-			})
-			return
-		}
-		// compare passwords
-		if bcrypt.CompareHashAndPassword([]byte(fetchuser.Password), []byte(user.Password)) != nil {
-			SendResponse(w, http.StatusBadRequest, &map[string]string{
-				"message": "provided wrong data2",
-			})
-			return
-		}
-		access_token, e1 := createToken(fetchuser.Id.Hex(), time.Minute*15)
-		refresh_token, e2 := createToken(fetchuser.Id.Hex(), time.Hour*24*30)
-		if e1 == nil && e2 == nil {
-			SendResponse(w, http.StatusOK, &map[string]string{
-				"message":       "Welcome to Redinn!",
-				"access_token":  access_token,
-				"refresh_token": refresh_token,
-			})
-		} else {
-			SendResponse(w, http.StatusInternalServerError, &map[string]string{
-				"message": "internal error",
-			})
-		}
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	user := User{Enterprises: []int{}}
+	// convert json to struct
+	err := json.NewDecoder(r.Body).Decode(&user)
+	// some validation
+	if err != nil || len(user.Password) < 8 || len(user.Email) < 3 {
+		SendResponse(w, http.StatusBadRequest, &map[string]string{
+			"message": "provided wrong data",
+		})
+		return
+	}
+	// get the users collection
+	COL := database.UserCol
+	// fetch the user
+	fetchuser := User{Enterprises: []int{}}
+	fetchErr := COL.FindOne(ctx, bson.M{"email": user.Email}).Decode(&fetchuser)
+	if fetchErr != nil {
+		SendResponse(w, http.StatusBadRequest, &map[string]string{
+			"message": "provided wrong data1",
+		})
+		return
+	}
+	// compare passwords
+	if bcrypt.CompareHashAndPassword([]byte(fetchuser.Password), []byte(user.Password)) != nil {
+		SendResponse(w, http.StatusBadRequest, &map[string]string{
+			"message": "provided wrong data2",
+		})
+		return
+	}
+	access_token, e1 := createToken(fetchuser.Id.Hex(), time.Minute*15)
+	refresh_token, e2 := createToken(fetchuser.Id.Hex(), time.Hour*24*30)
+	if e1 == nil && e2 == nil {
+		SendResponse(w, http.StatusOK, &map[string]string{
+			"message":       "Welcome to Redinn!",
+			"access_token":  access_token,
+			"refresh_token": refresh_token,
+		})
+	} else {
+		SendResponse(w, http.StatusInternalServerError, &map[string]string{
+			"message": "internal error",
+		})
 	}
 }
 
