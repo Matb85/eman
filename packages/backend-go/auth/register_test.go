@@ -4,25 +4,14 @@ import (
 	"bytes"
 	"encoding/json"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	"redinnlabs.com/redinn-core/auth"
-	"redinnlabs.com/redinn-core/database"
 )
 
 // struct for decoding responses
 type message struct {
 	Message string `json:"message"`
-}
-
-func TestMain(m *testing.M) {
-	// setup
-	database.Connect()
-	// run tests
-	code := m.Run()
-	// shutdown
-	os.Exit(code)
 }
 
 func TestRegister200(t *testing.T) {
