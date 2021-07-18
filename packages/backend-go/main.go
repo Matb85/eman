@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gorilla/mux"
 	"redinnlabs.com/redinn-core/auth"
@@ -26,5 +27,12 @@ func main() {
 	graphql.Setup(router)
 	auth.Setup(router.PathPrefix("/auth").Subrouter())
 
-	http.ListenAndServe(":"+PORT, router)
+	srv := &http.Server{
+		Handler:      router,
+		Addr:         "127.0.0.1:" + PORT,
+		WriteTimeout: 15 * time.Second,
+		ReadTimeout:  15 * time.Second,
+	}
+
+	srv.ListenAndServe()
 }
