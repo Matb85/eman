@@ -8,6 +8,7 @@ import (
 
 	"github.com/golang-jwt/jwt"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 	"redinnlabs.com/redinn-core/database"
 )
@@ -45,9 +46,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// create tokens
-	var userID = fetchuser.Id.Hex()
-	access_token, e1 := createToken(userID, time.Minute*15)
-	refresh_token, e2 := createToken(userID, time.Hour*24*30)
+	access_token, e1 := createToken(fetchuser.Id, time.Minute*30)
+	refresh_token, e2 := createToken(fetchuser.Id, time.Hour*24*30)
 	if e1 == nil && e2 == nil {
 		SendResponse(w, http.StatusOK, &map[string]string{
 			"message":       "Welcome to Redinn!",
@@ -62,13 +62,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 }
 
 type customClaims struct {
-	ID string `json:"id"`
+	ID primitive.ObjectID `json:"id"`
 	jwt.StandardClaims
 }
 
 var SECRET = "gdsgfdgdfhfghgfhldsjgdfk"
 
-func createToken(id string, duration time.Duration) (string, error) {
+func createToken(id primitive.ObjectID, duration time.Duration) (string, error) {
 	claims := customClaims{
 		ID: id,
 		StandardClaims: jwt.StandardClaims{

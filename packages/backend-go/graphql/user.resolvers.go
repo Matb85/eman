@@ -18,10 +18,7 @@ func (r *UserQuery) User(ctx context.Context) (*User, error) {
 
 	user := &User{}
 
-	// turn _id string to mongo's ObjectId
-	id, _ := primitive.ObjectIDFromHex(ctx.Value("user_id").(string))
-
-	fetchErr := database.UserCol.FindOne(dbctx, bson.M{"_id": id}).Decode(&user)
+	fetchErr := database.UserCol.FindOne(dbctx, bson.M{"_id": ctx.Value("user_id").(primitive.ObjectID)}).Decode(&user)
 	if fetchErr != nil {
 		return &User{}, fetchErr
 	}
