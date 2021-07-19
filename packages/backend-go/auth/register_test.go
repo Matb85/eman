@@ -18,24 +18,23 @@ func TestRegister200(t *testing.T) {
 	w := httptest.NewRecorder()
 
 	// setup payload
-	payload, _ := json.Marshal(&map[string]string{
-		"email":     "example@redinnlabs.com",
-		"password":  "example-password",
-		"firstname": "example",
-		"lastname":  "user",
+	payload, _ := json.Marshal(&auth.User{
+		Email:     "example@redinnlabs.com",
+		Password:  "example-password",
+		FirstName: "example",
+		LastName:  "user",
 	})
 
-	auth.Register(w, httptest.NewRequest("GET", "/register", bytes.NewReader(payload)))
+	auth.Register(w, httptest.NewRequest("POST", "/register", bytes.NewReader(payload)))
 	res := w.Result()
 
 	// read the response
 	mes := &message{}
-	jsonerr := json.NewDecoder(res.Body).Decode(&mes)
-
-	// log possible errors
-	if jsonerr != nil {
+	if jsonerr := json.NewDecoder(res.Body).Decode(&mes); jsonerr != nil {
 		t.Fatal(jsonerr)
 	}
+
+	// log possible errors
 	if res.StatusCode != 200 {
 		t.Error("wrong status:", res.StatusCode, "instead of 200")
 	}

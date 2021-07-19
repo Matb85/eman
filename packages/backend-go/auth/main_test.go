@@ -20,15 +20,15 @@ func TestMain(m *testing.M) {
 	// create a temporary folder for mongodb
 	// if already exists, clear content
 	if _, staterr := os.Stat(DBSTORAGE); !os.IsNotExist(staterr) {
-		clearerr := os.RemoveAll(DBSTORAGE)
-		if clearerr != nil {
+		if clearerr := os.RemoveAll(DBSTORAGE); clearerr != nil {
 			log.Fatal(clearerr)
 		}
 	}
-	Mkdirerr := os.Mkdir(DBSTORAGE, 0755)
-	if Mkdirerr != nil {
+
+	if Mkdirerr := os.Mkdir(DBSTORAGE, 0755); Mkdirerr != nil {
 		log.Fatal(Mkdirerr)
 	}
+
 	// start a mongo instance
 	args := []string{
 		"--bind_ip", "127.0.0.1",
@@ -36,8 +36,7 @@ func TestMain(m *testing.M) {
 		"--dbpath", DBSTORAGE,
 	}
 	server := exec.Command(os.Getenv("TEST_DB_BIN_PATH"), args...)
-	mongoerr := server.Start()
-	if mongoerr != nil {
+	if mongoerr := server.Start(); mongoerr != nil {
 		log.Fatal(mongoerr)
 	}
 	// connect to the instance
