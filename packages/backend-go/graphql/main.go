@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	graphql "github.com/graph-gophers/graphql-go"
+	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 	"redinnlabs.com/redinn-core/auth"
 )
@@ -15,8 +15,12 @@ type rootquery struct {
 	UserQuery
 }
 
+type contextKey int
+
+const User_id = contextKey(1)
+
 func Setup(router *mux.Router) {
-	// stich schemas
+	// stitch schemas
 	s := ""
 	files, err := ioutil.ReadDir("./graphql/schema")
 	if err != nil {
@@ -46,7 +50,7 @@ func Setup(router *mux.Router) {
 			})
 			return
 		}
-		ctx := context.WithValue(context.Background(), "user_id", claims.ID)
+		ctx := context.WithValue(context.Background(), User_id, claims.ID)
 		g.ServeHTTP(w, r.WithContext(ctx))
 	}).Methods("POST")
 }

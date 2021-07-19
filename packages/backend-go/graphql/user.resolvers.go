@@ -12,20 +12,20 @@ import (
 
 type UserQuery struct{}
 
-func (r *UserQuery) User(ctx context.Context) (*User, error) {
+func (r *UserQuery) User(ctx context.Context) (*usergql, error) {
 	dbctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	user := &User{}
+	user := &usergql{}
 
-	fetchErr := database.UserCol.FindOne(dbctx, bson.M{"_id": ctx.Value("user_id").(primitive.ObjectID)}).Decode(&user)
+	fetchErr := database.UserCol.FindOne(dbctx, bson.M{"_id": ctx.Value(User_id).(primitive.ObjectID)}).Decode(&user)
 	if fetchErr != nil {
-		return &User{}, fetchErr
+		return &usergql{}, fetchErr
 	}
 	return user, nil
 }
 
-type User struct {
+type usergql struct {
 	ID          graphql.ID    `json:"id" bson:"_id,omitempty"`
 	EMAIL       string        `json:"email"`
 	FIRSTNAME   string        `json:"firstname"`
