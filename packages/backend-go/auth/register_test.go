@@ -9,11 +9,6 @@ import (
 	"redinnlabs.com/redinn-core/auth"
 )
 
-// struct for decoding responses
-type message struct {
-	Message string `json:"message"`
-}
-
 func TestRegister200(t *testing.T) {
 	// setup payload
 	payload, _ := json.Marshal(&auth.User{
@@ -28,7 +23,7 @@ func TestRegister200(t *testing.T) {
 	res := w.Result()
 
 	// read the response
-	mes := &message{}
+	mes := &Message{}
 	if jsonerr := json.NewDecoder(res.Body).Decode(&mes); jsonerr != nil {
 		t.Fatal(jsonerr)
 	}
@@ -63,7 +58,7 @@ func TestRegister400(t *testing.T) {
 		res := w.Result()
 
 		// read the response
-		mes := &message{}
+		mes := &Message{}
 		if jsonerr := json.NewDecoder(res.Body).Decode(&mes); jsonerr != nil {
 			t.Fatal(jsonerr)
 		}

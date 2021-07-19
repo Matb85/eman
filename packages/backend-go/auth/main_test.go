@@ -9,6 +9,11 @@ import (
 	"redinnlabs.com/redinn-core/database"
 )
 
+// struct for decoding responses
+type Message struct {
+	Message string `json:"message"`
+}
+
 func TestMain(m *testing.M) {
 	// setup
 	// get current working directory
