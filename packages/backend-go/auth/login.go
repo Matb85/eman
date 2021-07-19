@@ -21,9 +21,9 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// convert json to struct
 	err := json.NewDecoder(r.Body).Decode(&user)
 	// some validation
-	if err != nil || len(user.Password) < 8 || len(user.Email) < 3 {
+	if err != nil || len(user.Password) < 8 || len(user.Email) < 6 {
 		SendResponse(w, http.StatusBadRequest, &map[string]string{
-			"message": "provided wrong data",
+			"message": "too short password or email",
 		})
 		return
 	}
@@ -32,16 +32,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// fetch the user
 	fetchuser := User{Enterprises: []int{}}
 	fetchErr := COL.FindOne(ctx, bson.M{"email": user.Email}).Decode(&fetchuser)
-	if fetchErr != nil {
-		SendResponse(w, http.StatusBadRequest, &map[string]string{
-			"message": "provided wrong data1",
-		})
-		return
-	}
 	// compare passwords
-	if bcrypt.CompareHashAndPassword([]byte(fetchuser.Password), []byte(user.Password)) != nil {
+	passworderr := bcrypt.CompareHashAndPassword([]byte(fetchuser.Password), []byte(user.Password))
+
+	if fetchErr != nil || passworderr != nil {
 		SendResponse(w, http.StatusBadRequest, &map[string]string{
-			"message": "provided wrong data2",
+			"message": "incorrect password or email",
 		})
 		return
 	}
