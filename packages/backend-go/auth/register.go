@@ -28,7 +28,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	// convert json to struct
 	err := json.NewDecoder(r.Body).Decode(&user)
 	// some validation
-	if err != nil || len(user.Password) < 8 || len(user.Email) < 3 || len(user.FirstName) < 3 || len(user.LastName) < 3 {
+	if err != nil || len(user.Password) < 8 || len(user.Email) < 6 || len(user.FirstName) < 3 || len(user.LastName) < 3 {
 		SendResponse(w, http.StatusBadRequest, &map[string]string{
 			"message": "provided wrong data",
 		})
@@ -48,6 +48,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		SendResponse(w, http.StatusInternalServerError, &map[string]string{
 			"message": "internal error",
 		})
+		return
 	}
 	user.Password = string(hashedPassword)
 
