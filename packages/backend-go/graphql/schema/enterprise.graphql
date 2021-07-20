@@ -1,0 +1,28 @@
+type Enterprise {
+  id: ID!
+  name: String!
+  logo: String!
+  address: Address!
+  employees: [Employee!]
+}
+type Address {
+  country: String!
+  zipcode: String!
+  city: String!
+  street: String!
+}
+type Employee {
+  ref: ID!
+  permissions: String!
+}
+
+input EnterpriseI {
+  name: String!
+  address: AddressI!
+}
+input AddressI {
+  country: String!
+  zipcode: String!
+  city: String!
+  street: String!
+}

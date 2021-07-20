@@ -11,6 +11,8 @@ import (
 
 var UserCol *mongo.Collection
 
+var EnterpriseCol *mongo.Collection
+
 func Connect() {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
@@ -21,6 +23,7 @@ func Connect() {
 	}
 
 	db := client.Database("test")
-	UserCol = db.Collection("users")
 
+	UserCol = db.Collection("users")
+	EnterpriseCol = db.Collection("enterprises")
 }
