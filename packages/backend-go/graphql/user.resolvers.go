@@ -2,7 +2,6 @@ package graphql
 
 import (
 	"context"
-	"time"
 
 	"github.com/graph-gophers/graphql-go"
 	"go.mongodb.org/mongo-driver/bson"
@@ -13,7 +12,7 @@ import (
 type UserQuery struct{}
 
 func (r *UserQuery) User(ctx context.Context) (*usergql, error) {
-	dbctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	dbctx, cancel := createDBContext()
 	defer cancel()
 
 	user := &usergql{}

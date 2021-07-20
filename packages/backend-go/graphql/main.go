@@ -4,6 +4,7 @@ import (
 	"context"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/graph-gophers/graphql-go"
@@ -13,11 +14,18 @@ import (
 
 type rootquery struct {
 	UserQuery
+	EnterpriseMutation
+	EnterpriseQuery
 }
 
 type contextKey int
 
 const User_id = contextKey(1)
+
+func createDBContext() (context.Context, context.CancelFunc) {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	return ctx, cancel
+}
 
 func Setup(router *mux.Router) {
 	// stitch schemas
