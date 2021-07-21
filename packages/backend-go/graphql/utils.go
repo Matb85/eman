@@ -6,7 +6,7 @@ import (
 	"redinnlabs.com/redinn-core/database"
 )
 
-func findUser(id primitive.ObjectID) (*userGQL, error) {
+func FindUser(id primitive.ObjectID) (*userGQL, error) {
 	dbctx, cancel := createDBContext()
 	defer cancel()
 
@@ -18,7 +18,7 @@ func findUser(id primitive.ObjectID) (*userGQL, error) {
 
 }
 
-func findEnterprise(id primitive.ObjectID) (*enterpriseGQL, error) {
+func FindEnterprise(id primitive.ObjectID) (*enterpriseGQL, error) {
 	dbctx, cancel := createDBContext()
 	defer cancel()
 

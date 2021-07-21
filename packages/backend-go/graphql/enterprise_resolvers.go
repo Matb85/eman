@@ -16,7 +16,7 @@ type EnterpriseQuery struct{}
 
 func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float64 }) (*enterpriseGQL, error) {
 	// fetch the user
-	user, fetchErr := findUser(ctx.Value(User_id).(primitive.ObjectID))
+	user, fetchErr := FindUser(ctx.Value(User_id).(primitive.ObjectID))
 	if fetchErr != nil {
 		return nil, fetchErr
 	}
@@ -28,7 +28,7 @@ func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float
 	}
 
 	// get the id of the enterprise and fetch it
-	return findEnterprise(id)
+	return FindEnterprise(id)
 }
 
 // Enterprise mutations
@@ -56,7 +56,7 @@ func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data 
 	}
 
 	// find the inserted enterprise
-	enterprise, finderr := findEnterprise(insertresult.InsertedID.(primitive.ObjectID))
+	enterprise, finderr := FindEnterprise(insertresult.InsertedID.(primitive.ObjectID))
 	if finderr != nil {
 		return nil, finderr
 	}
@@ -100,7 +100,7 @@ func (*EnterpriseMutation) DeleteEnterprise(ctx context.Context, args struct {
 	}
 
 	// find the enterprise
-	enterprise, finderr := findEnterprise(ID)
+	enterprise, finderr := FindEnterprise(ID)
 	if finderr != nil {
 		return nil, finderr
 	}

@@ -9,5 +9,5 @@ import (
 type UserQuery struct{}
 
 func (r *UserQuery) User(ctx context.Context) (*userGQL, error) {
-	return findUser(ctx.Value(User_id).(primitive.ObjectID))
+	return FindUser(ctx.Value(User_id).(primitive.ObjectID))
 }
