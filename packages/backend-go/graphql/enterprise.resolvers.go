@@ -12,35 +12,9 @@ import (
 	"redinnlabs.com/redinn-core/database"
 )
 
-type Employee struct {
-	Ref         graphql.ID `json:"ref"`
-	Permissions string     `json:"permissions"`
-}
-type Address struct {
-	Country string `json:"country"`
-	Zipcode string `json:"zipcode"`
-	City    string `json:"city"`
-	Street  string `json:"street"`
-}
-
-type Media struct {
-	Config  map[string]string `json:"config"`
-	Posts   []graphql.ID      `json:"posts"`
-	Stories []graphql.ID      `json:"stories"`
-}
-
-type Enterprise struct {
-	ID        graphql.ID  `json:"id" bson:"_id,omitempty"`
-	Name      string      `json:"name"`
-	Logo      string      `json:"logo"`
-	Address   *Address    `json:"address"`
-	Employees *[]Employee `json:"employees"`
-	Media     *Media      `json:"media"`
-}
-
 type EnterpriseQuery struct{}
 
-func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float64 }) (*Enterprise, error) {
+func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float64 }) (*enterpriseGQL, error) {
 	// fetch the user
 	user, fetchErr := findUser(ctx.Value(User_id).(primitive.ObjectID))
 	if fetchErr != nil {
@@ -48,7 +22,7 @@ func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float
 	}
 
 	// get the id of the enterprise
-	id, primerr := primitive.ObjectIDFromHex(string((*user.ENTERPRISES)[int(args.Index)]))
+	id, primerr := primitive.ObjectIDFromHex(string((*user.Enterprises)[int(args.Index)]))
 	if primerr != nil {
 		return nil, primerr
 	}
@@ -61,7 +35,7 @@ func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float
 type EnterpriseMutation struct{}
 
 // create a new enterprise provided that it has a unique name
-func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data Enterprise }) (*Enterprise, error) {
+func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data enterpriseGQL }) (*enterpriseGQL, error) {
 	dbctx, cancel := createDBContext()
 	defer cancel()
 
@@ -73,7 +47,7 @@ func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data 
 	}
 
 	// add the user that created the enterprise to Employees
-	args.Data.Employees = &[]Employee{{Ref: graphql.ID(userID.Hex()), Permissions: "111111"}}
+	args.Data.Employees = &[]employeeGQL{{Ref: graphql.ID(userID.Hex()), Permissions: "111111"}}
 
 	// insert
 	insertresult, dberr := database.EnterpriseCol.InsertOne(dbctx, args.Data)
@@ -132,7 +106,6 @@ func (*EnterpriseMutation) DeleteEnterprise(ctx context.Context, args struct {
 	}
 
 	// extract employees' refs
-
 	employees := make([]primitive.ObjectID, len(*enterprise.Employees))
 	// map the employees array objects -> ref strings
 	for i, e := range *enterprise.Employees {

@@ -6,11 +6,11 @@ import (
 	"redinnlabs.com/redinn-core/database"
 )
 
-func findUser(id primitive.ObjectID) (*usergql, error) {
+func findUser(id primitive.ObjectID) (*userGQL, error) {
 	dbctx, cancel := createDBContext()
 	defer cancel()
 
-	user := &usergql{}
+	user := &userGQL{}
 
 	fetchErr := database.UserCol.FindOne(dbctx, bson.M{"_id": id}).Decode(&user)
 
@@ -18,11 +18,11 @@ func findUser(id primitive.ObjectID) (*usergql, error) {
 
 }
 
-func findEnterprise(id primitive.ObjectID) (*Enterprise, error) {
+func findEnterprise(id primitive.ObjectID) (*enterpriseGQL, error) {
 	dbctx, cancel := createDBContext()
 	defer cancel()
 
-	enterprise := &Enterprise{}
+	enterprise := &enterpriseGQL{}
 	finderr := database.EnterpriseCol.FindOne(dbctx, bson.M{"_id": id}).Decode(enterprise)
 
 	return enterprise, finderr
