@@ -6,16 +6,28 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/graphql"
-	"redinnlabs.com/redinn-core/tests"
 )
+
+var MockedUser = &graphql.UserGQL{
+	Email:     "user@example.com",
+	Firstname: "example",
+	Lastname:  "user",
+}
+var MockedAuthUser = &auth.User{
+	Email:     "user@example.com",
+	Password:  "example-password",
+	FirstName: "example",
+	LastName:  "user",
+}
 
 func TestFindUserOK(t *testing.T) {
 	dbctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	result, inserterr := database.UserCol.InsertOne(dbctx, tests.Muser)
+	result, inserterr := database.UserCol.InsertOne(dbctx, MockedUser)
 	if inserterr != nil {
 		t.Fatal(inserterr)
 	}
@@ -24,8 +36,8 @@ func TestFindUserOK(t *testing.T) {
 	if finderr != nil {
 		t.Fatal(finderr)
 	}
-	if user.Email != tests.Muser.Email {
-		t.Error("emails are not the same - user:", user.Email, "model:", tests.Muser.Email)
+	if user.Email != MockedUser.Email {
+		t.Error("emails are not the same - user:", user.Email, "model:", MockedUser.Email)
 	}
 }
 func TestFindEnterpriseOK(t *testing.T) {
@@ -33,7 +45,7 @@ func TestFindEnterpriseOK(t *testing.T) {
 	defer cancel()
 
 	Menterprise := graphql.EnterpriseGQL{}
-	result, inserterr := database.EnterpriseCol.InsertOne(dbctx, tests.Muser)
+	result, inserterr := database.EnterpriseCol.InsertOne(dbctx, MockedUser)
 	if inserterr != nil {
 		t.Fatal(inserterr)
 	}

@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/exec"
 
-	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
 )
 
@@ -43,12 +42,4 @@ func GlobalSetup() *exec.Cmd {
 	database.Connect()
 
 	return server
-}
-
-// a mocked user
-var Muser = &auth.User{
-	Email:     "user@example.com",
-	Password:  "example-password",
-	FirstName: "example",
-	LastName:  "user",
 }
