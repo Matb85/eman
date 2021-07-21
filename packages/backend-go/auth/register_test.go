@@ -11,12 +11,7 @@ import (
 
 func TestRegister200(t *testing.T) {
 	// setup payload
-	payload, _ := json.Marshal(&auth.User{
-		Email:     "example@redinnlabs.com",
-		Password:  "example-password",
-		FirstName: "example",
-		LastName:  "user",
-	})
+	payload, _ := json.Marshal(ExampleUser)
 
 	w := httptest.NewRecorder()
 	auth.Register(w, httptest.NewRequest("POST", "/register", bytes.NewReader(payload)))
