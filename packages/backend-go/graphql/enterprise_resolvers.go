@@ -14,7 +14,7 @@ import (
 
 type EnterpriseQuery struct{}
 
-func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float64 }) (*enterpriseGQL, error) {
+func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float64 }) (*EnterpriseGQL, error) {
 	// fetch the user
 	user, fetchErr := FindUser(ctx.Value(User_id).(primitive.ObjectID))
 	if fetchErr != nil {
@@ -35,7 +35,7 @@ func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float
 type EnterpriseMutation struct{}
 
 // create a new enterprise provided that it has a unique name
-func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data enterpriseGQL }) (*enterpriseGQL, error) {
+func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data EnterpriseGQL }) (*EnterpriseGQL, error) {
 	dbctx, cancel := createDBContext()
 	defer cancel()
 
@@ -47,7 +47,7 @@ func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data 
 	}
 
 	// add the user that created the enterprise to Employees
-	args.Data.Employees = &[]employeeGQL{{Ref: graphql.ID(userID.Hex()), Permissions: "111111"}}
+	args.Data.Employees = &[]EmployeeGQL{{Ref: graphql.ID(userID.Hex()), Permissions: "111111"}}
 
 	// insert
 	insertresult, dberr := database.EnterpriseCol.InsertOne(dbctx, args.Data)

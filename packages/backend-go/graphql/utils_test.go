@@ -11,7 +11,7 @@ import (
 	"redinnlabs.com/redinn-core/tests"
 )
 
-func TestFindUser200(t *testing.T) {
+func TestFindUserOK(t *testing.T) {
 	dbctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -26,5 +26,23 @@ func TestFindUser200(t *testing.T) {
 	}
 	if user.Email != tests.Muser.Email {
 		t.Error("emails are not the same - user:", user.Email, "model:", tests.Muser.Email)
+	}
+}
+func TestFindEnterpriseOK(t *testing.T) {
+	dbctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	Menterprise := graphql.EnterpriseGQL{}
+	result, inserterr := database.EnterpriseCol.InsertOne(dbctx, tests.Muser)
+	if inserterr != nil {
+		t.Fatal(inserterr)
+	}
+
+	enterprise, finderr := graphql.FindEnterprise(result.InsertedID.(primitive.ObjectID))
+	if finderr != nil {
+		t.Fatal(finderr)
+	}
+	if enterprise.Name != Menterprise.Name {
+		t.Error("emails are not the same - user:", enterprise.Name, "model:", Menterprise.Name)
 	}
 }

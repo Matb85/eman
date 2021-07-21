@@ -8,6 +8,6 @@ import (
 
 type UserQuery struct{}
 
-func (r *UserQuery) User(ctx context.Context) (*userGQL, error) {
+func (r *UserQuery) User(ctx context.Context) (*UserGQL, error) {
 	return FindUser(ctx.Value(User_id).(primitive.ObjectID))
 }
