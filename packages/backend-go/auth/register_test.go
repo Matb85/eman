@@ -7,11 +7,12 @@ import (
 	"testing"
 
 	"redinnlabs.com/redinn-core/auth"
+	"redinnlabs.com/redinn-core/tests"
 )
 
 func TestRegister200(t *testing.T) {
 	// setup payload
-	payload, _ := json.Marshal(ExampleUser)
+	payload, _ := json.Marshal(tests.Muser)
 
 	w := httptest.NewRecorder()
 	auth.Register(w, httptest.NewRequest("POST", "/register", bytes.NewReader(payload)))

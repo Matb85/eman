@@ -12,21 +12,15 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
+	"redinnlabs.com/redinn-core/tests"
 )
-
-var ExampleUser = &auth.User{
-	Email:     "user@example.com",
-	Password:  "example-password",
-	FirstName: "example",
-	LastName:  "user",
-}
 
 func TestLogin200(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
 	// insert a mock user to the db
-	mockUser := *ExampleUser
+	mockUser := *tests.Muser
 	// hash the password
 	hashedPassword, hasherr := bcrypt.GenerateFromPassword([]byte(mockUser.Password), 10)
 	if hasherr != nil {
@@ -41,7 +35,7 @@ func TestLogin200(t *testing.T) {
 	// test the controller
 	w := httptest.NewRecorder()
 
-	payload, _ := json.Marshal(ExampleUser)
+	payload, _ := json.Marshal(tests.Muser)
 	auth.Login(w, httptest.NewRequest("POST", "/login", bytes.NewReader(payload)))
 	res := w.Result()
 
@@ -58,7 +52,7 @@ func TestLogin200(t *testing.T) {
 		t.Error("wrong message:", mes.Message)
 	}
 	// delete the db entry
-	if _, deleteerr := database.UserCol.DeleteOne(ctx, bson.M{"email": ExampleUser.Email}); deleteerr != nil {
+	if _, deleteerr := database.UserCol.DeleteOne(ctx, bson.M{"email": tests.Muser.Email}); deleteerr != nil {
 		t.Fatal(deleteerr)
 	}
 }
