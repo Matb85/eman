@@ -41,28 +41,20 @@ type Enterprise struct {
 type EnterpriseQuery struct{}
 
 func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float64 }) (*Enterprise, error) {
-	dbctx, cancel := createDBContext()
-	defer cancel()
-
 	// fetch the user
-	user := &usergql{}
-
-	fetchErr := database.UserCol.FindOne(dbctx, bson.M{"_id": ctx.Value(User_id).(primitive.ObjectID)}).Decode(&user)
+	user, fetchErr := findUser(ctx.Value(User_id).(primitive.ObjectID))
 	if fetchErr != nil {
 		return nil, fetchErr
 	}
 
+	// get the id of the enterprise
 	id, primerr := primitive.ObjectIDFromHex(string((*user.ENTERPRISES)[int(args.Index)]))
 	if primerr != nil {
 		return nil, primerr
 	}
+
 	// get the id of the enterprise and fetch it
-	enterprise := &Enterprise{}
-	finderr := database.EnterpriseCol.FindOne(dbctx, bson.M{"_id": id}).Decode(enterprise)
-	if finderr != nil {
-		return nil, finderr
-	}
-	return enterprise, nil
+	return findEnterprise(id)
 }
 
 // Enterprise mutations
@@ -73,13 +65,15 @@ func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data 
 	dbctx, cancel := createDBContext()
 	defer cancel()
 
+	var userID = ctx.Value(User_id).(primitive.ObjectID)
+
 	// chek id the name is unique
 	if count, _ := database.EnterpriseCol.CountDocuments(ctx, bson.M{"name": args.Data.Name}); count > 0 {
 		return nil, errors.New("an enterprise with the same name already exists")
 	}
 
 	// add the user that created the enterprise to Employees
-	args.Data.Employees = &[]Employee{{Ref: graphql.ID(ctx.Value(User_id).(primitive.ObjectID).Hex()), Permissions: "111111"}}
+	args.Data.Employees = &[]Employee{{Ref: graphql.ID(userID.Hex()), Permissions: "111111"}}
 
 	// insert
 	insertresult, dberr := database.EnterpriseCol.InsertOne(dbctx, args.Data)
@@ -88,15 +82,13 @@ func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data 
 	}
 
 	// find the inserted enterprise
-	enterprise := &Enterprise{}
-
-	finderr := database.EnterpriseCol.FindOne(ctx, bson.M{"_id": insertresult.InsertedID}).Decode(enterprise)
+	enterprise, finderr := findEnterprise(insertresult.InsertedID.(primitive.ObjectID))
 	if finderr != nil {
 		return nil, finderr
 	}
 
 	// update the user's enterprises list
-	_, updateErr := database.UserCol.UpdateByID(dbctx, ctx.Value(User_id).(primitive.ObjectID), bson.M{"$addToSet": bson.M{"enterprises": enterprise.ID}})
+	_, updateErr := database.UserCol.UpdateByID(dbctx, userID, bson.M{"$addToSet": bson.M{"enterprises": enterprise.ID}})
 	if updateErr != nil {
 		return nil, updateErr
 	}
@@ -134,9 +126,7 @@ func (*EnterpriseMutation) DeleteEnterprise(ctx context.Context, args struct {
 	}
 
 	// find the enterprise
-	enterprise := &Enterprise{}
-
-	finderr := database.EnterpriseCol.FindOne(ctx, bson.M{"_id": ID}).Decode(enterprise)
+	enterprise, finderr := findEnterprise(ID)
 	if finderr != nil {
 		return nil, finderr
 	}
@@ -144,7 +134,7 @@ func (*EnterpriseMutation) DeleteEnterprise(ctx context.Context, args struct {
 	// extract employees' refs
 
 	employees := make([]primitive.ObjectID, len(*enterprise.Employees))
-
+	// map the employees array objects -> ref strings
 	for i, e := range *enterprise.Employees {
 		employeeID, _ := primitive.ObjectIDFromHex(string(e.Ref))
 		employees[i] = employeeID
