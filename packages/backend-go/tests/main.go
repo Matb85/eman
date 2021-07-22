@@ -1,14 +1,16 @@
 package tests
 
 import (
+	"context"
 	"log"
 	"os"
 	"os/exec"
+	"time"
 
 	"redinnlabs.com/redinn-core/database"
 )
 
-func GlobalSetup() *exec.Cmd {
+func GlobalSetup() func() {
 	// setup
 	// get current working directory
 	CWD, cwderr := os.Getwd()
@@ -41,5 +43,12 @@ func GlobalSetup() *exec.Cmd {
 	// connect to the instance
 	database.Connect()
 
-	return server
+	// shutdown
+	return func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		database.UserCol.Drop(ctx)
+		database.EnterpriseCol.Drop(ctx)
+		server.Process.Kill()
+	}
 }

@@ -13,9 +13,9 @@ type Message struct {
 }
 
 func TestMain(m *testing.M) {
-	server := tests.GlobalSetup()
+	shutdown := tests.GlobalSetup()
 	code := m.Run()
 	// shut down
-	server.Process.Kill()
+	shutdown()
 	os.Exit(code)
 }
