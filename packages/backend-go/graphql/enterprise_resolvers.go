@@ -14,8 +14,12 @@ import (
 
 type EnterpriseResolvers struct{}
 
+type GetEnterpriseArgs struct {
+	Index float64
+}
+
 // query: get an enterprise
-func (*EnterpriseResolvers) Enterprise(ctx context.Context, args struct{ Index float64 }) (*EnterpriseGQL, error) {
+func (*EnterpriseResolvers) Enterprise(ctx context.Context, args GetEnterpriseArgs) (*EnterpriseGQL, error) {
 	// fetch the user
 	user, fetchErr := FindUser(ctx.Value(User_id).(primitive.ObjectID))
 	if fetchErr != nil {
@@ -32,8 +36,12 @@ func (*EnterpriseResolvers) Enterprise(ctx context.Context, args struct{ Index f
 	return FindEnterprise(id)
 }
 
+type AddEnterpriseArgs struct {
+	Data EnterpriseGQL
+}
+
 // mutation: create a new enterprise provided that it has a unique name
-func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args struct{ Data EnterpriseGQL }) (*EnterpriseGQL, error) {
+func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args AddEnterpriseArgs) (*EnterpriseGQL, error) {
 	dbctx, cancel := CreateDBContext()
 	defer cancel()
 
@@ -73,11 +81,13 @@ type message struct {
 	Message string `json:"message"`
 }
 
-// mutation: delete an enterprise
-func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args struct {
+type DeleteEnterpriseArgs struct {
 	Password     string
 	EnterpriseID graphql.ID
-}) (*message, error) {
+}
+
+// mutation: delete an enterprise
+func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args DeleteEnterpriseArgs) (*message, error) {
 	dbctx, cancel := CreateDBContext()
 	defer cancel()
 
