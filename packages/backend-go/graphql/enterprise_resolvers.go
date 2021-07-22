@@ -12,9 +12,10 @@ import (
 	"redinnlabs.com/redinn-core/database"
 )
 
-type EnterpriseQuery struct{}
+type EnterpriseResolvers struct{}
 
-func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float64 }) (*EnterpriseGQL, error) {
+// query: get an enterprise
+func (*EnterpriseResolvers) Enterprise(ctx context.Context, args struct{ Index float64 }) (*EnterpriseGQL, error) {
 	// fetch the user
 	user, fetchErr := FindUser(ctx.Value(User_id).(primitive.ObjectID))
 	if fetchErr != nil {
@@ -31,11 +32,8 @@ func (*EnterpriseQuery) Enterprise(ctx context.Context, args struct{ Index float
 	return FindEnterprise(id)
 }
 
-// Enterprise mutations
-type EnterpriseMutation struct{}
-
-// create a new enterprise provided that it has a unique name
-func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data EnterpriseGQL }) (*EnterpriseGQL, error) {
+// mutation: create a new enterprise provided that it has a unique name
+func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args struct{ Data EnterpriseGQL }) (*EnterpriseGQL, error) {
 	dbctx, cancel := CreateDBContext()
 	defer cancel()
 
@@ -75,7 +73,8 @@ type message struct {
 	Message string `json:"message"`
 }
 
-func (*EnterpriseMutation) DeleteEnterprise(ctx context.Context, args struct {
+// mutation: delete an enterprise
+func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args struct {
 	Password     string
 	EnterpriseID graphql.ID
 }) (*message, error) {

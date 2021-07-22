@@ -12,10 +12,9 @@ import (
 	"redinnlabs.com/redinn-core/auth"
 )
 
-type rootquery struct {
-	UserQuery
-	EnterpriseMutation
-	EnterpriseQuery
+type rootResolvers struct {
+	UserResolvers
+	EnterpriseResolvers
 }
 
 type contextKey int
@@ -45,7 +44,7 @@ func Setup(router *mux.Router) {
 
 	// setup the graphql package
 	opts := []graphql.SchemaOpt{graphql.UseFieldResolvers()}
-	schema := graphql.MustParseSchema(s, &rootquery{}, opts...)
+	schema := graphql.MustParseSchema(s, &rootResolvers{}, opts...)
 	g := relay.Handler{Schema: schema}
 
 	router.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {

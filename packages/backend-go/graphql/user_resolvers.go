@@ -6,8 +6,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
-type UserQuery struct{}
+type UserResolvers struct{}
 
-func (r *UserQuery) User(ctx context.Context) (*UserGQL, error) {
+func (r *UserResolvers) User(ctx context.Context) (*UserGQL, error) {
 	return FindUser(ctx.Value(User_id).(primitive.ObjectID))
 }
