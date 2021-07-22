@@ -7,7 +7,7 @@ import (
 )
 
 func FindUser(id primitive.ObjectID) (*UserGQL, error) {
-	dbctx, cancel := createDBContext()
+	dbctx, cancel := CreateDBContext()
 	defer cancel()
 
 	user := &UserGQL{}
@@ -19,7 +19,7 @@ func FindUser(id primitive.ObjectID) (*UserGQL, error) {
 }
 
 func FindEnterprise(id primitive.ObjectID) (*EnterpriseGQL, error) {
-	dbctx, cancel := createDBContext()
+	dbctx, cancel := CreateDBContext()
 	defer cancel()
 
 	enterprise := &EnterpriseGQL{}

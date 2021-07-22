@@ -22,7 +22,7 @@ type contextKey int
 
 const User_id = contextKey(1)
 
-func createDBContext() (context.Context, context.CancelFunc) {
+func CreateDBContext() (context.Context, context.CancelFunc) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	return ctx, cancel
 }

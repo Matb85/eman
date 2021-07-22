@@ -36,7 +36,7 @@ type EnterpriseMutation struct{}
 
 // create a new enterprise provided that it has a unique name
 func (*EnterpriseMutation) AddEnterprise(ctx context.Context, args struct{ Data EnterpriseGQL }) (*EnterpriseGQL, error) {
-	dbctx, cancel := createDBContext()
+	dbctx, cancel := CreateDBContext()
 	defer cancel()
 
 	var userID = ctx.Value(User_id).(primitive.ObjectID)
@@ -79,7 +79,7 @@ func (*EnterpriseMutation) DeleteEnterprise(ctx context.Context, args struct {
 	Password     string
 	EnterpriseID graphql.ID
 }) (*message, error) {
-	dbctx, cancel := createDBContext()
+	dbctx, cancel := CreateDBContext()
 	defer cancel()
 
 	ID, primerr := primitive.ObjectIDFromHex(string(args.EnterpriseID))
