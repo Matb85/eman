@@ -17,7 +17,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	user := User{Enterprises: []int{}}
+	user := User{Enterprises: []string{}}
 	// convert json to struct
 	err := json.NewDecoder(r.Body).Decode(&user)
 	// some validation
@@ -30,7 +30,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// get the users collection
 	COL := database.UserCol
 	// fetch the user
-	fetchuser := User{Enterprises: []int{}}
+	fetchuser := User{Enterprises: []string{}}
 	fetchErr := COL.FindOne(ctx, bson.M{"email": user.Email}).Decode(&fetchuser)
 	// compare passwords
 	passworderr := bcrypt.CompareHashAndPassword([]byte(fetchuser.Password), []byte(user.Password))

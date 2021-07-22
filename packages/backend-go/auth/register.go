@@ -18,13 +18,13 @@ type User struct {
 	Password    string             `json:"password"`
 	FirstName   string             `json:"firstname"`
 	LastName    string             `json:"lastname"`
-	Enterprises []int              `json:"enterprises"`
+	Enterprises []string           `json:"enterprises"`
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
-	user := User{Enterprises: []int{}}
+	user := User{Enterprises: []string{}}
 	// convert json to struct
 	err := json.NewDecoder(r.Body).Decode(&user)
 	// some validation
