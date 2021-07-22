@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	gql "github.com/graph-gophers/graphql-go"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
@@ -12,15 +13,23 @@ import (
 )
 
 var MockedUser = &graphql.UserGQL{
-	Email:     "user@example.com",
-	Firstname: "example",
-	Lastname:  "user",
+	Email:       "user@example.com",
+	Firstname:   "example",
+	Lastname:    "user",
+	Enterprises: &[]gql.ID{},
 }
+
+const MockedPasswordString = "example-password"
+
 var MockedAuthUser = &auth.User{
-	Email:     "user@example.com",
-	Password:  "example-password",
-	FirstName: "example",
-	LastName:  "user",
+	Email:       "user@example.com",
+	Password:    MockedPasswordString,
+	FirstName:   "example",
+	LastName:    "user",
+	Enterprises: []string{},
+}
+var MockedEnterprise = &graphql.EnterpriseGQL{
+	Name: "Example Enterprise",
 }
 
 func TestFindUserOK(t *testing.T) {
