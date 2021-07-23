@@ -53,7 +53,10 @@ export default {
     localStorage: false,
     strategies: {
       local: {
-        property: "token",
+        token: {
+          property: "access_token",
+          type: false,
+        },
         user: {
           property: "data.user",
         },
