@@ -48,11 +48,11 @@ func Setup(router *mux.Router) {
 	g := relay.Handler{Schema: schema}
 
 	router.HandleFunc("/graphql", func(w http.ResponseWriter, r *http.Request) {
-		// pass auth validate the token
+		// auth - validate the token
 		claims, err := auth.VerifyToken(r.Header.Get("Authorization"))
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
-			auth.SendResponse(w, http.StatusInternalServerError, &map[string]string{
+			auth.SendResponse(w, http.StatusBadRequest, &map[string]string{
 				"message": err.Error(),
 			})
 			return
