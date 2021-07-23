@@ -1,0 +1,11 @@
+{
+  "name": "redinn_api_go",
+  "version": "0.0.1",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "dev": "go run ./",
+    "build": "go build ./",
+    "test": "go test ./... -count=1"
+  }
+}
