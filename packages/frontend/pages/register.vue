@@ -83,13 +83,17 @@ export default class Register extends Vue {
   async register(): Promise<void> {
     try {
       const result = await this.$axios.$post("/auth/register", this.credentials);
-      console.log(result);
       if (result.error) return;
       this.$auth.loginWith("local", {
         data: this.credentials,
       });
     } catch (err) {
-      console.log(err);
+      this.$buefy.snackbar.open({
+        message: "Coś poszło nie tak... Spróbuj ponownie później",
+        type: "is-danger",
+        queue: false,
+        position: "is-bottom-right",
+      });
     }
   }
 }

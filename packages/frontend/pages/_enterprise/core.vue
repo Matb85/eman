@@ -42,8 +42,6 @@ export default {
   //   const response = await $axios.$post("/graphql", {
   //     query: `query get{enterprise(index: ${route.params.enterprise}){ id name address {street}}}`,
   //   });
-  //
-  //   console.log(response);
   // },
 };
 </script>

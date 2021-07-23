@@ -7,9 +7,6 @@
 <script>
 export default {
   name: "EnterprisesView",
-  mounted() {
-    console.log("mounted");
-  },
 };
 </script>
 <style lang="scss">

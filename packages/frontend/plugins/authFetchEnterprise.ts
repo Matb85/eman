@@ -3,7 +3,6 @@ import type { Auth, RecursivePartial, ModuleOptions } from "@nuxtjs/auth-next/di
 import { EnterpriseI, UserI } from "@/helpers/authTypes";
 
 export default async function ({ $auth, $axios, route }: Context) {
-  console.log();
   if (!$auth.loggedIn || isNaN(parseInt(route.params.enterprise))) return;
   const response = await $axios.$post("/graphql", {
     query: `query get{enterprise(index: ${route.params.enterprise}){ name address {country zipcode city street }}}`,

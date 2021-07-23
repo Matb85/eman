@@ -37,6 +37,12 @@ export default class Login extends Vue {
       });
       this.$auth.setUser(user.data.user);
     } catch (err) {
+      this.$buefy.snackbar.open({
+        message: "Coś poszło nie tak... Spróbuj ponownie później",
+        type: "is-danger",
+        queue: false,
+        position: "is-bottom-right",
+      });
       console.log(err);
     }
   }
