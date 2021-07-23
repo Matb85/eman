@@ -60,18 +60,19 @@ export default class AddEnterprise extends Vue {
   async addEnterprise() {
     try {
       const response = await this.$axios.$post("/graphql", {
-        query: `mutation add($enterprise: EnterpriseI){
+        query: `mutation add($enterprise: EnterpriseI!){
           addEnterprise(data: $enterprise) { name }
           }`,
-        variables: {
-          enterprise: this.enterpriseData,
-        },
+        variables: { enterprise: this.enterpriseData },
       });
       this.$buefy.snackbar.open({
         message: "Dodano działalność o nazwie " + response.data.addEnterprise.name,
         type: "is-success",
         queue: false,
         position: "is-bottom-right",
+      });
+      this.$router.push({
+        path: "/0/media",
       });
     } catch (err) {
       this.$buefy.snackbar.open({
