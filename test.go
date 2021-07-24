@@ -1,18 +1,14 @@
-package tests
+package main
 
 import (
-	"context"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
-	"time"
-
-	"redinnlabs.com/redinn-core/database"
 )
 
-func GlobalSetup() func() {
-	// setup
-	// get current working directory
+func main() {
+	// get the current working directory
 	CWD, cwderr := os.Getwd()
 	if cwderr != nil {
 		log.Fatal(cwderr)
@@ -29,8 +25,7 @@ func GlobalSetup() func() {
 	if Mkdirerr := os.Mkdir(DBSTORAGE, 0755); Mkdirerr != nil {
 		log.Fatal(Mkdirerr)
 	}
-
-	// start a mongo instance
+	// start a mongodb instance
 	args := []string{
 		"--bind_ip", "127.0.0.1",
 		"--port", os.Getenv("DB_PORT"),
@@ -40,15 +35,13 @@ func GlobalSetup() func() {
 	if mongoerr := server.Start(); mongoerr != nil {
 		log.Fatal(mongoerr)
 	}
-	// connect to the instance
-	database.Connect()
 
-	// shutdown
-	return func() {
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		database.UserCol.Drop(ctx)
-		database.EnterpriseCol.Drop(ctx)
-		server.Process.Kill()
+	command := exec.Command("lerna", []string{"run", "test"}...)
+	output, err := command.Output()
+	fmt.Println("output:\n", string(output))
+	if err != nil {
+		fmt.Println("errors:\n", err.Error())
 	}
+	// shutdown
+	server.Process.Kill()
 }

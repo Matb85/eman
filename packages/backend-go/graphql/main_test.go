@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"golang.org/x/crypto/bcrypt"
-	"redinnlabs.com/redinn-core/tests"
+	"redinnlabs.com/redinn-core/database"
 )
 
 // struct for decoding responses
@@ -14,12 +14,11 @@ type Message struct {
 }
 
 func TestMain(m *testing.M) {
-	shutdown := tests.GlobalSetup()
 	// hash the password of the MockAuthUser
+	database.Connect()
 	hash, _ := bcrypt.GenerateFromPassword([]byte(MockedAuthUser.Password), 10)
 	MockedAuthUser.Password = string(hash)
 	code := m.Run()
-	// shut down
-	shutdown()
+
 	os.Exit(code)
 }

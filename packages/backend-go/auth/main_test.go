@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"redinnlabs.com/redinn-core/tests"
+	"redinnlabs.com/redinn-core/database"
 )
 
 // struct for decoding responses
@@ -13,9 +13,7 @@ type Message struct {
 }
 
 func TestMain(m *testing.M) {
-	shutdown := tests.GlobalSetup()
+	database.Connect()
 	code := m.Run()
-	// shut down
-	shutdown()
 	os.Exit(code)
 }
