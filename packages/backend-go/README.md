@@ -1,6 +1,4 @@
-# A universal app for FizjoPieniny
-
-# https://fizjopieniny.pl
+# Backend server for https://redinnlabs.pl
 
 ## required env variables
 
