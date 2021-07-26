@@ -6,6 +6,6 @@
   },
   "scripts": {
     "release": "lerna version --conventional-commits --no-push",
-    "test": "go run ./test.go"
+    "test": "go run ./utils/test.go"
   }
 }
