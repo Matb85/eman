@@ -7,7 +7,7 @@
     "noImplicitThis": true,
     "strictPropertyInitialization": false,
     "target": "ES2018",
-    "module": "ESNext",
+    "module": "commonjs",
     "moduleResolution": "Node",
     "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
     "esModuleInterop": true,
@@ -21,7 +21,17 @@
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": ["@types/node", "@nuxt/types", "nuxt-i18n", "buefy/types", "@types/sortablejs", "@nuxtjs/auth-next"]
+    "types": [
+      "@types/node",
+      "@nuxt/types",
+      "nuxt-i18n",
+      "buefy/types",
+      "@types/sortablejs",
+      "@nuxtjs/auth-next",
+      "webdriverio/sync",
+      "@wdio/mocha-framework",
+      "expect-webdriverio"
+    ]
   },
   "exclude": ["node_modules", ".nuxt", "dist"]
 }
