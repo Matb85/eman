@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"time"
 )
 
 var RESET = "\033[0m"
@@ -47,7 +48,6 @@ func main() {
 	fmt.Println(GREEN + "mongodb is running!" + RESET)
 
 	serversShutdown := setupServers()
-
 	command := exec.Command("lerna", []string{"run", "test"}...)
 	output, err := command.Output()
 	fmt.Println(GREEN+"output:\n"+RESET, string(output))
@@ -77,37 +77,27 @@ func generateProxy(proxyurl string) *handler {
 
 func setupServers() func() {
 	fmt.Println(GREEN + "preparing setup frontend & backend..." + RESET)
-
-	CWD, cwderr := os.Getwd()
-	if cwderr != nil {
-		log.Fatal(cwderr)
-	}
 	// setup backend
-	backend := exec.Command("npm", []string{"run", "dev"}...)
-	backend.Dir = CWD + "/packages/backend-go"
-	// setup frontend
-	frontend := exec.Command("npm", []string{"run", "dev"}...)
-	frontend.Dir = CWD + "/packages/frontend"
+	dev := exec.Command("lerna", []string{"run", "dev"}...)
 
 	// start servers in packages
-	if err := backend.Start(); err != nil {
-		log.Fatal(err)
-	}
-	if err := frontend.Start(); err != nil {
+	if err := dev.Start(); err != nil {
 		log.Fatal(err)
 	}
 	fmt.Println(GREEN + "frontend & backend are running!" + RESET)
 
+	fmt.Println(GREEN + "waiting 6 seconds for both ends to warm up..." + RESET)
+	time.Sleep(time.Second * 6)
+
 	// setup the proxies
+	fmt.Println(GREEN + "setting up the reverse proxy..." + RESET)
 	http.Handle("/app/", generateProxy("http://localhost:3000"))
 	http.Handle("/api/", generateProxy("http://localhost:3001"))
 	go http.ListenAndServe("localhost:3002", nil)
-
 	fmt.Println(GREEN + "reverse proxy is running!" + RESET)
 
 	return func() {
-		backend.Process.Kill()
-		frontend.Process.Kill()
+		dev.Process.Kill()
 	}
 }
 
