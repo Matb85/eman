@@ -49,8 +49,11 @@ func main() {
 
 	serversShutdown := setupServers()
 	command := exec.Command("lerna", []string{"run", "test"}...)
-	output, err := command.Output()
-	fmt.Println(GREEN+"output:\n"+RESET, string(output))
+
+	fmt.Println(GREEN + "output:\n" + RESET)
+	command.Stdout = os.Stdout
+	command.Stderr = os.Stderr
+	err := command.Run()
 	if err != nil {
 		fmt.Println(RED+"errors:\n"+RESET, err.Error())
 	}
@@ -76,18 +79,25 @@ func generateProxy(proxyurl string) *handler {
 }
 
 func setupServers() func() {
-	fmt.Println(GREEN + "preparing setup frontend & backend..." + RESET)
-	// setup backend
-	dev := exec.Command("lerna", []string{"run", "dev"}...)
-
+	fmt.Println(GREEN + "building frontend & backend..." + RESET)
+	// build packages
+	build := exec.Command("lerna", []string{"run", "build"}...)
+	buildOutput, buildErr := build.CombinedOutput()
+	fmt.Println(string(buildOutput))
+	if buildErr != nil {
+		log.Fatal(buildErr)
+	}
 	// start servers in packages
-	if err := dev.Start(); err != nil {
+	start := exec.Command("lerna", []string{"run", "start"}...)
+	start.Stdout = os.Stdout
+	start.Stderr = os.Stderr
+	if err := start.Start(); err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(GREEN + "frontend & backend are running!" + RESET)
 
-	fmt.Println(GREEN + "waiting 6 seconds for both ends to warm up..." + RESET)
-	time.Sleep(time.Second * 6)
+	fmt.Println(GREEN + "frontend & backend are running!" + RESET)
+	fmt.Println(GREEN + "waiting 5 seconds for both ends to warm up..." + RESET)
+	time.Sleep(time.Second * 5)
 
 	// setup the proxies
 	fmt.Println(GREEN + "setting up the reverse proxy..." + RESET)
@@ -97,7 +107,8 @@ func setupServers() func() {
 	fmt.Println(GREEN + "reverse proxy is running!" + RESET)
 
 	return func() {
-		dev.Process.Kill()
+		start.Process.Kill()
+		start.Wait()
 	}
 }
 
