@@ -8,6 +8,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"golang.org/x/crypto/bcrypt"
 	"redinnlabs.com/redinn-core/database"
 )
@@ -37,7 +38,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	// get the users collection
 	COL := database.UserCol
 	// check if email is already used
-	if count, _ := COL.CountDocuments(ctx, bson.M{"email": user.Email}); count > 0 {
+	if err := COL.FindOne(ctx, bson.M{"email": user.Email}).Decode(User{Enterprises: []string{}}); err == mongo.ErrNoDocuments {
 		SendResponse(w, http.StatusBadRequest, &map[string]string{
 			"message": "email already in use",
 		})
