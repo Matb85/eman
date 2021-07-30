@@ -23,6 +23,7 @@ var MockedUser = &auth.User{
 }
 
 func TestLogin200(t *testing.T) {
+
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -35,7 +36,8 @@ func TestLogin200(t *testing.T) {
 	}
 	mockUser.Password = string(hashedPassword)
 	// insert
-	if _, inserterr := database.UserCol.InsertOne(ctx, mockUser); inserterr != nil {
+	insertResult, inserterr := database.UserCol.InsertOne(ctx, mockUser)
+	if inserterr != nil {
 		t.Fatal(inserterr)
 	}
 
@@ -59,7 +61,7 @@ func TestLogin200(t *testing.T) {
 		t.Error("wrong message:", mes.Message)
 	}
 	// delete the db entry
-	if _, deleteerr := database.UserCol.DeleteOne(ctx, bson.M{"email": MockedUser.Email}); deleteerr != nil {
+	if _, deleteerr := database.UserCol.DeleteOne(ctx, bson.M{"_id": insertResult.InsertedID}); deleteerr != nil {
 		t.Fatal(deleteerr)
 	}
 }
@@ -81,7 +83,7 @@ func TestLogin400(t *testing.T) {
 	defer cancel()
 
 	for i, scenario := range scenarios {
-		database.UserCol.InsertOne(ctx, scenario)
+		scenarioResult, _ := database.UserCol.InsertOne(ctx, scenario)
 
 		w := httptest.NewRecorder()
 		payload, _ := json.Marshal(scenario)
@@ -90,7 +92,7 @@ func TestLogin400(t *testing.T) {
 		res := w.Result()
 
 		// delete the scenario in db
-		database.UserCol.DeleteOne(ctx, bson.M{"email": scenario.Email, "password": scenario.Password})
+		database.UserCol.DeleteOne(ctx, bson.M{"_id": scenarioResult.InsertedID})
 
 		// read the response
 		mes := &Message{}
