@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "go run ./",
     "build": "go build ./",
-    "test": "go test ./... -count=1",
+    "test:unit": "go test ./... -v -count=1",
     "start": "./redinn-core"
   }
 }

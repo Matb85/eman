@@ -4,19 +4,68 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"net/http/httputil"
-	"net/url"
 	"os"
 	"os/exec"
 	"syscall"
 	"time"
 )
 
-var RESET = "\033[0m"
-var RED = "\033[31m"
-var GREEN = "\033[32m"
+func runTests(e2e bool) {
+	testType := "unit"
 
-func main() {
+	callbackDB := setupDB()
+	defer callbackDB()
+	// if running e2e test run servers on localhost
+	if e2e {
+		testType = "e2e"
+		serversShutdown := setupServers()
+		defer serversShutdown()
+	}
+
+	command := exec.Command("lerna", []string{"run", "test:" + testType}...)
+
+	fmt.Println(GREEN + "output:\n" + RESET)
+	command.Stdout = os.Stdout
+	command.Stderr = os.Stderr
+	err := command.Run()
+	if err != nil {
+		fmt.Println(RED+"errors:\n"+RESET, err.Error())
+	}
+	// shutdown
+	fmt.Println(GREEN + "shutting servers down..." + RESET)
+}
+
+func setupServers() func() {
+	// start servers in packages
+	start := exec.Command("lerna", []string{"run", "start"}...)
+	start.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+	start.Stdout = os.Stdout
+	start.Stderr = os.Stderr
+	if err := start.Start(); err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Println(GREEN + "frontend & backend are running!" + RESET)
+	fmt.Println(GREEN + "waiting 3 seconds for both ends to warm up..." + RESET)
+	time.Sleep(time.Second * 3)
+
+	// setup the proxies
+	fmt.Println(GREEN + "setting up the reverse proxy..." + RESET)
+	http.Handle("/app/", generateProxy("http://localhost:3000"))
+	http.Handle("/api/", generateProxy("http://localhost:3001"))
+	go http.ListenAndServe("localhost:3002", nil)
+	fmt.Println(GREEN + "reverse proxy is running!" + RESET)
+
+	return func() {
+		pgid, err := syscall.Getpgid(start.Process.Pid)
+		if err == nil {
+			syscall.Kill(-pgid, 15) // note the minus sign
+		}
+		start.Wait()
+	}
+}
+
+func setupDB() func() {
 	// get the current working directory
 	CWD, cwderr := os.Getwd()
 	if cwderr != nil {
@@ -46,81 +95,10 @@ func main() {
 		log.Fatal(mongoerr)
 	}
 	fmt.Println(GREEN + "mongodb is running!" + RESET)
-
-	serversShutdown := setupServers()
-	command := exec.Command("lerna", []string{"run", "test"}...)
-
-	fmt.Println(GREEN + "output:\n" + RESET)
-	command.Stdout = os.Stdout
-	command.Stderr = os.Stderr
-	err := command.Run()
-	if err != nil {
-		fmt.Println(RED+"errors:\n"+RESET, err.Error())
-	}
-	// shutdown
-	fmt.Println(GREEN + "shutting servers down..." + RESET)
-	serversShutdown()
-	server.Process.Kill()
-}
-
-func generateProxy(proxyurl string) *handler {
-	url, err := url.Parse(proxyurl)
-	if err != nil {
-		panic(err)
-	}
-
-	director := func(req *http.Request) {
-		req.URL.Scheme = url.Scheme
-		req.URL.Host = url.Host
-	}
-
-	reverseProxy := &httputil.ReverseProxy{Director: director}
-	return &handler{proxy: reverseProxy}
-}
-
-func setupServers() func() {
-	fmt.Println(GREEN + "building frontend & backend..." + RESET)
-	// build packages
-	build := exec.Command("lerna", []string{"run", "build"}...)
-	buildOutput, buildErr := build.CombinedOutput()
-	fmt.Println(string(buildOutput))
-	if buildErr != nil {
-		log.Fatal(buildErr)
-	}
-	// start servers in packages
-	start := exec.Command("lerna", []string{"run", "start"}...)
-	start.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
-
-	start.Stdout = os.Stdout
-	start.Stderr = os.Stderr
-	if err := start.Start(); err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Println(GREEN + "frontend & backend are running!" + RESET)
-	fmt.Println(GREEN + "waiting 3 seconds for both ends to warm up..." + RESET)
-	time.Sleep(time.Second * 3)
-
-	// setup the proxies
-	fmt.Println(GREEN + "setting up the reverse proxy..." + RESET)
-	http.Handle("/app/", generateProxy("http://localhost:3000"))
-	http.Handle("/api/", generateProxy("http://localhost:3001"))
-	go http.ListenAndServe("localhost:3002", nil)
-	fmt.Println(GREEN + "reverse proxy is running!" + RESET)
-
 	return func() {
-		pgid, err := syscall.Getpgid(start.Process.Pid)
-		if err == nil {
-			syscall.Kill(-pgid, 15) // note the minus sign
-		}
-		start.Wait()
+		server.Process.Kill()
+		server.Process.Wait()
+		fmt.Println("removing storage")
+		os.RemoveAll(DBSTORAGE)
 	}
-}
-
-type handler struct {
-	proxy *httputil.ReverseProxy
-}
-
-func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	h.proxy.ServeHTTP(w, r)
 }

@@ -1,3 +1,6 @@
 test_db
 *.exe
 redinn-core
+
+utils
+!utils/

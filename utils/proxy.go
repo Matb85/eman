@@ -7,9 +7,6 @@ import (
 	"net/url"
 )
 
-var RESET = "\033[0m"
-var GREEN = "\033[32m"
-
 func generateProxy(proxyurl string) *handler {
 	url, err := url.Parse(proxyurl)
 	if err != nil {
@@ -25,7 +22,7 @@ func generateProxy(proxyurl string) *handler {
 	return &handler{proxy: reverseProxy}
 }
 
-func main() {
+func setupProxy() {
 	// setup the proxies
 	http.Handle("/app/", generateProxy("http://localhost:3000"))
 	http.Handle("/api/", generateProxy("http://localhost:3001"))

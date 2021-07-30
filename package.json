@@ -6,7 +6,7 @@
   },
   "scripts": {
     "release": "lerna version --conventional-commits --no-push",
-    "test": "go run ./utils/test.go",
-    "test:windows": "go run ./utils/test.go && taskkill /IM \"redinn-core.exe\" /F && taskkill /IM \"node.exe\" /F"
+    "test:unit": "./utils/utils unit",
+    "test:e2e": "lerna run build && ./utils/utils e2e"
   }
 }
