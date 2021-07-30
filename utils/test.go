@@ -8,6 +8,7 @@ import (
 	"net/url"
 	"os"
 	"os/exec"
+	"syscall"
 	"time"
 )
 
@@ -29,7 +30,6 @@ func main() {
 			log.Fatal(clearerr)
 		}
 	}
-
 	if Mkdirerr := os.Mkdir(DBSTORAGE, 0755); Mkdirerr != nil {
 		log.Fatal(Mkdirerr)
 	}
@@ -89,6 +89,8 @@ func setupServers() func() {
 	}
 	// start servers in packages
 	start := exec.Command("lerna", []string{"run", "start"}...)
+	start.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+
 	start.Stdout = os.Stdout
 	start.Stderr = os.Stderr
 	if err := start.Start(); err != nil {
@@ -96,8 +98,8 @@ func setupServers() func() {
 	}
 
 	fmt.Println(GREEN + "frontend & backend are running!" + RESET)
-	fmt.Println(GREEN + "waiting 5 seconds for both ends to warm up..." + RESET)
-	time.Sleep(time.Second * 5)
+	fmt.Println(GREEN + "waiting 3 seconds for both ends to warm up..." + RESET)
+	time.Sleep(time.Second * 3)
 
 	// setup the proxies
 	fmt.Println(GREEN + "setting up the reverse proxy..." + RESET)
@@ -107,7 +109,10 @@ func setupServers() func() {
 	fmt.Println(GREEN + "reverse proxy is running!" + RESET)
 
 	return func() {
-		start.Process.Kill()
+		pgid, err := syscall.Getpgid(start.Process.Pid)
+		if err == nil {
+			syscall.Kill(-pgid, 15) // note the minus sign
+		}
 		start.Wait()
 	}
 }
