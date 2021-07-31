@@ -9,6 +9,7 @@
         :message="feedback[name].message"
       >
         <b-input
+          :data-testid="'register-' + name"
           v-model="credentials[name]"
           :type="feedback[name].type"
           :placeholder="feedback[name].placeholder"
@@ -19,6 +20,7 @@
 
       <div class="mt-3 submit-con">
         <b-button
+          data-testid="register-submit"
           tag="input"
           native-type="submit"
           value="Utwórz konto"
