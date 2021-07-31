@@ -17,13 +17,32 @@ describe("/login tab - input form", () => {
     expect(response.status).toBe(200);
     expect(response.data.message).toBe("registration successful");
     // set credentials
-    console.log(Page.email);
     await (await Page.email).setValue(user.email);
     await (await Page.password).setValue(user.password);
     // submit
     await Page.submit();
-    await browser.pause(1000);
     // wait for a redirect
+    await browser.pause(1000);
     expect(browser).toHaveUrlContaining("/app/addenterprise");
+    // if all correct clear the session cookies
+    await browser.deleteCookies(["auth._token.local", "auth._token_expiration.local"]);
+  });
+  it("login - wrong credentials", async () => {
+    await Page.open();
+    const user = mockUser();
+    // skip registering the user
+    // set credentials
+    await (await Page.email).setValue(user.email);
+    await (await Page.password).setValue(user.password);
+    // submit
+    await Page.submit();
+    await browser.pause(500);
+    // look for the snack bar
+    const snackbar = await $(".snackbar .text");
+    expect(snackbar).toHaveText("Coś poszło nie tak... Spróbuj ponownie później");
+    // wait for a redirect
+    expect(browser).toHaveUrlContaining("/app/login");
+    // if all correct clear the session cookies
+    await browser.deleteCookies(["auth._token.local", "auth._token_expiration.local"]);
   });
 });
