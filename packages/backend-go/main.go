@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -27,6 +28,7 @@ func main() {
 	graphql.Setup(router)
 	auth.Setup(router.PathPrefix("/auth").Subrouter())
 
+	router.Use(wrapHandlerWithLogging)
 	srv := &http.Server{
 		Handler:      router,
 		Addr:         "127.0.0.1:" + PORT,
@@ -35,4 +37,28 @@ func main() {
 	}
 
 	srv.ListenAndServe()
+}
+
+type loggingResponseWriter struct {
+	http.ResponseWriter
+	statusCode int
+}
+
+func NewLoggingResponseWriter(w http.ResponseWriter) *loggingResponseWriter {
+	return &loggingResponseWriter{w, http.StatusOK}
+}
+
+func (lrw *loggingResponseWriter) WriteHeader(code int) {
+	lrw.statusCode = code
+	lrw.ResponseWriter.WriteHeader(code)
+}
+
+func wrapHandlerWithLogging(wrappedHandler http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		lrw := NewLoggingResponseWriter(w)
+		wrappedHandler.ServeHTTP(lrw, req)
+
+		statusCode := lrw.statusCode
+		log.Printf("- %s %s %d %s", req.Method, req.URL.Path, statusCode, http.StatusText(statusCode))
+	})
 }
