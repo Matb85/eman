@@ -38,4 +38,4 @@ export function mockUser(): UserI {
   return new User("user@example.com" + randomString(10), "example-password" + randomString(10), "example", "user");
 }
 
-export const axiosI = axios.create({ baseURL: "http://localhost:3001", timeout: 5000 });
+export const axiosApi = axios.create({ baseURL: "http://localhost:3001/api", timeout: 5000 });
