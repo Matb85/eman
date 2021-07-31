@@ -22,7 +22,7 @@ var MockedUser = &graphql.UserGQL{
 const MockedPasswordString = "example-password"
 
 var MockedAuthUser = &auth.User{
-	Email:       "user@example.com",
+	Email:       "user2@example.com",
 	Password:    MockedPasswordString,
 	FirstName:   "example",
 	LastName:    "user",
