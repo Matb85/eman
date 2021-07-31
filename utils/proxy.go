@@ -35,5 +35,6 @@ type handler struct {
 }
 
 func (h handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.URL.Path)
 	h.proxy.ServeHTTP(w, r)
 }
