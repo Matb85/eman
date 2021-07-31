@@ -38,7 +38,8 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	// get the users collection
 	COL := database.UserCol
 	// check if email is already used
-	if err := COL.FindOne(ctx, bson.M{"email": user.Email}).Decode(User{Enterprises: []string{}}); err == mongo.ErrNoDocuments {
+	tempU := &User{Enterprises: []string{}}
+	if err := COL.FindOne(ctx, bson.M{"email": user.Email}).Decode(tempU); err != mongo.ErrNoDocuments {
 		SendResponse(w, http.StatusBadRequest, &map[string]string{
 			"message": "email already in use",
 		})
@@ -61,7 +62,7 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		})
 	} else {
 		SendResponse(w, http.StatusOK, &map[string]string{
-			"message": "registration successsful",
+			"message": "registration successful",
 		})
 	}
 }

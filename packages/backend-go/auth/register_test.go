@@ -27,7 +27,7 @@ func TestRegister200(t *testing.T) {
 	if res.StatusCode != 200 {
 		t.Error("wrong status:", res.StatusCode, "instead of 200")
 	}
-	if mes.Message != "registration successsful" {
+	if mes.Message != "registration successful" {
 		t.Error("wrong message:", mes.Message)
 	}
 }
