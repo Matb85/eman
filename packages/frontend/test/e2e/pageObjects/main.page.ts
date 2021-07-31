@@ -1,5 +1,5 @@
 export default class Page {
-  static open(path = "/") {
+  open(path = "/") {
     browser.url("/app" + path);
   }
 }
