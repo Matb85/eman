@@ -7,6 +7,7 @@
   "scripts": {
     "release": "lerna version --conventional-commits --no-push",
     "test:unit": "./utils/utils unit",
-    "test:e2e": "lerna run build && ./utils/utils e2e"
+    "test:e2e": "lerna run build && ./utils/utils e2e",
+    "proxy": "./utils/utils proxy"
   }
 }
