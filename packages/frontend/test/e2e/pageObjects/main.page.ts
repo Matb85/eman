@@ -1,5 +1,5 @@
 export default class Page {
-  open(path = "/") {
-    browser.url("/app" + path);
+  async open(path = "/") {
+    await browser.url("/app" + path);
   }
 }

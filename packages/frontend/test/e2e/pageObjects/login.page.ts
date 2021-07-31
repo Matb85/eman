@@ -10,8 +10,8 @@ class LoginPage extends Page {
   get submitBtn() {
     return $("[data-testid='login-submit']");
   }
-  async open() {
-    await super.open("/login");
+  open() {
+    return super.open("/login");
   }
   async submit() {
     await (await this.submitBtn).click();
