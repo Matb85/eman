@@ -2,7 +2,6 @@ package graphql_test
 
 import (
 	"context"
-	"fmt"
 	"testing"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -70,7 +69,6 @@ func createUserAndEnterprise() (func(t *testing.T), *utils, error) {
 	if usererr != nil {
 		return nil, nil, usererr
 	}
-	fmt.Println(userresult.InsertedID)
 	// mock the auth context
 	authctx := context.WithValue(context.Background(), graphql.User_id, userresult.InsertedID)
 	// add an enterprise
@@ -82,7 +80,7 @@ func createUserAndEnterprise() (func(t *testing.T), *utils, error) {
 		if edeleteErr != nil {
 			t.Fatal(edeleteErr)
 		}
-		_, udeleteErr := database.UserCol.DeleteOne(dbctx, bson.M{"email": MockedUser.Email})
+		_, udeleteErr := database.UserCol.DeleteOne(dbctx, bson.M{"_id": userresult.InsertedID})
 		if udeleteErr != nil {
 			t.Fatal(edeleteErr)
 		}
