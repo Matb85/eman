@@ -2,16 +2,15 @@ package auth_test
 
 import (
 	"bytes"
-	"context"
 	"encoding/json"
 	"net/http/httptest"
 	"testing"
-	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
 	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
+	"redinnlabs.com/redinn-core/utils"
 )
 
 // a mocked user
@@ -24,7 +23,7 @@ var MockedUser = &auth.User{
 
 func TestLogin200(t *testing.T) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := utils.CreateDBContext()
 	defer cancel()
 
 	// insert a mock user to the db
@@ -79,7 +78,7 @@ func TestLogin400(t *testing.T) {
 		{Email: "example@redinnlabs.com", Password: "wrong-password"},
 	}
 	// insert users to the db
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := utils.CreateDBContext()
 	defer cancel()
 
 	for i, scenario := range scenarios {

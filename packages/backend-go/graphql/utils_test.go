@@ -1,15 +1,14 @@
 package graphql_test
 
 import (
-	"context"
 	"testing"
-	"time"
 
 	gql "github.com/graph-gophers/graphql-go"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/graphql"
+	"redinnlabs.com/redinn-core/utils"
 )
 
 var MockedUser = &graphql.UserGQL{
@@ -33,7 +32,7 @@ var MockedEnterprise = &graphql.EnterpriseGQL{
 }
 
 func TestFindUserOK(t *testing.T) {
-	dbctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	dbctx, cancel := utils.CreateDBContext()
 	defer cancel()
 
 	result, inserterr := database.UserCol.InsertOne(dbctx, MockedUser)
@@ -50,7 +49,7 @@ func TestFindUserOK(t *testing.T) {
 	}
 }
 func TestFindEnterpriseOK(t *testing.T) {
-	dbctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	dbctx, cancel := utils.CreateDBContext()
 	defer cancel()
 
 	Menterprise := graphql.EnterpriseGQL{}

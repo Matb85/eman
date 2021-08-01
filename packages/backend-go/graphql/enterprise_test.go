@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/graphql"
+	"redinnlabs.com/redinn-core/utils"
 )
 
 func TestAddEnterpriseOK(t *testing.T) {
@@ -52,7 +53,7 @@ func TestDeleteEnterpriseOK(t *testing.T) {
 	}
 }
 
-type utils struct {
+type cutils struct {
 	authctx    context.Context
 	userID     primitive.ObjectID
 	enterprise *graphql.EnterpriseGQL
@@ -60,8 +61,8 @@ type utils struct {
 }
 
 // create a user and an enterprise
-func createUserAndEnterprise() (func(t *testing.T), *utils, error) {
-	dbctx, cancel := graphql.CreateDBContext()
+func createUserAndEnterprise() (func(t *testing.T), *cutils, error) {
+	dbctx, cancel := utils.CreateDBContext()
 
 	resolvers := &graphql.EnterpriseResolvers{}
 	// create a mock user
@@ -85,6 +86,6 @@ func createUserAndEnterprise() (func(t *testing.T), *utils, error) {
 			t.Fatal(edeleteErr)
 		}
 	}
-	u := &utils{authctx, userresult.InsertedID.(primitive.ObjectID), createdenterprise, resolvers}
+	u := &cutils{authctx, userresult.InsertedID.(primitive.ObjectID), createdenterprise, resolvers}
 	return callback, u, adderr
 }

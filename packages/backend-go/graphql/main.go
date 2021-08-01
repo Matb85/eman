@@ -4,12 +4,12 @@ import (
 	"context"
 	"io/ioutil"
 	"net/http"
-	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/graph-gophers/graphql-go"
 	"github.com/graph-gophers/graphql-go/relay"
 	"redinnlabs.com/redinn-core/auth"
+	"redinnlabs.com/redinn-core/utils"
 )
 
 type rootResolvers struct {
@@ -20,11 +20,6 @@ type rootResolvers struct {
 type contextKey int
 
 const User_id = contextKey(1)
-
-func CreateDBContext() (context.Context, context.CancelFunc) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	return ctx, cancel
-}
 
 func Setup(router *mux.Router) {
 	// stitch schemas
@@ -52,7 +47,7 @@ func Setup(router *mux.Router) {
 		claims, err := auth.VerifyToken(r.Header.Get("Authorization"))
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
-			auth.SendResponse(w, http.StatusBadRequest, &map[string]string{
+			utils.SendResponse(w, http.StatusBadRequest, &map[string]string{
 				"message": err.Error(),
 			})
 			return

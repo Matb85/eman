@@ -10,6 +10,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
+	"redinnlabs.com/redinn-core/utils"
 )
 
 type EnterpriseResolvers struct{}
@@ -42,7 +43,7 @@ type AddEnterpriseArgs struct {
 
 // mutation: create a new enterprise provided that it has a unique name
 func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args AddEnterpriseArgs) (*EnterpriseGQL, error) {
-	dbctx, cancel := CreateDBContext()
+	dbctx, cancel := utils.CreateDBContext()
 	defer cancel()
 
 	var userID = ctx.Value(User_id).(primitive.ObjectID)
@@ -88,7 +89,7 @@ type DeleteEnterpriseArgs struct {
 
 // mutation: delete an enterprise
 func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args DeleteEnterpriseArgs) (*message, error) {
-	dbctx, cancel := CreateDBContext()
+	dbctx, cancel := utils.CreateDBContext()
 	defer cancel()
 
 	ID, primerr := primitive.ObjectIDFromHex(string(args.EnterpriseID))

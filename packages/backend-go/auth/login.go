@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"context"
 	"encoding/json"
 	"net/http"
 	"time"
@@ -11,18 +10,19 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 	"redinnlabs.com/redinn-core/database"
+	"redinnlabs.com/redinn-core/utils"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := utils.CreateDBContext()
 	defer cancel()
 	user := User{Enterprises: []string{}}
 	// convert json to struct
 	err := json.NewDecoder(r.Body).Decode(&user)
 	// some validation
 	if err != nil || len(user.Password) < 8 || len(user.Email) < 6 {
-		SendResponse(w, http.StatusBadRequest, &map[string]string{
+		utils.SendResponse(w, http.StatusBadRequest, &map[string]string{
 			"message": "too short password or email",
 		})
 		return
@@ -36,7 +36,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	passworderr := bcrypt.CompareHashAndPassword([]byte(fetchuser.Password), []byte(user.Password))
 
 	if fetchErr != nil || passworderr != nil {
-		SendResponse(w, http.StatusBadRequest, &map[string]string{
+		utils.SendResponse(w, http.StatusBadRequest, &map[string]string{
 			"message": "incorrect password or email",
 		})
 		return
@@ -45,13 +45,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	access_token, e1 := createToken(fetchuser.Id, time.Minute*30)
 	refresh_token, e2 := createToken(fetchuser.Id, time.Hour*24*30)
 	if e1 == nil && e2 == nil {
-		SendResponse(w, http.StatusOK, &map[string]string{
+		utils.SendResponse(w, http.StatusOK, &map[string]string{
 			"message":       "Welcome to Redinn!",
 			"access_token":  access_token,
 			"refresh_token": refresh_token,
 		})
 	} else {
-		SendResponse(w, http.StatusInternalServerError, &map[string]string{
+		utils.SendResponse(w, http.StatusInternalServerError, &map[string]string{
 			"message": "internal error",
 		})
 	}
