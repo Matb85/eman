@@ -1,6 +1,7 @@
 package assets
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -28,15 +29,19 @@ func CreateFolder(category bool, id string) (string, error) {
 		path = ASSETS_DIR + "/u-" + uuidv5 + "/"
 	}
 	// create the folder
-	os.Mkdir(path, 0755)
+	fmt.Println(path)
+	if err := os.Mkdir(path, 0755); err != nil {
+		return "", err
+	}
 	return path, nil
+}
+
+func GenUUIDv4() (string, error) {
+	out, err := exec.Command("uuidgen").CombinedOutput()
+	return strings.TrimSpace(string(out)), err
 }
 
 func GenUUIDv5(name, namespace string) (string, error) {
 	out, err := exec.Command("uuidgen", "--sha1", "--name", name, "--namespace", namespace).CombinedOutput()
-	return strings.TrimSpace(string(out)), err
-}
-func GenUUIDv4() (string, error) {
-	out, err := exec.Command("uuidgen").CombinedOutput()
 	return strings.TrimSpace(string(out)), err
 }
