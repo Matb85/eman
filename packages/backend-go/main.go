@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gorilla/mux"
+	"redinnlabs.com/redinn-core/assets"
 	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/graphql"
@@ -26,6 +27,7 @@ func main() {
 	router := mux.NewRouter().PathPrefix("/api").Subrouter()
 
 	graphql.Setup(router)
+	assets.Setup(router)
 	auth.Setup(router.PathPrefix("/auth").Subrouter())
 
 	router.Use(wrapHandlerWithLogging)
