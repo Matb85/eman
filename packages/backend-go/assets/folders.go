@@ -1,7 +1,6 @@
 package assets
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -9,6 +8,16 @@ import (
 
 const ENTERPRISE = true
 const USER = false
+
+func GenUUIDv4() (string, error) {
+	out, err := exec.Command("uuidgen").CombinedOutput()
+	return strings.TrimSpace(string(out)), err
+}
+
+func GenUUIDv5(name, namespace string) (string, error) {
+	out, err := exec.Command("uuidgen", "--sha1", "--name", name, "--namespace", namespace).CombinedOutput()
+	return strings.TrimSpace(string(out)), err
+}
 
 // category - ENTERPRISE or USER; id - uuidv4 or mongodb document id
 func CreateFolder(category bool, id string) (string, error) {
@@ -24,24 +33,17 @@ func CreateFolder(category bool, id string) (string, error) {
 	}
 	// add a prefix depending on the given category
 	if category {
-		path = ASSETS_DIR + "/e-" + uuidv5 + "/"
+		path = "/e-" + uuidv5 + "/"
 	} else {
-		path = ASSETS_DIR + "/u-" + uuidv5 + "/"
+		path = "/u-" + uuidv5 + "/"
 	}
 	// create the folder
-	fmt.Println(path)
-	if err := os.Mkdir(path, 0755); err != nil {
+	if err := os.Mkdir(ASSETS_DIR+path, 0755); err != nil {
 		return "", err
 	}
 	return path, nil
 }
 
-func GenUUIDv4() (string, error) {
-	out, err := exec.Command("uuidgen").CombinedOutput()
-	return strings.TrimSpace(string(out)), err
-}
-
-func GenUUIDv5(name, namespace string) (string, error) {
-	out, err := exec.Command("uuidgen", "--sha1", "--name", name, "--namespace", namespace).CombinedOutput()
-	return strings.TrimSpace(string(out)), err
+func RemoveFolder(path string) error {
+	return os.RemoveAll(ASSETS_DIR + path)
 }

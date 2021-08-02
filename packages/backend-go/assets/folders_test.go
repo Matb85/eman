@@ -23,12 +23,26 @@ func TestGenUUIDv5(t *testing.T) {
 func TestCreateFolderOK(t *testing.T) {
 	uuidv4, uuiderr := assets.GenUUIDv4()
 	if uuiderr != nil {
-		t.Error("unexpected error: ", uuiderr)
+		t.Fatal("unexpected error: ", uuiderr)
 	}
 	if path, createerr := assets.CreateFolder(assets.ENTERPRISE, uuidv4); createerr != nil {
-		t.Error("unexpected error when creating an enterprise folder: ", createerr, path)
+		t.Fatal("unexpected error when creating an enterprise folder: ", createerr, path)
 	}
 	if path, createerr := assets.CreateFolder(assets.USER, uuidv4); createerr != nil {
-		t.Error("unexpected error when creating an user folder: ", createerr, path)
+		t.Fatal("unexpected error when creating an user folder: ", createerr, path)
+	}
+}
+func TestRemoveFolderOK(t *testing.T) {
+	uuidv4, uuiderr := assets.GenUUIDv4()
+	if uuiderr != nil {
+		t.Fatal("unexpected error: ", uuiderr)
+	}
+	path, createerr := assets.CreateFolder(assets.ENTERPRISE, uuidv4)
+	if createerr != nil {
+		t.Fatal("unexpected error when creating an enterprise folder: ", createerr, path)
+	}
+	// remove the folder
+	if err := assets.RemoveFolder(path); err != nil {
+		t.Fatal(err)
 	}
 }
