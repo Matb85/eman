@@ -7,6 +7,7 @@ type EnterpriseGQL struct {
 	ID        graphql.ID     `json:"id" bson:"_id,omitempty"`
 	Name      string         `json:"name"`
 	Logo      string         `json:"logo"`
+	Folder    string         `json:"folder"`
 	Address   *AddressGQL    `json:"address"`
 	Employees *[]EmployeeGQL `json:"employees"`
 	Media     *MediaGQL      `json:"media"`

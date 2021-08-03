@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
+	"redinnlabs.com/redinn-core/assets"
 	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/utils"
@@ -61,13 +62,19 @@ func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args AddEnterpris
 	if dberr != nil {
 		return nil, dberr
 	}
-
+	insertID := insertresult.InsertedID.(primitive.ObjectID)
 	// find the inserted enterprise
-	enterprise, finderr := FindEnterprise(insertresult.InsertedID.(primitive.ObjectID))
+	enterprise, finderr := FindEnterprise(insertID)
 	if finderr != nil {
 		return nil, finderr
 	}
-
+	// create a folder
+	folder, foldererr := assets.CreateFolder(assets.ENTERPRISE, insertID.Hex())
+	if foldererr != nil {
+		database.EnterpriseCol.DeleteOne(dbctx, bson.M{"_id": insertID})
+		return nil, foldererr
+	}
+	args.Data.Folder = folder
 	// update the user's enterprises list
 	_, updateErr := database.UserCol.UpdateByID(dbctx, userID, bson.M{"$addToSet": bson.M{"enterprises": enterprise.ID}})
 	if updateErr != nil {

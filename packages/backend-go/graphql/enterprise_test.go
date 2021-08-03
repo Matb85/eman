@@ -2,10 +2,12 @@ package graphql_test
 
 import (
 	"context"
+	"os"
 	"testing"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"redinnlabs.com/redinn-core/assets"
 	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/graphql"
 	"redinnlabs.com/redinn-core/utils"
@@ -19,6 +21,10 @@ func TestAddEnterpriseOK(t *testing.T) {
 	}
 	if result.enterprise.Name != MockedEnterprise.Name {
 		t.Error("given and created enterprise are not equal", result.enterprise.Name, MockedEnterprise.Name)
+	}
+	folderPath := assets.ASSETS_DIR + result.enterprise.Folder
+	if _, err := os.Stat(folderPath); os.IsNotExist(err) {
+		t.Error("the assets folder for the enterprise does not exist: ", folderPath)
 	}
 }
 
