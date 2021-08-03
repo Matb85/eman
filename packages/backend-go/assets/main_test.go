@@ -2,6 +2,7 @@ package assets_test
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"testing"
 
@@ -12,11 +13,7 @@ func TestMain(m *testing.M) {
 	// set up ASSETS_DIR - normally it should be set in the Setup func
 	assets.ASSETS_DIR = os.Getenv("ASSETS_DIR")
 	if len(assets.ASSETS_DIR) == 0 {
-		CWD, cwderr := os.Getwd()
-		if cwderr != nil {
-			fmt.Println(cwderr)
-		}
-		assets.ASSETS_DIR = CWD + "/uploads/"
+		log.Fatal("ASSETS_DIR not specified")
 	}
 	// if folder exits delete it
 	if _, staterr := os.Stat(assets.ASSETS_DIR); !os.IsNotExist(staterr) {

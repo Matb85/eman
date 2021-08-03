@@ -7,6 +7,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
+	"redinnlabs.com/redinn-core/assets"
 	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/utils"
 )
@@ -18,6 +19,7 @@ type User struct {
 	FirstName   string             `json:"firstname"`
 	LastName    string             `json:"lastname"`
 	Enterprises []string           `json:"enterprises"`
+	Folder      string             `json:"folder"`
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
@@ -45,17 +47,25 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	hashedPassword, hashErr := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 	if hashErr != nil {
 		utils.SendResponse(w, http.StatusInternalServerError, &map[string]string{
-			"message": "internal error",
+			"message": "internal error: " + hashErr.Error(),
 		})
 		return
 	}
 	user.Password = string(hashedPassword)
-
+	user.Id = primitive.NewObjectID()
+	folder, foldererr := assets.CreateFolder(assets.USER, user.Id.Hex())
+	if foldererr != nil {
+		utils.SendResponse(w, http.StatusInternalServerError, &map[string]string{
+			"message": "internal error: " + foldererr.Error(),
+		})
+		return
+	}
+	user.Folder = folder
 	// finally, insert the user
 	_, insertErr := COL.InsertOne(ctx, user)
 	if insertErr != nil {
 		utils.SendResponse(w, http.StatusInternalServerError, &map[string]string{
-			"message": "internal error",
+			"message": "internal error: " + insertErr.Error(),
 		})
 	} else {
 		utils.SendResponse(w, http.StatusOK, &map[string]string{
