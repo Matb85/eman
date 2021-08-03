@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"redinnlabs.com/redinn-core/auth"
+	"redinnlabs.com/redinn-core/utils"
 )
 
 func TestRegister200(t *testing.T) {
@@ -18,7 +19,7 @@ func TestRegister200(t *testing.T) {
 	res := w.Result()
 
 	// read the response
-	mes := &Message{}
+	mes := &utils.Message{}
 	if jsonerr := json.NewDecoder(res.Body).Decode(&mes); jsonerr != nil {
 		t.Fatal(jsonerr)
 	}
@@ -53,7 +54,7 @@ func TestRegister400(t *testing.T) {
 		res := w.Result()
 
 		// read the response
-		mes := &Message{}
+		mes := &utils.Message{}
 		if jsonerr := json.NewDecoder(res.Body).Decode(&mes); jsonerr != nil {
 			t.Fatal(jsonerr)
 		}

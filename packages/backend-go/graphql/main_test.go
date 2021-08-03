@@ -8,11 +8,6 @@ import (
 	"redinnlabs.com/redinn-core/database"
 )
 
-// struct for decoding responses
-type Message struct {
-	Message string `json:"message"`
-}
-
 func TestMain(m *testing.M) {
 	// hash the password of the MockAuthUser
 	database.Connect()

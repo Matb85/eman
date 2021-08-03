@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+type Message struct {
+	Message string `json:"message"`
+}
+
 func SendResponse(w http.ResponseWriter, status int, message *map[string]string) {
 	w.WriteHeader(status)
 	json.NewEncoder(w).Encode(message)

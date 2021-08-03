@@ -48,7 +48,7 @@ func TestLogin200(t *testing.T) {
 	res := w.Result()
 
 	// read the response
-	mes := &Message{}
+	mes := &utils.Message{}
 	if jsonerr := json.NewDecoder(res.Body).Decode(&mes); jsonerr != nil {
 		t.Fatal(jsonerr)
 	}
@@ -94,7 +94,7 @@ func TestLogin400(t *testing.T) {
 		database.UserCol.DeleteOne(ctx, bson.M{"_id": scenarioResult.InsertedID})
 
 		// read the response
-		mes := &Message{}
+		mes := &utils.Message{}
 		if jsonerr := json.NewDecoder(res.Body).Decode(&mes); jsonerr != nil {
 			t.Fatal(jsonerr)
 		}

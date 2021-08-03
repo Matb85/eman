@@ -78,17 +78,13 @@ func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args AddEnterpris
 	return enterprise, nil
 }
 
-type message struct {
-	Message string `json:"message"`
-}
-
 type DeleteEnterpriseArgs struct {
 	Password     string
 	EnterpriseID graphql.ID
 }
 
 // mutation: delete an enterprise
-func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args DeleteEnterpriseArgs) (*message, error) {
+func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args DeleteEnterpriseArgs) (*utils.Message, error) {
 	dbctx, cancel := utils.CreateDBContext()
 	defer cancel()
 
@@ -131,5 +127,5 @@ func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args DeleteEnt
 	if deleteerr != nil {
 		return nil, deleteerr
 	}
-	return &message{"enterprise successfully deleted"}, nil
+	return &utils.Message{"enterprise successfully deleted"}, nil
 }
