@@ -52,9 +52,7 @@ func authMiddleware(next http.Handler) http.Handler {
 		claims, err := auth.VerifyToken(r.Header.Get("Authorization"))
 		if err != nil {
 			w.Header().Set("Content-Type", "application/json")
-			utils.SendResponse(w, http.StatusBadRequest, &map[string]string{
-				"message": err.Error(),
-			})
+			utils.SendMessage(w, http.StatusBadRequest, err.Error())
 			return
 		}
 		ctx := context.WithValue(context.Background(), utils.User_id, claims.ID)

@@ -22,9 +22,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&user)
 	// some validation
 	if err != nil || len(user.Password) < 8 || len(user.Email) < 6 {
-		utils.SendResponse(w, http.StatusBadRequest, &map[string]string{
-			"message": "too short password or email",
-		})
+		utils.SendMessage(w, http.StatusBadRequest, "too short password or email")
 		return
 	}
 	// get the users collection
@@ -36,9 +34,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	passworderr := bcrypt.CompareHashAndPassword([]byte(fetchuser.Password), []byte(user.Password))
 
 	if fetchErr != nil || passworderr != nil {
-		utils.SendResponse(w, http.StatusBadRequest, &map[string]string{
-			"message": "incorrect password or email",
-		})
+		utils.SendMessage(w, http.StatusBadRequest, "incorrect password or email")
 		return
 	}
 	// create tokens
@@ -51,9 +47,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			"refresh_token": refresh_token,
 		})
 	} else {
-		utils.SendResponse(w, http.StatusInternalServerError, &map[string]string{
-			"message": "internal error",
-		})
+		utils.SendMessage(w, http.StatusInternalServerError, "internal error")
 	}
 }
 

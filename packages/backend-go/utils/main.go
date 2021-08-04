@@ -15,9 +15,13 @@ type Message struct {
 	Message string `json:"message"`
 }
 
-func SendResponse(w http.ResponseWriter, status int, message *map[string]string) {
+func SendResponse(w http.ResponseWriter, status int, res *map[string]string) {
 	w.WriteHeader(status)
-	json.NewEncoder(w).Encode(message)
+	json.NewEncoder(w).Encode(res)
+}
+func SendMessage(w http.ResponseWriter, status int, message string) {
+	w.WriteHeader(status)
+	json.NewEncoder(w).Encode(Message{message})
 }
 
 func CreateDBContext() (context.Context, context.CancelFunc) {

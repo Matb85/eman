@@ -30,46 +30,34 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&user)
 	// some validation
 	if err != nil || len(user.Password) < 8 || len(user.Email) < 6 || len(user.FirstName) < 3 || len(user.LastName) < 3 {
-		utils.SendResponse(w, http.StatusBadRequest, &map[string]string{
-			"message": "provided wrong data",
-		})
+		utils.SendMessage(w, http.StatusBadRequest, "provided wrong data")
 		return
 	}
 	// get the users collection
 	COL := database.UserCol
 	// check if email is already used
 	if count, _ := COL.CountDocuments(ctx, bson.M{"email": user.Email}); count > 0 {
-		utils.SendResponse(w, http.StatusBadRequest, &map[string]string{
-			"message": "email already in use",
-		})
+		utils.SendMessage(w, http.StatusBadRequest, "email already in use")
 		return
 	}
 	hashedPassword, hashErr := bcrypt.GenerateFromPassword([]byte(user.Password), 10)
 	if hashErr != nil {
-		utils.SendResponse(w, http.StatusInternalServerError, &map[string]string{
-			"message": "internal error: " + hashErr.Error(),
-		})
+		utils.SendMessage(w, http.StatusInternalServerError, "internal error: "+hashErr.Error())
 		return
 	}
 	user.Password = string(hashedPassword)
 	user.Id = primitive.NewObjectID()
 	folder, foldererr := assets.CreateFolder(assets.USER, user.Id.Hex())
 	if foldererr != nil {
-		utils.SendResponse(w, http.StatusInternalServerError, &map[string]string{
-			"message": "internal error: " + foldererr.Error(),
-		})
+		utils.SendMessage(w, http.StatusInternalServerError, "internal error: "+foldererr.Error())
 		return
 	}
 	user.Folder = folder
 	// finally, insert the user
 	_, insertErr := COL.InsertOne(ctx, user)
 	if insertErr != nil {
-		utils.SendResponse(w, http.StatusInternalServerError, &map[string]string{
-			"message": "internal error: " + insertErr.Error(),
-		})
+		utils.SendMessage(w, http.StatusInternalServerError, "internal error: "+insertErr.Error())
 	} else {
-		utils.SendResponse(w, http.StatusOK, &map[string]string{
-			"message": "registration successful",
-		})
+		utils.SendMessage(w, http.StatusOK, "registration successful")
 	}
 }
