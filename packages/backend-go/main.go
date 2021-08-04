@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -12,6 +13,7 @@ import (
 	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/graphql"
+	"redinnlabs.com/redinn-core/utils"
 )
 
 func main() {
@@ -24,10 +26,13 @@ func main() {
 	// connect to the database
 	database.Connect()
 
-	router := mux.NewRouter().PathPrefix("/api").Subrouter()
+	router := mux.NewRouter()
 
-	graphql.Setup(router)
-	assets.Setup(router)
+	api := router.PathPrefix("/api").Subrouter()
+	api.Use(authMiddleware)
+
+	graphql.Setup(api)
+	assets.Setup(api)
 	auth.Setup(router.PathPrefix("/auth").Subrouter())
 
 	router.Use(wrapHandlerWithLogging)
@@ -39,6 +44,23 @@ func main() {
 	}
 
 	srv.ListenAndServe()
+}
+
+func authMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		// auth - validate the token
+		claims, err := auth.VerifyToken(r.Header.Get("Authorization"))
+		if err != nil {
+			w.Header().Set("Content-Type", "application/json")
+			utils.SendResponse(w, http.StatusBadRequest, &map[string]string{
+				"message": err.Error(),
+			})
+			return
+		}
+		ctx := context.WithValue(context.Background(), utils.User_id, claims.ID)
+		// Call the next handler, which can be another middleware in the chain, or the final handler.
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
 }
 
 type loggingResponseWriter struct {

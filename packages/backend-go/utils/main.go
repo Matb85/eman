@@ -7,6 +7,10 @@ import (
 	"time"
 )
 
+type contextKey int
+
+const User_id = contextKey(1)
+
 type Message struct {
 	Message string `json:"message"`
 }

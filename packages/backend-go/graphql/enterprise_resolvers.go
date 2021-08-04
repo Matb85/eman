@@ -23,7 +23,7 @@ type GetEnterpriseArgs struct {
 // query: get an enterprise
 func (*EnterpriseResolvers) Enterprise(ctx context.Context, args GetEnterpriseArgs) (*EnterpriseGQL, error) {
 	// fetch the user
-	user, fetchErr := FindUser(ctx.Value(User_id).(primitive.ObjectID))
+	user, fetchErr := FindUser(ctx.Value(utils.User_id).(primitive.ObjectID))
 	if fetchErr != nil {
 		return nil, fetchErr
 	}
@@ -47,7 +47,7 @@ func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args AddEnterpris
 	dbctx, cancel := utils.CreateDBContext()
 	defer cancel()
 
-	var userID = ctx.Value(User_id).(primitive.ObjectID)
+	var userID = ctx.Value(utils.User_id).(primitive.ObjectID)
 
 	// chek id the name is unique
 	if count, _ := database.EnterpriseCol.CountDocuments(ctx, bson.M{"name": args.Data.Name}); count > 0 {
@@ -106,7 +106,7 @@ func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args DeleteEnt
 
 	// compare passwords
 	fetchuser := auth.User{}
-	database.UserCol.FindOne(ctx, bson.M{"_id": ctx.Value(User_id).(primitive.ObjectID)}).Decode(&fetchuser)
+	database.UserCol.FindOne(ctx, bson.M{"_id": ctx.Value(utils.User_id).(primitive.ObjectID)}).Decode(&fetchuser)
 	passerr := bcrypt.CompareHashAndPassword([]byte(fetchuser.Password), []byte(args.Password))
 	if passerr != nil {
 		return nil, passerr

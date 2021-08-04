@@ -77,7 +77,7 @@ func createUserAndEnterprise() (func(t *testing.T), *cutils, error) {
 		return nil, nil, usererr
 	}
 	// mock the auth context
-	authctx := context.WithValue(context.Background(), graphql.User_id, userresult.InsertedID)
+	authctx := context.WithValue(context.Background(), utils.User_id, userresult.InsertedID)
 	// add an enterprise
 	createdenterprise, adderr := resolvers.AddEnterprise(authctx, graphql.AddEnterpriseArgs{*MockedEnterprise})
 	// a callback for clearing up the db
