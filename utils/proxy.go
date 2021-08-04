@@ -25,7 +25,7 @@ func generateProxy(proxyurl string) *handler {
 func setupProxy() {
 	// setup the proxies
 	http.Handle("/app/", generateProxy("http://localhost:3000"))
-	http.Handle("/api/", generateProxy("http://localhost:3001"))
+	http.Handle("/", generateProxy("http://localhost:3001"))
 	fmt.Println(GREEN + "reverse proxy is running!" + RESET)
 	http.ListenAndServe("localhost:3002", nil)
 }

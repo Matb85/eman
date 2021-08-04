@@ -14,8 +14,8 @@ describe("/login tab - input form", () => {
     const user = mockUser();
     // register the user
     const response = await axiosApi.post("/auth/register", user).catch((err) => err.response);
-    expect(response.status).toBe(200);
     expect(response.data.message).toBe("registration successful");
+    expect(response.status).toBe(200);
     // set credentials
     await (await Page.email).setValue(user.email);
     await (await Page.password).setValue(user.password);
