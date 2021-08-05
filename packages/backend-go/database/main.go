@@ -3,6 +3,7 @@ package database
 import (
 	"os"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"redinnlabs.com/redinn-core/utils"
@@ -25,4 +26,14 @@ func Connect() {
 
 	UserCol = db.Collection("users")
 	EnterpriseCol = db.Collection("enterprises")
+}
+
+type User struct {
+	Id          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
+	Email       string             `json:"email"`
+	Password    string             `json:"password"`
+	FirstName   string             `json:"firstname"`
+	LastName    string             `json:"lastname"`
+	Enterprises []string           `json:"enterprises"`
+	Folder      string             `json:"folder"`
 }

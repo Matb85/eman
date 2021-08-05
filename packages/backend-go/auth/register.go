@@ -12,20 +12,10 @@ import (
 	"redinnlabs.com/redinn-core/utils"
 )
 
-type User struct {
-	Id          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	Email       string             `json:"email"`
-	Password    string             `json:"password"`
-	FirstName   string             `json:"firstname"`
-	LastName    string             `json:"lastname"`
-	Enterprises []string           `json:"enterprises"`
-	Folder      string             `json:"folder"`
-}
-
 func Register(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := utils.CreateDBContext()
 	defer cancel()
-	user := User{Enterprises: []string{}}
+	user := database.User{Enterprises: []string{}}
 	// convert json to struct
 	err := json.NewDecoder(r.Body).Decode(&user)
 	// some validation

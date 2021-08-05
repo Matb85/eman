@@ -5,7 +5,6 @@ import (
 
 	gql "github.com/graph-gophers/graphql-go"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/graphql"
 	"redinnlabs.com/redinn-core/utils"
@@ -20,7 +19,7 @@ var MockedUser = &graphql.UserGQL{
 
 const MockedPasswordString = "example-password"
 
-var MockedAuthUser = &auth.User{
+var MockedAuthUser = &database.User{
 	Email:       "user2@example.com",
 	Password:    MockedPasswordString,
 	FirstName:   "example",

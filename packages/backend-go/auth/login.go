@@ -17,7 +17,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	ctx, cancel := utils.CreateDBContext()
 	defer cancel()
-	user := User{Enterprises: []string{}}
+	user := database.User{Enterprises: []string{}}
 	// convert json to struct
 	err := json.NewDecoder(r.Body).Decode(&user)
 	// some validation
@@ -28,7 +28,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	// get the users collection
 	COL := database.UserCol
 	// fetch the user
-	fetchuser := User{Enterprises: []string{}}
+	fetchuser := database.User{Enterprises: []string{}}
 	fetchErr := COL.FindOne(ctx, bson.M{"email": user.Email}).Decode(&fetchuser)
 	// compare passwords
 	passworderr := bcrypt.CompareHashAndPassword([]byte(fetchuser.Password), []byte(user.Password))

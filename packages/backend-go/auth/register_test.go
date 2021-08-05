@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"redinnlabs.com/redinn-core/auth"
+	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/utils"
 )
 
@@ -35,7 +36,7 @@ func TestRegister200(t *testing.T) {
 
 func TestRegister400(t *testing.T) {
 	// setup scenarios
-	scenarios := []auth.User{
+	scenarios := []database.User{
 		// too short email - empty string
 		{Password: "example-password", FirstName: "example", LastName: "user"},
 		// too short password - empty string

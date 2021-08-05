@@ -22,7 +22,7 @@ func upload(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// get user's folder path
-	user := &User{}
+	user := &database.User{}
 	finderr := database.UserCol.FindOne(ctx, bson.M{"_id": r.Context().Value(utils.User_id)}).Decode(user)
 	if finderr != nil {
 		utils.SendMessage(w, http.StatusBadRequest, "could not find the user: "+finderr.Error())

@@ -14,7 +14,7 @@ import (
 )
 
 // a mocked user
-var MockedUser = &auth.User{
+var MockedUser = &database.User{
 	Email:     "user@example.com",
 	Password:  "example-password",
 	FirstName: "example",
@@ -67,7 +67,7 @@ func TestLogin200(t *testing.T) {
 
 func TestLogin400(t *testing.T) {
 	// setup scenarios
-	scenarios := []auth.User{
+	scenarios := []database.User{
 		// too short email - empty string
 		{Password: "example-password"},
 		// too short password - empty string

@@ -9,7 +9,6 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
 	"redinnlabs.com/redinn-core/assets"
-	"redinnlabs.com/redinn-core/auth"
 	"redinnlabs.com/redinn-core/database"
 	"redinnlabs.com/redinn-core/utils"
 )
@@ -105,7 +104,7 @@ func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args DeleteEnt
 	}
 
 	// compare passwords
-	fetchuser := auth.User{}
+	fetchuser := database.User{}
 	database.UserCol.FindOne(ctx, bson.M{"_id": ctx.Value(utils.User_id).(primitive.ObjectID)}).Decode(&fetchuser)
 	passerr := bcrypt.CompareHashAndPassword([]byte(fetchuser.Password), []byte(args.Password))
 	if passerr != nil {

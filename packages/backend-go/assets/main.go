@@ -6,7 +6,6 @@ import (
 	"os"
 
 	"github.com/gorilla/mux"
-	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var ASSETS_DIR string
@@ -22,14 +21,4 @@ func Setup(router *mux.Router) {
 	}
 	router.HandleFunc("/assets", upload).Methods("POST")
 	router.PathPrefix("/assets/").Handler(http.StripPrefix("/api/assets/", http.FileServer(http.Dir(ASSETS_DIR)))).Methods("GET")
-}
-
-type User struct {
-	Id          primitive.ObjectID `json:"id" bson:"_id,omitempty"`
-	Email       string             `json:"email"`
-	Password    string             `json:"password"`
-	FirstName   string             `json:"firstname"`
-	LastName    string             `json:"lastname"`
-	Enterprises []string           `json:"enterprises"`
-	Folder      string             `json:"folder"`
 }
