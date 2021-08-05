@@ -59,6 +59,21 @@ func TestDeleteEnterpriseOK(t *testing.T) {
 	}
 }
 
+func TestEnterpriseLogoOK(t *testing.T) {
+	callback, result, addErr := createUserAndEnterprise()
+	defer callback(t)
+	if addErr != nil {
+		t.Fatal(addErr)
+	}
+	response, logoErr := result.resolvers.EnterpriseLogo(result.authctx, graphql.EnterpriseLogoArgs{0, "image.jpg"})
+	if logoErr != nil {
+		t.Fatal(logoErr)
+	}
+	if len(response.Uploadtoken) < 10 {
+		t.Fatal("upload token shorter than 10: ", response.Uploadtoken)
+	}
+}
+
 type cutils struct {
 	authctx    context.Context
 	userID     primitive.ObjectID
