@@ -8,4 +8,9 @@ type Query {
 type Mutation {
   deleteEnterprise(password: String!, enterpriseID: ID!): Message!
   addEnterprise(data: EnterpriseI!): Enterprise!
+  enterpriseLogo(index: Int!, filename: String!): UploadToken!
+}
+
+type UploadToken {
+  uploadtoken: String!
 }

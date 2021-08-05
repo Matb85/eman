@@ -3,6 +3,8 @@ package graphql
 import (
 	"context"
 	"errors"
+	"path/filepath"
+	"time"
 
 	"github.com/graph-gophers/graphql-go"
 	"go.mongodb.org/mongo-driver/bson"
@@ -26,13 +28,11 @@ func (*EnterpriseResolvers) Enterprise(ctx context.Context, args GetEnterpriseAr
 	if fetchErr != nil {
 		return nil, fetchErr
 	}
-
 	// get the id of the enterprise
 	id, primerr := primitive.ObjectIDFromHex(string((*user.Enterprises)[int(args.Index)]))
 	if primerr != nil {
 		return nil, primerr
 	}
-
 	// get the id of the enterprise and fetch it
 	return FindEnterprise(id)
 }
@@ -47,15 +47,12 @@ func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args AddEnterpris
 	defer cancel()
 
 	var userID = ctx.Value(utils.User_id).(primitive.ObjectID)
-
-	// chek id the name is unique
+	// chek if id the name is unique
 	if count, _ := database.EnterpriseCol.CountDocuments(ctx, bson.M{"name": args.Data.Name}); count > 0 {
 		return nil, errors.New("an enterprise with the same name already exists")
 	}
-
 	// add the user that created the enterprise to Employees
 	args.Data.Employees = &[]EmployeeGQL{{Ref: graphql.ID(userID.Hex()), Permissions: "111111"}}
-
 	// insert
 	insertresult, dberr := database.EnterpriseCol.InsertOne(dbctx, args.Data)
 	if dberr != nil {
@@ -79,7 +76,6 @@ func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args AddEnterpris
 	if updateErr != nil {
 		return nil, updateErr
 	}
-
 	// return the result
 	return enterprise, nil
 }
@@ -102,7 +98,6 @@ func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args DeleteEnt
 	if count, _ := database.EnterpriseCol.CountDocuments(ctx, bson.M{"_id": ID}); count <= 0 {
 		return nil, errors.New("an enterprise with the same name already exists")
 	}
-
 	// compare passwords
 	fetchuser := database.User{}
 	database.UserCol.FindOne(ctx, bson.M{"_id": ctx.Value(utils.User_id).(primitive.ObjectID)}).Decode(&fetchuser)
@@ -110,13 +105,11 @@ func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args DeleteEnt
 	if passerr != nil {
 		return nil, passerr
 	}
-
 	// find the enterprise
 	enterprise, finderr := FindEnterprise(ID)
 	if finderr != nil {
 		return nil, finderr
 	}
-
 	// extract employees' refs
 	employees := make([]primitive.ObjectID, len(*enterprise.Employees))
 	// map the employees array objects -> ref strings
@@ -124,14 +117,57 @@ func (*EnterpriseResolvers) DeleteEnterprise(ctx context.Context, args DeleteEnt
 		employeeID, _ := primitive.ObjectIDFromHex(string(e.Ref))
 		employees[i] = employeeID
 	}
-
 	// delete the enterprise entry on other Users' documents
 	database.UserCol.UpdateMany(dbctx, bson.M{"_id": bson.M{"$in": employees}}, bson.M{"$pull": bson.M{"enterprises": args.EnterpriseID}})
-
 	// delete the enterprise
 	_, deleteerr := database.EnterpriseCol.DeleteOne(dbctx, bson.M{"_id": ID})
 	if deleteerr != nil {
 		return nil, deleteerr
 	}
 	return &utils.Message{"enterprise successfully deleted"}, nil
+}
+
+// mutation: upload an avatar
+// important: also applies to users!
+type EnterpriseLogoArgs struct {
+	Index    float64
+	Filename string
+}
+type EnterpriseLogoRes struct {
+	Uploadtoken string
+}
+
+func (*EnterpriseResolvers) EnterpriseLogo(ctx context.Context, args EnterpriseLogoArgs) (*EnterpriseLogoRes, error) {
+	dbctx, cancel := utils.CreateDBContext()
+	defer cancel()
+
+	hash, uuiderr := assets.GenUUIDv4()
+	if uuiderr != nil {
+		return nil, uuiderr
+	}
+	// add the file's extension to the hash
+	hash += filepath.Ext(args.Filename)
+
+	user, fetchErr := FindUser(ctx.Value(utils.User_id).(primitive.ObjectID))
+	if fetchErr != nil {
+		return nil, fetchErr
+	}
+	// get the id of the enterprise
+	id, primerr := primitive.ObjectIDFromHex(string((*user.Enterprises)[int(args.Index)]))
+	if primerr != nil {
+		return nil, primerr
+	}
+	// update
+	_, updateErr := database.EnterpriseCol.UpdateByID(dbctx, id, bson.M{"$set": bson.M{
+		"logo": hash,
+	}})
+	if updateErr != nil {
+		return nil, updateErr
+	}
+	// create an upload token
+	token, tokenErr := assets.CreateUploadToken(hash, time.Minute*1)
+	if tokenErr != nil {
+		return nil, tokenErr
+	}
+	return &EnterpriseLogoRes{token}, nil
 }
