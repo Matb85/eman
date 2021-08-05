@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"path/filepath"
-	"time"
 
 	"github.com/graph-gophers/graphql-go"
 	"go.mongodb.org/mongo-driver/bson"
@@ -165,7 +164,7 @@ func (*EnterpriseResolvers) EnterpriseLogo(ctx context.Context, args EnterpriseL
 		return nil, updateErr
 	}
 	// create an upload token
-	token, tokenErr := assets.CreateUploadToken(hash, time.Minute*1)
+	token, tokenErr := assets.CreateUploadToken(hash, assets.PHOTO_UPLOAD_DUR)
 	if tokenErr != nil {
 		return nil, tokenErr
 	}
