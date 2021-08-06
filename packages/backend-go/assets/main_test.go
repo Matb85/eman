@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"redinnlabs.com/redinn-core/assets"
+	"redinnlabs.com/redinn-core/database"
 )
 
 func TestMain(m *testing.M) {
@@ -25,6 +26,7 @@ func TestMain(m *testing.M) {
 	if err := os.Mkdir(assets.ASSETS_DIR, 0755); err != nil {
 		fmt.Println(err)
 	}
+	database.Connect()
 	code := m.Run()
 	os.Exit(code)
 }
