@@ -33,9 +33,9 @@ func CreateFolder(category bool, id string) (string, error) {
 	}
 	// add a prefix depending on the given category
 	if category {
-		path = "/e-" + uuidv5 + "/"
+		path = "/e-" + uuidv5
 	} else {
-		path = "/u-" + uuidv5 + "/"
+		path = "/u-" + uuidv5
 	}
 	// create the folder
 	if err := os.Mkdir(ASSETS_DIR+path, 0755); err != nil {
