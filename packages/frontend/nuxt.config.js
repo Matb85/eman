@@ -65,7 +65,7 @@ export default {
           logout: false,
           user: {
             method: "post",
-            url: "/graphql",
+            url: "/secure/graphql",
             data: { query: "query { user {email, firstName, lastName, enterprises}}" },
           },
         },

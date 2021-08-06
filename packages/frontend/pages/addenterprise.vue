@@ -59,7 +59,7 @@ export default class AddEnterprise extends Vue {
 
   async addEnterprise() {
     try {
-      const response = await this.$axios.$post("/api/graphql", {
+      const response = await this.$axios.$post("/secure/graphql", {
         query: `mutation add($enterprise: EnterpriseI!){
           addEnterprise(data: $enterprise) { name }
           }`,

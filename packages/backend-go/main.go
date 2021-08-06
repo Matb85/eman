@@ -26,9 +26,9 @@ func main() {
 	// connect to the database
 	database.Connect()
 
-	router := mux.NewRouter()
+	router := mux.NewRouter().PathPrefix("/api").Subrouter()
 
-	api := router.PathPrefix("/api").Subrouter()
+	api := router.PathPrefix("/secure").Subrouter()
 	api.Use(authMiddleware)
 
 	graphql.Setup(api)
