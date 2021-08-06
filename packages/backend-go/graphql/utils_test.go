@@ -25,6 +25,7 @@ var MockedAuthUser = &database.User{
 	FirstName:   "example",
 	LastName:    "user",
 	Enterprises: []string{},
+	Folder:      "db0886b8-6d88-417a-99a7-d54c6293fc09",
 }
 var MockedEnterprise = &graphql.EnterpriseGQL{
 	Name: "Example Enterprise",
