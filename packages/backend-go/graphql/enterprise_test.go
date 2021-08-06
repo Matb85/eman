@@ -15,6 +15,8 @@ import (
 	"redinnlabs.com/redinn-core/utils"
 )
 
+var resolvers = &graphql.EnterpriseResolvers{}
+
 func TestAddEnterpriseOK(t *testing.T) {
 	callback, result, adderr := createUserAndEnterprise()
 	defer callback(t)
@@ -37,7 +39,7 @@ func TestEnterpriseOK(t *testing.T) {
 		t.Fatal(adderr)
 	}
 	// call the Enterprise method
-	foundenterprise, finderr := result.resolvers.Enterprise(result.authctx, graphql.GetEnterpriseArgs{0})
+	foundenterprise, finderr := resolvers.Enterprise(result.authctx, graphql.GetEnterpriseArgs{0})
 	if finderr != nil {
 		t.Fatal(finderr)
 	}
@@ -52,7 +54,7 @@ func TestDeleteEnterpriseOK(t *testing.T) {
 		t.Fatal(adderr)
 	}
 	// call the DeleteEnterprise method
-	message, deleteerr := result.resolvers.DeleteEnterprise(result.authctx, graphql.DeleteEnterpriseArgs{MockedPasswordString, result.enterprise.ID})
+	message, deleteerr := resolvers.DeleteEnterprise(result.authctx, graphql.DeleteEnterpriseArgs{MockedPasswordString, result.enterprise.ID})
 	if deleteerr != nil {
 		t.Error(deleteerr)
 	}
@@ -68,7 +70,7 @@ func TestEnterpriseLogoOK(t *testing.T) {
 	if addErr != nil {
 		t.Fatal(addErr)
 	}
-	response, logoErr := result.resolvers.EnterpriseLogo(result.authctx, graphql.EnterpriseLogoArgs{0, FILENAME})
+	response, logoErr := resolvers.EnterpriseLogo(result.authctx, graphql.EnterpriseLogoArgs{0, FILENAME})
 	if logoErr != nil {
 		t.Fatal(logoErr)
 	}
@@ -90,14 +92,12 @@ type cutils struct {
 	authctx    context.Context
 	userID     primitive.ObjectID
 	enterprise *graphql.EnterpriseGQL
-	resolvers  *graphql.EnterpriseResolvers
 }
 
 // create a user and an enterprise
 func createUserAndEnterprise() (func(t *testing.T), *cutils, error) {
 	dbctx, cancel := utils.CreateDBContext()
 
-	resolvers := &graphql.EnterpriseResolvers{}
 	// create a mock user
 	userresult, usererr := database.UserCol.InsertOne(dbctx, *MockedAuthUser)
 	if usererr != nil {
@@ -119,6 +119,6 @@ func createUserAndEnterprise() (func(t *testing.T), *cutils, error) {
 			t.Fatal(edeleteErr)
 		}
 	}
-	u := &cutils{authctx, userresult.InsertedID.(primitive.ObjectID), createdenterprise, resolvers}
+	u := &cutils{authctx, userresult.InsertedID.(primitive.ObjectID), createdenterprise}
 	return callback, u, adderr
 }
