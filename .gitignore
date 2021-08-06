@@ -6,3 +6,5 @@ utils
 !utils/
 
 uploads/
+
+node_modules

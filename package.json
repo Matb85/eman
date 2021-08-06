@@ -8,6 +8,11 @@
     "release": "lerna version --conventional-commits --no-push",
     "test:unit": "./utils/utils unit",
     "test:e2e": "lerna run build && ./utils/utils e2e",
-    "proxy": "./utils/utils proxy"
+    "test": "npm run test:unit && npm run test:e2e",
+    "proxy": "./utils/utils proxy",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^7.0.0"
   }
 }
