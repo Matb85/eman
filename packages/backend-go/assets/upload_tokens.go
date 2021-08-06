@@ -7,7 +7,7 @@ import (
 )
 
 type uploadClaims struct {
-	Hash string `json:"hash"`
+	Path string `json:"path"`
 	jwt.StandardClaims
 }
 
@@ -15,9 +15,10 @@ var PHOTO_UPLOAD_DUR = time.Second * 30
 
 var SECRET = "gdsgfdgdfhfghgfhldsjgdfk"
 
-func CreateUploadToken(hash string, duration time.Duration) (string, error) {
+// path = /folder/file.ext - starts with a slash!
+func CreateUploadToken(path string, duration time.Duration) (string, error) {
 	claims := uploadClaims{
-		Hash: hash,
+		Path: path,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(duration).Unix(),
 			Subject:   "1",
