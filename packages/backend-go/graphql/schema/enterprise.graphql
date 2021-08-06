@@ -2,6 +2,7 @@ type Enterprise {
   id: ID!
   name: String!
   logo: String!
+  folder: String!
   address: Address!
   employees: [Employee!]
 }
