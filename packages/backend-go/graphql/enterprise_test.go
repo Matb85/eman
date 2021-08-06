@@ -3,6 +3,8 @@ package graphql_test
 import (
 	"context"
 	"os"
+	"path/filepath"
+	"strings"
 	"testing"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -60,17 +62,27 @@ func TestDeleteEnterpriseOK(t *testing.T) {
 }
 
 func TestEnterpriseLogoOK(t *testing.T) {
+	const FILENAME = "image.jpg"
 	callback, result, addErr := createUserAndEnterprise()
 	defer callback(t)
 	if addErr != nil {
 		t.Fatal(addErr)
 	}
-	response, logoErr := result.resolvers.EnterpriseLogo(result.authctx, graphql.EnterpriseLogoArgs{0, "image.jpg"})
+	response, logoErr := result.resolvers.EnterpriseLogo(result.authctx, graphql.EnterpriseLogoArgs{0, FILENAME})
 	if logoErr != nil {
 		t.Fatal(logoErr)
 	}
-	if len(response.Uploadtoken) < 10 {
-		t.Fatal("upload token shorter than 10: ", response.Uploadtoken)
+	if len(strings.Split(response.Uploadtoken, ".")) != 3 {
+		t.Fatal("upload token has an incorrect structure (does not have 3 parts): ", response.Uploadtoken)
+	}
+	// find the enterprise
+	id, findErr := graphql.FindEnterpriseByIndex(result.userID, 0)
+	if findErr != nil {
+		t.Fatal(findErr)
+	}
+	enterprise, _ := graphql.FindEnterprise(*id)
+	if filepath.Ext(enterprise.Logo) != filepath.Ext(FILENAME) {
+		t.Fatal("file extensions do not match: ", enterprise.Logo, FILENAME)
 	}
 }
 
