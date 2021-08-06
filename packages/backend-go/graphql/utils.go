@@ -28,3 +28,17 @@ func FindEnterprise(id primitive.ObjectID) (*EnterpriseGQL, error) {
 
 	return enterprise, finderr
 }
+func FindEnterpriseByIndex(user_id primitive.ObjectID, index int) (*primitive.ObjectID, error) {
+	// fetch the user
+	user, fetchErr := FindUser(user_id)
+	if fetchErr != nil {
+		return nil, fetchErr
+	}
+	// get the id of the enterprise
+	id, primerr := primitive.ObjectIDFromHex(string((*user.Enterprises)[index]))
+	if primerr != nil {
+		return nil, primerr
+	}
+	// get the id of the enterprise and fetch it
+	return &id, nil
+}

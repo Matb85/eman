@@ -22,18 +22,11 @@ type GetEnterpriseArgs struct {
 
 // query: get an enterprise
 func (*EnterpriseResolvers) Enterprise(ctx context.Context, args GetEnterpriseArgs) (*EnterpriseGQL, error) {
-	// fetch the user
-	user, fetchErr := FindUser(ctx.Value(utils.User_id).(primitive.ObjectID))
-	if fetchErr != nil {
-		return nil, fetchErr
+	id, err := FindEnterpriseByIndex(ctx.Value(utils.User_id).(primitive.ObjectID), int(args.Index))
+	if err != nil {
+		return nil, err
 	}
-	// get the id of the enterprise
-	id, primerr := primitive.ObjectIDFromHex(string((*user.Enterprises)[int(args.Index)]))
-	if primerr != nil {
-		return nil, primerr
-	}
-	// get the id of the enterprise and fetch it
-	return FindEnterprise(id)
+	return FindEnterprise(*id)
 }
 
 type AddEnterpriseArgs struct {
@@ -146,15 +139,10 @@ func (*EnterpriseResolvers) EnterpriseLogo(ctx context.Context, args EnterpriseL
 	}
 	// add the file's extension to the hash
 	hash += filepath.Ext(args.Filename)
-
-	user, fetchErr := FindUser(ctx.Value(utils.User_id).(primitive.ObjectID))
-	if fetchErr != nil {
-		return nil, fetchErr
-	}
 	// get the id of the enterprise
-	id, primerr := primitive.ObjectIDFromHex(string((*user.Enterprises)[int(args.Index)]))
-	if primerr != nil {
-		return nil, primerr
+	id, findErr := FindEnterpriseByIndex(ctx.Value(utils.User_id).(primitive.ObjectID), int(args.Index))
+	if findErr != nil {
+		return nil, findErr
 	}
 	// update
 	_, updateErr := database.EnterpriseCol.UpdateByID(dbctx, id, bson.M{"$set": bson.M{
