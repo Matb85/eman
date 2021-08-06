@@ -19,6 +19,6 @@ func Setup(router *mux.Router) {
 		}
 		ASSETS_DIR = CWD + "/uploads"
 	}
-	router.HandleFunc("/assets", upload).Methods("POST")
+	router.HandleFunc("/assets", Upload).Methods("POST")
 	router.PathPrefix("/assets/").Handler(http.StripPrefix("/api/assets/", http.FileServer(http.Dir(ASSETS_DIR)))).Methods("GET")
 }

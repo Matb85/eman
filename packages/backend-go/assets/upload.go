@@ -11,7 +11,7 @@ import (
 	"redinnlabs.com/redinn-core/utils"
 )
 
-func upload(w http.ResponseWriter, r *http.Request) {
+func Upload(w http.ResponseWriter, r *http.Request) {
 	ctx, cancel := utils.CreateDBContext()
 	defer cancel()
 	// auth - validate the upload token
