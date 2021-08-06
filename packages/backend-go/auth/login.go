@@ -38,8 +38,8 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// create tokens
-	access_token, e1 := createToken(fetchuser.Id, time.Minute*30)
-	refresh_token, e2 := createToken(fetchuser.Id, time.Hour*24*30)
+	access_token, e1 := CreateToken(fetchuser.Id, time.Minute*30)
+	refresh_token, e2 := CreateToken(fetchuser.Id, time.Hour*24*30)
 	if e1 == nil && e2 == nil {
 		utils.SendResponse(w, http.StatusOK, &map[string]string{
 			"message":       "Welcome to Redinn!",
@@ -58,7 +58,7 @@ type customClaims struct {
 
 var SECRET = "gdsgfdgdfhfghgfhldsjgdfk"
 
-func createToken(id primitive.ObjectID, duration time.Duration) (string, error) {
+func CreateToken(id primitive.ObjectID, duration time.Duration) (string, error) {
 	claims := customClaims{
 		ID: id,
 		StandardClaims: jwt.StandardClaims{
