@@ -59,12 +59,20 @@ export default class AddEnterprise extends Vue {
 
   async addEnterprise() {
     try {
-      const response = await this.$axios.$post("/secure/graphql", {
-        query: `mutation add($enterprise: EnterpriseI!){
+      // add enterprise info
+      const response = await this.$axios
+        .$post("/secure/graphql", {
+          query: `mutation add($enterprise: EnterpriseI!){
           addEnterprise(data: $enterprise) { name }
           }`,
-        variables: { enterprise: this.enterpriseData },
-      });
+          variables: { enterprise: this.enterpriseData },
+        })
+        .catch((err) => err.response);
+      // update the user
+      await this.$auth.fetchUser();
+      // upload the logo
+      await this.uploadLogo();
+      // if OK inform the user & redirect to the home page
       this.$buefy.snackbar.open({
         message: "Dodano działalność o nazwie " + response.data.addEnterprise.name,
         type: "is-success",
@@ -83,6 +91,27 @@ export default class AddEnterprise extends Vue {
       });
       console.log(err);
     }
+  }
+  async uploadLogo() {
+    // get the upload token
+    const response = await this.$axios
+      .$post("/secure/graphql", {
+        query: `mutation logo($filename: String!){
+              enterpriseLogo(index: ${this.$auth.user.enterprises.length - 1}, filename: $filename) { uploadtoken }
+            }`,
+        variables: {
+          filename: this.logo!.name,
+        },
+      })
+      .catch((err) => err);
+    console.log(response.data);
+    console.log(this.logo);
+    // post the logo file
+    const formData = new FormData();
+    formData.append("file", this.logo!);
+    await this.$axios.$post("/secure/assets", formData, {
+      headers: { "Content-Type": "multipart/form-data", Upload: response.data.enterpriseLogo.uploadtoken },
+    });
   }
 }
 </script>

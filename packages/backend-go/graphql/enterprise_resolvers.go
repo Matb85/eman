@@ -45,6 +45,12 @@ func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args AddEnterpris
 	}
 	// add the user that created the enterprise to Employees
 	args.Data.Employees = &[]EmployeeGQL{{Ref: graphql.ID(userID.Hex()), Permissions: "111111"}}
+	// create a folder
+	folder, foldererr := assets.CreateFolder(assets.ENTERPRISE, primitive.NewObjectID().Hex())
+	if foldererr != nil {
+		return nil, foldererr
+	}
+	args.Data.Folder = folder
 	// insert
 	insertresult, dberr := database.EnterpriseCol.InsertOne(dbctx, args.Data)
 	if dberr != nil {
@@ -56,13 +62,6 @@ func (*EnterpriseResolvers) AddEnterprise(ctx context.Context, args AddEnterpris
 	if finderr != nil {
 		return nil, finderr
 	}
-	// create a folder
-	folder, foldererr := assets.CreateFolder(assets.ENTERPRISE, insertID.Hex())
-	if foldererr != nil {
-		database.EnterpriseCol.DeleteOne(dbctx, bson.M{"_id": insertID})
-		return nil, foldererr
-	}
-	args.Data.Folder = folder
 	// update the user's enterprises list
 	_, updateErr := database.UserCol.UpdateByID(dbctx, userID, bson.M{"$addToSet": bson.M{"enterprises": enterprise.ID}})
 	if updateErr != nil {
@@ -137,13 +136,18 @@ func (*EnterpriseResolvers) EnterpriseLogo(ctx context.Context, args EnterpriseL
 	if uuiderr != nil {
 		return nil, uuiderr
 	}
-	// add the file's extension to the hash
-	hash += filepath.Ext(args.Filename)
 	// get the id of the enterprise
-	id, findErr := FindEnterpriseByIndex(ctx.Value(utils.User_id).(primitive.ObjectID), int(args.Index))
+	id, findByIDErr := FindEnterpriseByIndex(ctx.Value(utils.User_id).(primitive.ObjectID), int(args.Index))
+	if findByIDErr != nil {
+		return nil, findByIDErr
+	}
+	// find the enterprise
+	enterprise, findErr := FindEnterprise(*id)
 	if findErr != nil {
 		return nil, findErr
 	}
+	// add the file's extension to the hash
+	FULLPATH := enterprise.Folder + "/" + hash + filepath.Ext(args.Filename)
 	// update
 	_, updateErr := database.EnterpriseCol.UpdateByID(dbctx, id, bson.M{"$set": bson.M{
 		"logo": hash,
@@ -152,7 +156,7 @@ func (*EnterpriseResolvers) EnterpriseLogo(ctx context.Context, args EnterpriseL
 		return nil, updateErr
 	}
 	// create an upload token
-	token, tokenErr := assets.CreateUploadToken(hash, assets.PHOTO_UPLOAD_DUR)
+	token, tokenErr := assets.CreateUploadToken(FULLPATH, assets.PHOTO_UPLOAD_DUR)
 	if tokenErr != nil {
 		return nil, tokenErr
 	}
