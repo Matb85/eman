@@ -4,20 +4,35 @@
     <h3 class="is-size-4">Ogólne informacje</h3>
 
     <b-field label="Nazwa firmy" label-position="on-border" class="my-4">
-      <b-input v-model="enterpriseData.name" required rounded placeholder="np. Redinn" />
+      <b-input data-testid="add-e-name" v-model="enterpriseData.name" required rounded placeholder="np. Redinn" />
     </b-field>
 
     <h3 class="is-size-4">Adress</h3>
 
     <div class="input-form">
       <b-field v-for="(f, nm) in addressFields" :key="f.label" :label="f.label" label-position="on-border">
-        <b-input v-model="enterpriseData.address[nm]" required rounded :placeholder="f.placeholder" />
+        <b-input
+          :data-testid="'add-e-' + nm"
+          v-model="enterpriseData.address[nm]"
+          required
+          rounded
+          :placeholder="f.placeholder"
+        />
       </b-field>
     </div>
 
     <h3 class="is-size-4">Logo lub zdjęcie</h3>
 
-    <b-upload v-model="logo" drag-drop accept="image/*" required type="is-dark" class="my-4" expanded>
+    <b-upload
+      data-testid="add-e-upload"
+      v-model="logo"
+      drag-drop
+      accept="image/*"
+      required
+      type="is-dark"
+      class="my-4"
+      expanded
+    >
       <section class="py-4 content has-text-centered">
         <b-icon icon="upload" size="is-large" />
         <p>Upuść lub wybierz plik</p>
@@ -25,7 +40,7 @@
     </b-upload>
 
     <div class="submit-con">
-      <b-button tag="input" native-type="submit" value="Dodaj" type="is-primary" expanded />
+      <b-button data-testid="add-e-submit" tag="input" native-type="submit" value="Dodaj" type="is-primary" expanded />
     </div>
     <nuxt-link to="/core" class="new-account">Anuluj</nuxt-link>
   </form>
@@ -68,7 +83,7 @@ export default class AddEnterprise extends Vue {
           variables: { enterprise: this.enterpriseData },
         })
         .catch((err) => err.response);
-      // update the user
+      // update the user - it MUST happen before uploading the logo
       await this.$auth.fetchUser();
       // upload the logo
       await this.uploadLogo();
