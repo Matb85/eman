@@ -71,26 +71,28 @@ func setupDB() func() {
 	if cwderr != nil {
 		log.Fatal(cwderr)
 	}
-	fmt.Println(CWD + "/assets/image.jpg")
 	DBSTORAGE := CWD + "/test_db"
+	ASSETS_DIR := CWD + "/uploads"
 	// get the BASE_DIR
-	BASE_DIR := os.Getenv("BASE_DIR")
-	if len(BASE_DIR) == 0 {
-		log.Fatal("BASE_DIR env var not provided")
-	}
-	setErr := os.Setenv("ASSETS_DIR", BASE_DIR+"/uploads")
+	setErr := os.Setenv("BASE_DIR", CWD)
 	if setErr != nil {
 		log.Fatal(setErr)
 	}
-	// create a temporary folder for mongodb
-	// if already exists, clear content
-	if _, staterr := os.Stat(DBSTORAGE); !os.IsNotExist(staterr) {
-		if clearerr := os.RemoveAll(DBSTORAGE); clearerr != nil {
-			log.Fatal(clearerr)
-		}
+	setErr2 := os.Setenv("ASSETS_DIR", ASSETS_DIR)
+	if setErr2 != nil {
+		log.Fatal(setErr2)
 	}
-	if Mkdirerr := os.Mkdir(DBSTORAGE, 0755); Mkdirerr != nil {
-		log.Fatal(Mkdirerr)
+	// create a temporary folders for mongodb & assets
+	for _, value := range []string{DBSTORAGE, ASSETS_DIR} {
+		// if already exists, clear content
+		if _, staterr := os.Stat(value); !os.IsNotExist(staterr) {
+			if clearerr := os.RemoveAll(value); clearerr != nil {
+				log.Fatal(clearerr)
+			}
+		}
+		if Mkdirerr := os.Mkdir(value, 0755); Mkdirerr != nil {
+			log.Fatal(Mkdirerr)
+		}
 	}
 	// start a mongodb instance
 	fmt.Println(GREEN + "preparing to run mongodb..." + RESET)
@@ -110,5 +112,6 @@ func setupDB() func() {
 		server.Process.Wait()
 		fmt.Println("removing storage")
 		os.RemoveAll(DBSTORAGE)
+		os.RemoveAll(ASSETS_DIR)
 	}
 }
