@@ -24,7 +24,7 @@ describe("/addenterprise tab - input form", () => {
     await (await Page.street).setValue(enterprise.address.street);
     await (await Page.city).setValue(enterprise.address.city);
     // upload a logo
-    const filePath = path.join(__dirname, "/image.jpg");
+    const filePath = path.join(process.env.BASE_DIR!, "/assets/image.jpg");
     await (await Page.upload).setValue(filePath);
     // submit
     await Page.submit();

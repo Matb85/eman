@@ -136,6 +136,8 @@ func (*EnterpriseResolvers) EnterpriseLogo(ctx context.Context, args EnterpriseL
 	if uuiderr != nil {
 		return nil, uuiderr
 	}
+	// create a hashed relative path of the file
+	logo := "/" + hash + filepath.Ext(args.Filename)
 	// get the id of the enterprise
 	id, findByIDErr := FindEnterpriseByIndex(ctx.Value(utils.User_id).(primitive.ObjectID), int(args.Index))
 	if findByIDErr != nil {
@@ -146,17 +148,15 @@ func (*EnterpriseResolvers) EnterpriseLogo(ctx context.Context, args EnterpriseL
 	if findErr != nil {
 		return nil, findErr
 	}
-	// add the file's extension to the hash
-	FULLPATH := enterprise.Folder + "/" + hash + filepath.Ext(args.Filename)
 	// update
 	_, updateErr := database.EnterpriseCol.UpdateByID(dbctx, id, bson.M{"$set": bson.M{
-		"logo": hash,
+		"logo": logo,
 	}})
 	if updateErr != nil {
 		return nil, updateErr
 	}
-	// create an upload token
-	token, tokenErr := assets.CreateUploadToken(FULLPATH, assets.PHOTO_UPLOAD_DUR)
+	// create an upload token - pass the full path (with folder)
+	token, tokenErr := assets.CreateUploadToken(enterprise.Folder+logo, assets.PHOTO_UPLOAD_DUR)
 	if tokenErr != nil {
 		return nil, tokenErr
 	}

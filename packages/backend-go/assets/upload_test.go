@@ -19,6 +19,7 @@ import (
 	"redinnlabs.com/redinn-core/utils"
 )
 
+// test on a user
 func TestUpload200(t *testing.T) {
 	ctx, cancel := utils.CreateDBContext()
 	defer cancel()
@@ -47,21 +48,20 @@ func TestUpload200(t *testing.T) {
 	if uuiderr != nil {
 		t.Fatal(uuiderr)
 	}
-	hash += ".jpg"
 	// get an auth token
 	authToken, authErr := auth.CreateToken(MockedUser.Id, time.Minute)
 	if authErr != nil {
 		t.Fatal(authErr)
 	}
 	// get an upload token
-	uploadToken, uploadTokenErr := assets.CreateUploadToken(hash, assets.PHOTO_UPLOAD_DUR)
+	uploadToken, uploadTokenErr := assets.CreateUploadToken(folder+"/"+hash+".jpg", assets.PHOTO_UPLOAD_DUR)
 	if uploadTokenErr != nil {
 		t.Fatal(uploadTokenErr)
 	}
 
 	// attach a file
 	// New multipart writer
-	file, openErr := os.Open("./image.jpg")
+	file, openErr := os.Open(os.Getenv("BASE_DIR") + "/assets/image.jpg")
 	if openErr != nil {
 		t.Fatal(openErr)
 	}

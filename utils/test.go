@@ -71,7 +71,17 @@ func setupDB() func() {
 	if cwderr != nil {
 		log.Fatal(cwderr)
 	}
+	fmt.Println(CWD + "/assets/image.jpg")
 	DBSTORAGE := CWD + "/test_db"
+	// get the BASE_DIR
+	BASE_DIR := os.Getenv("BASE_DIR")
+	if len(BASE_DIR) == 0 {
+		log.Fatal("BASE_DIR env var not provided")
+	}
+	setErr := os.Setenv("ASSETS_DIR", BASE_DIR+"/uploads")
+	if setErr != nil {
+		log.Fatal(setErr)
+	}
 	// create a temporary folder for mongodb
 	// if already exists, clear content
 	if _, staterr := os.Stat(DBSTORAGE); !os.IsNotExist(staterr) {
