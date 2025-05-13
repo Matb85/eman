@@ -1,10 +1,10 @@
-<img src="./assets/image.jpg" width="100">
+**E**nterprise **man**agement app
 
-# Redinn Core
+# Eman - Enterprise MANagement app
 
-## The ulitmate service for managing enterprises
+A prototype of a Property Management system, the progenitor of the Poznaj Góry hotel management system, that is actually deployed at https://poznagory.pl
 
-### packages
+### Packages
 
-- backend - a REST/Graphql api
-- frontend - a universal app
+- backend - a REST/Graphql api written in Golang
+- frontend - a universal app written in Vue 2 & Nuxt 2
