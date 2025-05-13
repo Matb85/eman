@@ -1,4 +1,4 @@
-module redinnlabs.com/redinn-core
+module matb85.github.io/eman-core
 
 go 1.16
 

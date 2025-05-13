@@ -7,9 +7,9 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
-	"redinnlabs.com/redinn-core/assets"
-	"redinnlabs.com/redinn-core/database"
-	"redinnlabs.com/redinn-core/utils"
+	"matb85.github.io/eman-core/assets"
+	"matb85.github.io/eman-core/database"
+	"matb85.github.io/eman-core/utils"
 )
 
 func Register(w http.ResponseWriter, r *http.Request) {

@@ -4,7 +4,7 @@
     <h3 class="is-size-4">Ogólne informacje</h3>
 
     <b-field label="Nazwa firmy" label-position="on-border" class="my-4">
-      <b-input data-testid="add-e-name" v-model="enterpriseData.name" required rounded placeholder="np. Redinn" />
+      <b-input data-testid="add-e-name" v-model="enterpriseData.name" required rounded placeholder="np. Eman" />
     </b-field>
 
     <h3 class="is-size-4">Adress</h3>

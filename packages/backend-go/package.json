@@ -1,5 +1,5 @@
 {
-  "name": "redinn_api_go",
+  "name": "eman_api_go",
   "version": "0.1.0",
   "description": "",
   "private": true,
@@ -7,6 +7,6 @@
     "dev": "go run ./",
     "build": "go build ./",
     "test:unit": "go test ./... -v -count=1",
-    "start": "./redinn-core"
+    "start": "./eman-core"
   }
 }

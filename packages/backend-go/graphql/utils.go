@@ -3,8 +3,8 @@ package graphql
 import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"redinnlabs.com/redinn-core/database"
-	"redinnlabs.com/redinn-core/utils"
+	"matb85.github.io/eman-core/database"
+	"matb85.github.io/eman-core/utils"
 )
 
 func FindUser(id primitive.ObjectID) (*UserGQL, error) {

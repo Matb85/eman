@@ -5,9 +5,9 @@ import (
 
 	gql "github.com/graph-gophers/graphql-go"
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"redinnlabs.com/redinn-core/database"
-	"redinnlabs.com/redinn-core/graphql"
-	"redinnlabs.com/redinn-core/utils"
+	"matb85.github.io/eman-core/database"
+	"matb85.github.io/eman-core/graphql"
+	"matb85.github.io/eman-core/utils"
 )
 
 var MockedUser = &graphql.UserGQL{

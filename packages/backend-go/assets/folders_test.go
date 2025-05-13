@@ -3,7 +3,7 @@ package assets_test
 import (
 	"testing"
 
-	"redinnlabs.com/redinn-core/assets"
+	"matb85.github.io/eman-core/assets"
 )
 
 func TestGenUUIDv4(t *testing.T) {

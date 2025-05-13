@@ -9,8 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"golang.org/x/crypto/bcrypt"
-	"redinnlabs.com/redinn-core/database"
-	"redinnlabs.com/redinn-core/utils"
+	"matb85.github.io/eman-core/database"
+	"matb85.github.io/eman-core/utils"
 )
 
 func Login(w http.ResponseWriter, r *http.Request) {
@@ -42,7 +42,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	refresh_token, e2 := CreateToken(fetchuser.Id, time.Hour*24*30)
 	if e1 == nil && e2 == nil {
 		utils.SendResponse(w, http.StatusOK, &map[string]string{
-			"message":       "Welcome to Redinn!",
+			"message":       "Welcome to Eman!",
 			"access_token":  access_token,
 			"refresh_token": refresh_token,
 		})

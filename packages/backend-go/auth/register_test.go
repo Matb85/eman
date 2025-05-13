@@ -6,9 +6,9 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"redinnlabs.com/redinn-core/auth"
-	"redinnlabs.com/redinn-core/database"
-	"redinnlabs.com/redinn-core/utils"
+	"matb85.github.io/eman-core/auth"
+	"matb85.github.io/eman-core/database"
+	"matb85.github.io/eman-core/utils"
 )
 
 func TestRegister200(t *testing.T) {
@@ -40,11 +40,11 @@ func TestRegister400(t *testing.T) {
 		// too short email - empty string
 		{Password: "example-password", FirstName: "example", LastName: "user"},
 		// too short password - empty string
-		{Email: "example@redinnlabs.com", FirstName: "example", LastName: "user"},
+		{Email: "example@matb85.github.io", FirstName: "example", LastName: "user"},
 		// too short first name - empty string
-		{Email: "example@redinnlabs.com", Password: "example-password", LastName: "user"},
+		{Email: "example@matb85.github.io", Password: "example-password", LastName: "user"},
 		// too short last name - empty string
-		{Email: "example@redinnlabs.com", Password: "example-password", FirstName: "example"},
+		{Email: "example@matb85.github.io", Password: "example-password", FirstName: "example"},
 	}
 
 	for i, scenario := range scenarios {

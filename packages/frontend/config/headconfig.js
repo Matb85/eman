@@ -1,9 +1,9 @@
 import { ContentMetaTag } from "../helpers/helperclasses.ts";
 
-const TITLE = "Redinn";
-const DESC = "Redinn - The ultimate platform for managing your business";
+const TITLE = "Eman";
+const DESC = "Eman - The ultimate platform for managing your business";
 const IMG = "/icon.png";
-const ALT = "Redinn logo";
+const ALT = "Eman logo";
 export default {
   title: TITLE,
   meta: [
@@ -20,7 +20,7 @@ export default {
     new ContentMetaTag("og:image:alt", ALT),
     new ContentMetaTag("og:image:secure_url", IMG),
     new ContentMetaTag("og:type", "website"),
-    new ContentMetaTag("og:site_name", "Redinn"),
+    new ContentMetaTag("og:site_name", "Eman"),
     new ContentMetaTag("og:url", process.env.BASE_URL || "http://localhost:3000"),
   ],
   link: [{ rel: "icon", type: "image/x-icon", href: process.env.ROUTER_BASE_URL + "/favicon.ico" }],

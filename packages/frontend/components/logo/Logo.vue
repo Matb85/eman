@@ -1,7 +1,7 @@
 <template>
   <section class="logo-con">
     <LogoIcon :fill="$attrs.fill" />
-    <a href="#" class="title is-1 redinn-name ml-1 is-unselectable is-clickable">Redinn</a>
+    <a href="#" class="title is-1 eman-name ml-1 is-unselectable is-clickable">Eman</a>
   </section>
 </template>
 
@@ -28,7 +28,7 @@ export default {
     width: auto;
     object-fit: cover;
   }
-  .redinn-name {
+  .eman-name {
     align-self: center;
   }
 }

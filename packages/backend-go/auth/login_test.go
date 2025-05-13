@@ -8,9 +8,9 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
-	"redinnlabs.com/redinn-core/auth"
-	"redinnlabs.com/redinn-core/database"
-	"redinnlabs.com/redinn-core/utils"
+	"matb85.github.io/eman-core/auth"
+	"matb85.github.io/eman-core/database"
+	"matb85.github.io/eman-core/utils"
 )
 
 // a mocked user
@@ -56,7 +56,7 @@ func TestLogin200(t *testing.T) {
 	if res.StatusCode != 200 {
 		t.Error("wrong status:", res.StatusCode, "instead of 200")
 	}
-	if mes.Message != "Welcome to Redinn!" {
+	if mes.Message != "Welcome to Eman!" {
 		t.Error("wrong message:", mes.Message)
 	}
 	// delete the db entry
@@ -71,11 +71,11 @@ func TestLogin400(t *testing.T) {
 		// too short email - empty string
 		{Password: "example-password"},
 		// too short password - empty string
-		{Email: "example@redinnlabs.com"},
+		{Email: "example@matb85.github.io"},
 		// incorrect email
-		{Email: "wrong@redinnlabs.com", Password: "example-password"},
+		{Email: "wrong@matb85.github.io", Password: "example-password"},
 		// incorrect password
-		{Email: "example@redinnlabs.com", Password: "wrong-password"},
+		{Email: "example@matb85.github.io", Password: "wrong-password"},
 	}
 	// insert users to the db
 	ctx, cancel := utils.CreateDBContext()

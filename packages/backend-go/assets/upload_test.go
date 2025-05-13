@@ -13,10 +13,10 @@ import (
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"redinnlabs.com/redinn-core/assets"
-	"redinnlabs.com/redinn-core/auth"
-	"redinnlabs.com/redinn-core/database"
-	"redinnlabs.com/redinn-core/utils"
+	"matb85.github.io/eman-core/assets"
+	"matb85.github.io/eman-core/auth"
+	"matb85.github.io/eman-core/database"
+	"matb85.github.io/eman-core/utils"
 )
 
 // test on a user

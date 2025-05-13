@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
-	"redinnlabs.com/redinn-core/utils"
+	"matb85.github.io/eman-core/utils"
 )
 
 var UserCol *mongo.Collection

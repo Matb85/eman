@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"os"
 
-	"redinnlabs.com/redinn-core/utils"
+	"matb85.github.io/eman-core/utils"
 )
 
 func Upload(w http.ResponseWriter, r *http.Request) {

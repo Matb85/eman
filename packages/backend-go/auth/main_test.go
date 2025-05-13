@@ -5,8 +5,8 @@ import (
 	"os"
 	"testing"
 
-	"redinnlabs.com/redinn-core/assets"
-	"redinnlabs.com/redinn-core/database"
+	"matb85.github.io/eman-core/assets"
+	"matb85.github.io/eman-core/database"
 )
 
 func TestMain(m *testing.M) {

@@ -3,13 +3,13 @@
     <div id="start">
       <div id="brand" class="mx-2">
         <LogoIcon />
-        <nuxt-link :to="curPage.to" class="redinn-name title is-3 ml-1 is-unselectable"
-          >Redinn {{ curPage.name }}</nuxt-link
+        <nuxt-link :to="curPage.to" class="eman-name title is-3 ml-1 is-unselectable"
+          >Eman {{ curPage.name }}</nuxt-link
         >
       </div>
       <div id="links">
         <nuxt-link v-for="link in links" :key="link.name" class="has-text-dark is-size-5 mx-2" :to="link.to">
-          Redinn {{ link.name }}
+          Eman {{ link.name }}
         </nuxt-link>
       </div>
     </div>
@@ -94,7 +94,7 @@ export default class Navbar extends Vue {
         height: 4em;
         width: auto;
       }
-      .redinn-name {
+      .eman-name {
         line-height: 2.5em;
         position: relative;
         &::after {

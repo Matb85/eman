@@ -4,7 +4,7 @@ import { mockUser } from "../utils/index";
 describe("/register tab - a11y", () => {
   it("should have a proper title", async () => {
     await Page.open();
-    expect(browser).toHaveTitle("Redinn");
+    expect(browser).toHaveTitle("Eman");
   });
 });
 

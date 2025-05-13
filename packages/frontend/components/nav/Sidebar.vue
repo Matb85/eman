@@ -17,7 +17,7 @@
             v-for="link in links"
             :key="link.name"
             :to="link.to"
-            :label="'Redinn ' + link.name"
+            :label="'Eman ' + link.name"
             tag="nuxt-link"
           ></b-menu-item>
         </b-menu-list>

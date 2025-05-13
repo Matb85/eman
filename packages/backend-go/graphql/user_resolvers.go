@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"go.mongodb.org/mongo-driver/bson/primitive"
-	"redinnlabs.com/redinn-core/utils"
+	"matb85.github.io/eman-core/utils"
 )
 
 type UserResolvers struct{}
